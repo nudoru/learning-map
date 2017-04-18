@@ -1,5 +1,5 @@
 import Either from 'data.either';
-import { curry } from 'ramda';
+import { curry, memoize } from 'ramda';
 import moment from 'moment';
 import {
   formatSecondsToDate2,
@@ -16,6 +16,14 @@ import {
   stripHTML
 } from '../utils/AppUtils';
 import DangerousAppState from './DangerousAppState';
+
+////////////////////////////////////////////////////////////////////////////////
+
+// This one may not be useful since config is injected into page components via
+// Redux's connect. But it serves as an example of the approach
+export const configSelector = memoize(state => state.config);
+
+////////////////////////////////////////////////////////////////////////////////
 
 export const useLRS = () => DangerousAppState.dangerousGetState().config.webservice.lrs != null; // eslint-disable-line eqeqeq
 
