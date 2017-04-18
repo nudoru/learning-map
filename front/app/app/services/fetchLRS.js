@@ -19,8 +19,8 @@ export const fetchUserStatements = () => {
       console.warn('Error fetching user statements', err);
       reject(err);
     }, data => {
-      // TODO REDUX ACTION
-      DangerousAppState.dangerousSetState({config: data});
+      // TODO WTF?
+      //DangerousAppState.dangerousSetState({config: data});
       resolve(data);
     });
   });

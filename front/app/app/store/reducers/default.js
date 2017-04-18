@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
 
 import DefaultState from '../DefaultState';
-import * as ACTIONS from '../actions/Actions';
+import * as ACTIONS from '../actions/ActionsEnum';
 
 const config = (config = DefaultState.config, action) => {
   switch (action.type) {

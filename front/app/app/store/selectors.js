@@ -19,9 +19,21 @@ import DangerousAppState from './DangerousAppState';
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// This one may not be useful since config is injected into page components via
-// Redux's connect. But it serves as an example of the approach
-export const configSelector = memoize(state => state.config);
+export const configSelector            = memoize(state => state.config);
+export const defaultUserSelector       = memoize(state => state.config.defaultUser);
+export const lrsStatementsSelector     = memoize(state => state.lrsStatements);
+export const shadowEnrollmentsSelector = memoize(state => state.shadowEnrollments);
+export const fullUserProfileSelector   = memoize(state => state.fullUserProfile);
+export const enrolledCoursesSelector   = memoize(state => state.enrolledCourses);
+export const userCalendarSelector      = memoize(state => state.userCalendar);
+export const coursesInMapSelector      = memoize(state => state.coursesInMap);
+export const webserviceSelector        = memoize(state => state.config.webservice);
+export const currentVersionSelector    = memoize(state => state.config.currentVersion);
+export const newIfWithinDaysSelector   = memoize(state => state.config.newIfWithinDays);
+export const setupSelector             = memoize(state => state.config.setup);
+export const contentSelector           = memoize(state => state.config.content);
+export const contentTypesSelector      = memoize(state => state.config.contentTypes);
+export const structureSelector         = memoize(state => state.config.structure);
 
 ////////////////////////////////////////////////////////////////////////////////
 

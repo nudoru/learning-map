@@ -32,7 +32,7 @@ module.exports = env => {
       // Main application
       app   : appEntryFile,
       // Vendor libs to include in separate file
-      vendor: ['lodash', 'react', 'react-dom', 'react-router', 'moment', 'react-scroll', 'ramda']
+      vendor: ['lodash', 'react', 'react-dom', 'react-redux', 'redux', 'moment', 'react-scroll', 'ramda']
     },
 
     output: {
