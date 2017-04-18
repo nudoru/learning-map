@@ -15,11 +15,15 @@ import {
   noOp,
   stripHTML
 } from '../utils/AppUtils';
-import AppState from './AppState';
+import DangerousAppState from './DangerousAppState';
+
+export const useLRS = () => DangerousAppState.dangerousGetState().config.webservice.lrs != null; // eslint-disable-line eqeqeq
+
+export const useShadowDB = () => DangerousAppState.dangerousGetState().config.webservice.shadowdb != null; // eslint-disable-line eqeqeq
 
 // Get the period structure to either config default or last from the LRS
 export const setStructureVersion = () => {
-  let {config, lrsStatements} = AppState.getState(),
+  let {config, lrsStatements} = DangerousAppState.dangerousGetState(),
       strVersion              = config.currentVersion;
 
   // Get the version from the most recent LRS statement if there is one
@@ -30,28 +34,28 @@ export const setStructureVersion = () => {
       strVersion = r;
     });
 
-  AppState.setState({config: {currentStructure: getStructureForVersion(strVersion, config.structure)}});
+  // TODO REDUX ACTION
+  DangerousAppState.dangerousSetState({config: {currentStructure: getStructureForVersion(strVersion, config.structure)}});
 };
 
 // Get the period structure for the given version
 const getStructureForVersion = (version, data) =>
   Either.fromNullable(data.filter(str => str.version === version)[0]).fold(() => [], s => Object.assign({}, s));
 
-export const getContentObjById = id => {
-  let res = AppState.getState().config.content.filter(idMatchObjId(id))[0];
-  if (!res) {
-    console.error('Content with ID ' + id + ' not found!');
-    return {}
-  }
-  return res;
-};
+export const getContentObjById = id =>
+  Either.fromNullable(DangerousAppState.dangerousGetState().config.content.filter(idMatchObjId(id))[0])
+    .fold(
+      () => {
+        console.error('Content with ID ' + id + ' not found!');
+        return {};
+      },
+      res => res);
 
 // Get unique content IDs from period topics
 const getContentIDsInStructure = () =>
-  removeArrDupes(AppState.getState().config.currentStructure.data.reduce((pAcc, period) =>
+  removeArrDupes(DangerousAppState.dangerousGetState().config.currentStructure.data.reduce((pAcc, period) =>
     pAcc.concat(period.topics.reduce((tAcc, topic) =>
       tAcc.concat(topic.content), [])), [])).sort();
-
 
 // Gets new or updated content titles from the content IDs in period topics
 // Content MUST have been hydrated prior to calling
@@ -65,8 +69,8 @@ export const getNewOrUpdatedContentTitles = () => getContentIDsInStructure().red
 }, []);
 
 // Array => Number
-export const getNumActivitiesForPeriod = (p) =>
-  p.topics
+export const getNumActivitiesForPeriod = period =>
+  period.topics
     .filter(t => hasLength(t.content))
     .reduce((acc, topic) => acc += topic.content.length, 0);
 
@@ -83,7 +87,7 @@ export const getEnrollmentRecordLMSCourse = (lmsID, userEnrolledCourses) =>
 
 // Get URLs (id) for content that has a link and doesn't have an LMS id
 export const getContentIDForLRS = () => {
-  return AppState.getState().config.content.reduce((acc, cont) => {
+  return DangerousAppState.dangerousGetState().config.content.reduce((acc, cont) => {
     if (!cont.lmsID && cont.contentLink) {
       acc.push(cont.contentLink);
     }
@@ -91,19 +95,18 @@ export const getContentIDForLRS = () => {
   }, []);
 };
 
-
 export const getMostRecentStatusForContentID = (id) => {
   let statement = getMostRecentStatementForID(id);
   if (statement) {
     return statement.verb.display['en-US'];
   }
-  return ''
+  return '';
 };
 
 // Get the "completed" statement if exists then "clicked" or null if not
 export const getBestStatusStatementForContentID = id => getCompletionStatementForID(id) || getClickedStatementForID(id);
 
-const getAllStatementsForID       = id => AppState.getState().lrsStatements.filter(s => s.object.id === id);
+const getAllStatementsForID       = id => DangerousAppState.dangerousGetState().lrsStatements.filter(s => s.object.id === id);
 const getMostRecentStatementForID = id => getAllStatementsForID(id)[0];
 const getCompletionStatementForID = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'completed')[0];
 const getClickedStatementForID    = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'clicked')[0];
@@ -131,16 +134,17 @@ const isContentNew = curry((compare, acc, obj) => {
 
 // Mutate the loaded content by determining new and updated content and applying
 // any loaded LMS or LRS data
-export const hydrateContent = () => AppState.setState({config: {content: getHydratedContent()}});
+// TODO REDUX ACTION
+export const hydrateContent = () => DangerousAppState.dangerousSetState({config: {content: getHydratedContent()}});
 
 // Get the default start
 export const applyStartDateToStructure = () => {
-  let structure           = AppState.getState().config.currentStructure,
+  let structure           = DangerousAppState.dangerousGetState().config.currentStructure,
       startDate           = structure.startDate,
-      startEventData      = AppState.getState().config.setup.startEvent,
+      startEventData      = DangerousAppState.dangerousGetState().config.setup.startEvent,
       startEventDataParms = startEventData ? startEventData.split(',') : null;
 
-  // console.log('Applying dates ...', AppState.getState());
+  // console.log('Applying dates ...', DangerousAppState.dangerousGetState());
 
   if (startEventDataParms) {
     let enrollmentDetails = getEnrollmentDetailsForCourseId(parseInt(startEventDataParms[1]));
@@ -154,12 +158,12 @@ export const applyStartDateToStructure = () => {
     }
   }
 
-  AppState.setState({config: {currentStructure: applyStartDateToStructureObject(startDate, structure)}});
-
+  // TODO REDUX ACTION
+  DangerousAppState.dangerousSetState({config: {currentStructure: applyStartDateToStructureObject(startDate, structure)}});
 };
 
-const getUserEnrollmentForId          = id => AppState.getState().shadowEnrollments.userEnrollments.filter(e => id === e.enrolid)[0];
-const getEnrollmentDetailsForCourseId = id => AppState.getState().shadowEnrollments.enrollmentDetails.filter(e => id === e[0].courseid)[0];
+const getUserEnrollmentForId          = id => DangerousAppState.dangerousGetState().shadowEnrollments.userEnrollments.filter(e => id === e.enrolid)[0];
+const getEnrollmentDetailsForCourseId = id => DangerousAppState.dangerousGetState().shadowEnrollments.enrollmentDetails.filter(e => id === e[0].courseid)[0];
 
 // Determine if the compare date is within a range of days from the start date
 const isDateWithinNewRange = curry((startDate, rangeDays, compareDate) =>
@@ -176,8 +180,8 @@ const applyStartDateToStructureObject = (startDate, structure) => {
   structure.data = structure.data.map(period => {
     // If it's a string
     if (isString(startDate)) {
-      period.startdate = period.startDay ? moment(startDate, "MM-DD-YY").add(parseInt(period.startDay), 'days') : null;
-      period.enddate   = period.endDay ? moment(startDate, "MM-DD-YY").add(parseInt(period.endDay), 'days') : null;
+      period.startdate = period.startDay ? moment(startDate, 'MM-DD-YY').add(parseInt(period.startDay), 'days') : null;
+      period.enddate   = period.endDay ? moment(startDate, 'MM-DD-YY').add(parseInt(period.endDay), 'days') : null;
     } else {
       // A date object
       period.startdate = period.startDay ? moment(startDate).add(parseInt(period.startDay), 'days') : null;
@@ -192,7 +196,7 @@ const applyStartDateToStructureObject = (startDate, structure) => {
 
 // Add lms status, details and lrs status to the content objects in the array
 export const getHydratedContent = () => {
-  let {fullUserProfile, coursesInMap, config} = AppState.getState(),
+  let {fullUserProfile, coursesInMap, config} = DangerousAppState.dangerousGetState(),
       {content}                               = config;
 
   // TODO better incorporate this function

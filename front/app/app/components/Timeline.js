@@ -87,8 +87,6 @@ class Timeline extends React.Component {
                   }
                 }
 
-                // Removed the labels
-                //<div className="block-label" dangerouslySetInnerHTML={{__html: period.startdate}}></div>
                 return <li key={i} className={clsName.join(' ')}>
                   <div className="block"><Link
                     to={'period' + period.period} smooth={true} offset={-150}
@@ -97,7 +95,6 @@ class Timeline extends React.Component {
                     <IconCircleText label={period.period} style='inverse-small'/>
                     </Link>
                     {complete}
-
                   </div>
                 </li>
               })}

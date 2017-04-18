@@ -1,6 +1,7 @@
 import React from 'react';
-import AppState from './store/AppState';
+import DangerousAppState from './store/DangerousAppState';
 import {
+  useLRS,
   getNewOrUpdatedContentTitles,
   setStructureVersion,
   hydrateContent,
@@ -23,7 +24,7 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    AppState.subscribe('listenforlrs', this.onStateUpdated.bind(this));
+    DangerousAppState.dangerousSubscribe('listenforlrs', this.onStateUpdated.bind(this));
 
     this.fetchLMSData();
   }
@@ -31,16 +32,15 @@ class App extends React.Component {
   onStateUpdated () {
     // Referencing by string notation because key will only be present once the
     // user account has been successfully fetched from the LMS
-    if (AppState.getState()['lrsStatements']) { // eslint-disable-line dot-notation
-      AppState.unsubscribe('listenforlrs');
-
+    if (DangerousAppState.dangerousGetState()['lrsStatements']) { // eslint-disable-line dot-notation
+      DangerousAppState.dangerousUnsubscribe('listenforlrs');
       setStructureVersion();
     }
   }
 
   fetchLMSData () {
     fetchLMSData().fork(console.error, () => {
-      console.log('got the lms data!', AppState.getState());
+      console.log('got the lms data!', DangerousAppState.dangerousGetState());
       this.fetchLRSData();
     });
   }
@@ -48,13 +48,21 @@ class App extends React.Component {
   // Fetches all statements for the current user's email and then filters for the
   // contextID as set in the config.json file
   fetchLRSData () {
+    if(!useLRS()) {
+      // TODO fix
+      // TODO REDUX ACTION
+      DangerousAppState.dangerousSetState({lrsStatements: []});
+      this.fetchShadowDBDataEnrollmentData();
+    }
     fetchStatementsForContext().fork(e => {
       console.warn('Couldn\'t get LRS statements. An error -OR- no LRS is configured.', e);
-      AppState.setState({lrsStatements: []});
+      // TODO REDUX ACTION
+      DangerousAppState.dangerousSetState({lrsStatements: []});
       this.fetchShadowDBDataEnrollmentData();
     }, statements => {
       console.log('got the lrs data!', statements);
-      AppState.setState({lrsStatements: statements});
+      // TODO REDUX ACTION
+      DangerousAppState.dangerousSetState({lrsStatements: statements});
       this.externalLearningActivityLoaded();
     });
   }
@@ -71,7 +79,8 @@ class App extends React.Component {
       this.shadowDBEnrollmentsLoaded();
     }, res => {
       console.log('got the shadow data!', res);
-      AppState.setState({shadowEnrollments: res});
+      // TODO REDUX ACTION
+      DangerousAppState.dangerousSetState({shadowEnrollments: res});
       this.shadowDBEnrollmentsLoaded();
     });
   }
@@ -85,7 +94,7 @@ class App extends React.Component {
 
   render () {
     if (this.state.ready) {
-      let appState = AppState.getState();
+      let appState = DangerousAppState.dangerousGetState();
       return (<div>
         <Header title={appState.config.setup.title}
                 secondaryNav={appState.config.setup.secondaryNav}

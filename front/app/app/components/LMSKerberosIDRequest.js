@@ -2,7 +2,7 @@ import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ModalMessage from '../rh-components/rh-ModalMessage'
 import IconCircle from '../rh-components/rh-IconCircle'
-import AppState from '../store/AppState';
+import DangerousAppState from '../store/DangerousAppState';
 import {fetchUserProfile} from '../services/fetchLMS';
 import {validateInputStr} from '../utils/AppUtils';
 
@@ -41,7 +41,8 @@ class LMSKerberosIDRequest extends React.Component {
       return false;
     }
 
-    AppState.setState({config: {defaultuser: userinput + '@redhat.com'}});
+    // TODO REDUX ACTION
+    DangerousAppState.dangerousSetState({config: {defaultuser: userinput + '@redhat.com'}});
     this.getUser();
   }
 
@@ -57,9 +58,8 @@ class LMSKerberosIDRequest extends React.Component {
       this.setState({isFetching: false, isWSError: true, isPrompting: true});
     }, () => {
       // Don't need to do anything here since ApplicationContainer has a listener
-      // on the AppState and picks up that the user profile key was set. It then
+      // on the DangerousAppState and picks up that the user profile key was set. It then
       // renders App and removes this view
-      return;
     });
   }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ModalMessage from './rh-components/rh-ModalMessage';
 import App from './App';
-import AppState from './store/AppState';
+import AppState from './store/DangerousAppState';
 import { fetchConfigData } from './services/fetchConfig';
 import LMSKerberosIDRequest from './components/LMSKerberosIDRequest';
 
@@ -21,7 +21,7 @@ class ApplicationContainer extends React.Component {
 
   // On initial mounting of the component, load config or start app
   componentDidMount () {
-    AppState.subscribe('listenforuser', this.onStateUpdated.bind(this));
+    AppState.dangerousSubscribe('listenforuser', this.onStateUpdated.bind(this));
     this.fetchConfig();
   }
 
@@ -36,8 +36,8 @@ class ApplicationContainer extends React.Component {
   onStateUpdated () {
     // Referencing by string notation because key will only be present once the
     // user account has been successfully fetched from the LMS
-    if (AppState.getState()['fullUserProfile']) { // eslint-disable-line dot-notation
-      AppState.unsubscribe('listenforuser');
+    if (AppState.dangerousGetState()['fullUserProfile']) { // eslint-disable-line dot-notation
+      AppState.dangerousUnsubscribe('listenforuser');
       this.setState({hasUser: true});
     }
   }

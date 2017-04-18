@@ -1,19 +1,16 @@
 import React from 'react';
 import Toggle from 'react-toggle';
-import AppState from '../store/AppState';
-import {
-  isPeriodComplete,
-  isTopicComplete
-} from '../store/selectors';
-
-import {Tag, TagHGroup} from '../rh-components/rh-Tag';
-import {StatusIcon, StatusIconTiny} from '../rh-components/rh-StatusIcon';
+import DangerousAppState from '../store/DangerousAppState';
+import { isPeriodComplete } from '../store/selectors';
+import { Tag, TagHGroup } from '../rh-components/rh-Tag';
+import { StatusIcon, StatusIconTiny } from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
 
 //------------------------------------------------------------------------------
 // Card showing the week information, overall completion icon, and courses
 //------------------------------------------------------------------------------
 
+// TODO REDUX INJECT CONFIG VIA PROVIDER
 export const PeriodCard = (periodObj) => {
   let {title,
         category,
@@ -33,7 +30,7 @@ export const PeriodCard = (periodObj) => {
           <Tag>Begins <em>{startDateDisplay}</em></Tag>) : null,
       endEl           = endDateDisplay ? (
           <Tag>Ends <em>{endDateDisplay}</em></Tag>) : null,
-      {config}        = AppState.getState();
+      {config}        = DangerousAppState.dangerousGetState();
 
   if (timePeriod === -1) {
     cardStyle.push('period-past');
@@ -119,8 +116,6 @@ export const ContentRow = (props) => {
     </tr>
   );
 };
-
-
 
 const StatusCell = ({status}) => {
   return (<td className='details-course-status'>

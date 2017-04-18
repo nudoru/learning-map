@@ -28,7 +28,7 @@ const createStateStore = () => {
   /**
    * Return a copy of the state
    */
-  const getState = () => {
+  const dangerousGetState = () => {
     return Object.assign({}, _internalState);
   };
 
@@ -36,16 +36,9 @@ const createStateStore = () => {
    * Sets the state
    * @param nextState
    */
-  const setState = (nextState) => {
+  const dangerousSetState = (nextState) => {
     _internalState = merge({}, _internalState, nextState);
     _dispatch();
-  };
-
-  /**
-   * Convert the store to JSON
-   */
-  const toJSON = () => {
-    return JSON.stringify(getState());
   };
 
   /**
@@ -53,7 +46,7 @@ const createStateStore = () => {
    * @param id
    * @param func
    */
-  const subscribe = (id, func) => {
+  const dangerousSubscribe = (id, func) => {
     _listeners[id] = func;
   };
 
@@ -61,7 +54,7 @@ const createStateStore = () => {
    * Unregister a listener function
    * @param id
    */
-  const unsubscribe = (id) => {
+  const dangerousUnsubscribe = (id) => {
     if (_listeners.hasOwnProperty(id)) {
       delete _listeners[id];
     } else {
@@ -73,10 +66,10 @@ const createStateStore = () => {
    * Call each registered listener function
    */
   const _dispatch = () => {
-    Object.keys(_listeners).forEach(id => _listeners[id].call(null, getState()));
+    Object.keys(_listeners).forEach(id => _listeners[id].call(null, dangerousGetState()));
   };
 
-  return {setState, getState, subscribe, unsubscribe, toJSON}
+  return {dangerousSetState, dangerousGetState, dangerousSubscribe, dangerousUnsubscribe}
 
 };
 

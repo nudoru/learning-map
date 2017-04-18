@@ -2,7 +2,7 @@ import React from 'react';
 
 import UtilityBar from '../rh-components/rh-UtilityBar';
 
-const HeaderMinor = ({title, secondaryNav, username}) => {
+const Header = ({title, secondaryNav, username}) => {
     return (
       <div className="header-region-minor">
         <div className="page-container">
@@ -13,4 +13,4 @@ const HeaderMinor = ({title, secondaryNav, username}) => {
     )
 };
 
-export default HeaderMinor;
+export default Header;

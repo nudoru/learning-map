@@ -1,19 +1,10 @@
 import Task from 'data.task';
-import AppState from '../store/AppState';
+import DangerousAppState from '../store/DangerousAppState';
 import {LRS} from '../utils/learning/lrs/LRS';
-
-export const useLRS = () => {
-  // Falsey checking here
-  return AppState.getState().config.webservice.lrs != null; // eslint-disable-line eqeqeq
-};
 
 // Get LRS statements for the current user id (email) only
 export const fetchUserStatements = () => {
-  if (!useLRS()) {
-    return new Task((reject, resolve) => reject());
-  }
-
-  let state = AppState.getState(),
+  let state = DangerousAppState.dangerousGetState(),
       query = [{
         agent: JSON.stringify({
           objectType: 'Agent',
@@ -28,7 +19,8 @@ export const fetchUserStatements = () => {
       console.warn('Error fetching user statements', err);
       reject(err);
     }, data => {
-      AppState.setState({config: data});
+      // TODO REDUX ACTION
+      DangerousAppState.dangerousSetState({config: data});
       resolve(data);
     });
   });
@@ -39,7 +31,8 @@ export const fetchUserStatements = () => {
 export const fetchStatementsForContext = () => {
   return new Task((reject, resolve) => {
     fetchUserStatements().fork(e => reject(e), statements => {
-      let {config} = AppState.getState(),
+      // TODO REDUX
+      let {config} = DangerousAppState.dangerousGetState(),
           res      = statements.statements.reduce((acc, stmnt) => {
             if ((stmnt.context && stmnt.context.platform) && stmnt.context.platform === config.webservice.lrs.contextID) {
               acc.push(stmnt);

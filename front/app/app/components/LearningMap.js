@@ -1,7 +1,6 @@
 import React from 'react';
-import AppState from '../store/AppState';
-import {getNumActivitiesForPeriod} from '../store/selectors';
-import {useLRS} from '../services/fetchLRS';
+import DangerousAppState from '../store/DangerousAppState';
+import {getNumActivitiesForPeriod, useLRS} from '../store/selectors';
 import {getTimePeriod, idMatchObjId, contentTitleToLink, contentLinkWithId} from '../utils/AppUtils';
 import {PeriodCard, PeriodTopicCard, ContentRow} from './PeriodCard';
 import {LRS} from '../utils/learning/lrs/LRS';
@@ -10,9 +9,7 @@ class LearningMap extends React.Component {
 
   constructor() {
     super();
-    // I'm not worried about immutability here since truth is on the servers
-    // And this just lasts until a refresh
-    this.state = {contents: AppState.getState().config.content};
+    this.state = {contents: DangerousAppState.dangerousGetState().config.content};
   }
 
   componentDidMount() {
@@ -21,18 +18,14 @@ class LearningMap extends React.Component {
     console.log('Total content items: '+this.state.contents.length);
   }
 
-  // It's configured in AppState as it loads previous statements
   _connectToLRS() {
     if (!useLRS()) {
       return;
     }
 
-    let {config} = AppState.getState();
+    let {config} = DangerousAppState.dangerousGetState();
 
 
-    // TODO
-    // set subject.account w/ LMS user ID?
-    // set subject here?
     LRS.setStatementDefaults({
       result : {
         completion: true
@@ -59,7 +52,7 @@ class LearningMap extends React.Component {
   }
 
   _sendLoggedInStatement() {
-    let {config} = AppState.getState();
+    let {config} = DangerousAppState.dangerousGetState();
     this._sendXAPIStatement({
       verbDisplay: 'loggedin',
       objectName : config.setup.title,
@@ -82,7 +75,7 @@ class LearningMap extends React.Component {
 
   _sendStatementForLink(verb, name, link) {
     // some links may not have URL, just default to the context ID
-    link = link || AppState.getState().config.webservice.lrs.contextID;
+    link = link || DangerousAppState.dangerousGetState().config.webservice.lrs.contextID;
     this._sendXAPIStatement({
       verbDisplay: verb,
       objectName : name,
@@ -93,11 +86,11 @@ class LearningMap extends React.Component {
 
   _sendXAPIStatement(partialStatement) {
     return;
-    /*
+    /* Disabled for dev
     if (!useLRS()) {
       return;
     }
-    let {fullUserProfile}        = AppState.getState();
+    let {fullUserProfile}        = DangerousAppState.dangerousGetState();
 
     partialStatement.subjectName = fullUserProfile.fullname;
     partialStatement.subjectID   = fullUserProfile.email;
@@ -109,7 +102,6 @@ class LearningMap extends React.Component {
   // Will be passed the <a> element
   _onLinkClick(el) {
     if (el.target) {
-      // let title = el.target.innerHTML, link = el.target.href;
       let title = el.target.dataset.contentname, link = el.target.dataset.contenturl, cid=el.target.dataset.contentid;
 
       // Make it unique
@@ -139,7 +131,6 @@ class LearningMap extends React.Component {
   }
 
   _updateStateContentStatus(title, link, id, isPending, isCompleted) {
-    // let idx      = link ? this._getStateContentObjIndexByLink(link) : this._getStateContentObjIndexByTitle(title),
     let idx      = this._getStateContentObjIndexById(id),
         newState = this.state.contents;
 
@@ -162,13 +153,13 @@ class LearningMap extends React.Component {
     return res;
   }
 
-  _getStateContentObjIndexByLink(link) {
-    return this.state.contents.findIndex(cnt => cnt.contentLink === link);
-  }
-
-  _getStateContentObjIndexByTitle(title) {
-    return this.state.contents.findIndex(cnt => cnt.title === title);
-  }
+  //_getStateContentObjIndexByLink(link) {
+  //  return this.state.contents.findIndex(cnt => cnt.contentLink === link);
+  //}
+  //
+  //_getStateContentObjIndexByTitle(title) {
+  //  return this.state.contents.findIndex(cnt => cnt.title === title);
+  //}
 
   _getStateContentObjIndexById(id) {
     return this.state.contents.findIndex(cnt => cnt.id == id); // eslint-disable-line eqeqeq
@@ -181,7 +172,6 @@ class LearningMap extends React.Component {
     </div>);
   }
 
-  //
   _renderPeriod(period) {
     let periodContentCount = getNumActivitiesForPeriod(period),
         timePeriod         = getTimePeriod(period.startdate, period.enddate),
@@ -226,6 +216,8 @@ class LearningMap extends React.Component {
       }
     }
 
+    // "Pending" is after clicking a link or toggling a button. State on a server /maybe/
+    // update, but we're not calling the server to check right now
     if (contentObj.isPending) {
       status = 4;
     }
