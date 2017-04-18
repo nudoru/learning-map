@@ -1,5 +1,3 @@
-$footer-height: 6rem
-
 %page-region-base
   display: block
   overflow: hidden
@@ -10,8 +8,8 @@ $footer-height: 6rem
 
 .content-region
   @extend %page-region-base
-  background: #fff
-  margin-bottom: $footer-height
+  background: none
+  margin: 0
 
 .page-container
   display: block
@@ -35,28 +33,3 @@ $footer-height: 6rem
   padding-top: 3rem
   margin-top: 3rem
   border-top: 1px solid #c00
-
-// Removed for single column home page
-.page-container-column-left
-  width: 66.66666666666666%
-  display: inline
-  float: left
-  min-height: 1px
-  padding-left: $grid-padding
-  padding-right: $grid-padding
-  &:first-of-type
-    padding-left: 0
-  &:last-of-type
-    padding-right: 0
-
-.page-container-column-right
-  width: 33.33333333333333%
-  display: inline
-  float: left
-  min-height: 1px
-  padding-left: $grid-padding
-  padding-right: $grid-padding
-  &:first-of-type
-    padding-left: 0
-  &:last-of-type
-    padding-right: 0

@@ -6,7 +6,7 @@
  **/
 
 let {request}            = require('../../Rest'),
-    {getParameterString} = require('../../../../../../shared/utils/Toolbox'),
+    {getParameterString} = require('../../Toolbox'),
     wsURL                = '/webservice/rest/server.php';
 
 

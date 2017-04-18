@@ -12,7 +12,7 @@ let {html2json}         = require('../html2json'),
       convertTimeStrToHourStr,
       getMatchDates,
       getMatchTimes
-    }                   = require('../../../../../../shared/utils/Toolbox'),
+    }                   = require('../../Toolbox'),
     webserviceConfig,
     targetUserId,
     classFields         = ['Delivery&nbsp;Mode', 'Region', 'Country', 'City', 'Private', 'Class&nbsp;date/time', 'Duration', 'Room'],

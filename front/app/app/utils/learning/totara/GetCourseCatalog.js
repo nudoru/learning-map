@@ -9,7 +9,7 @@ let {request}           = require('../../Rest'),
       removeEntityStr,
       getParameterString,
       formatSecondsToDate
-    }                   = require('../../../../../../shared/utils/Toolbox'),
+    }                   = require('../../Toolbox'),
     webserviceConfig,
     wsURL               = '/webservice/rest/server.php',
     deepLinkURL         = '/course/view.php?id=',

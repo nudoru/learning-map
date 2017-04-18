@@ -26,7 +26,6 @@ export const LRS = {
 
   // Set connection options
   // obj -> endpoint: Str, token: Str, version: Str
-  // token is the key/secret or user/pass base 64 encoded: 'key:secret' -> base64
   configure(obj) {
     lrsConfig = obj;
   },

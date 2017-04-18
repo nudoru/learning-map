@@ -12,7 +12,7 @@ let moment              = require('moment'),
       convertTimeStrToHourStr,
       getMatchDates,
       getMatchTimes
-    }                   = require('../../../../../../shared/utils/Toolbox'),
+    }                   = require('../../Toolbox'),
     {requestCatalog}    = require('./GetCourseCatalog'),
     webserviceConfig,
     courseCatalog,

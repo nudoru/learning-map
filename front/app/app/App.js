@@ -9,7 +9,7 @@ import {
 import { fetchStatementsForContext } from './services/fetchLRS';
 import { fetchLMSData } from './services/fetchLMS';
 import { getSBUserEnrolledCourseDetails } from './services/fetchShadowDb';
-import HeaderMinor from './components/HeaderMinor';
+import Header from './components/Header';
 import LearningMap from './components/LearningMap';
 import { PleaseWaitModal } from './components/PleaseWaitModal';
 import Timeline from './components/Timeline';
@@ -87,9 +87,9 @@ class App extends React.Component {
     if (this.state.ready) {
       let appState = AppState.getState();
       return (<div>
-        <HeaderMinor title={appState.config.setup.title}
-                     secondaryNav={appState.config.setup.secondaryNav}
-                     username={appState.fullUserProfile.fullname}/>
+        <Header title={appState.config.setup.title}
+                secondaryNav={appState.config.setup.secondaryNav}
+                username={appState.fullUserProfile.fullname}/>
         <div className="header-overlap">
           <Introduction text={appState.config.currentStructure.introduction}
                         newOrUpdated={getNewOrUpdatedContentTitles()}/>

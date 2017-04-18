@@ -8,7 +8,7 @@ let {request}            = require('../../Rest'),
       removeEntityStr,
       getParameterString,
       formatSecondsToDate
-    }                    = require('../../../../../../shared/utils/Toolbox'),
+    }                    = require('../../Toolbox'),
     courseCategories,
     deepLinkURL          = '/course/view.php?id=',
     wsURL                = '/webservice/rest/server.php',

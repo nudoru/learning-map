@@ -6,7 +6,7 @@ let {requestUserProfile}          = require('./GetUserProfile'),
     {requestCourseStatusForUser}  = require('./GetCourseStatusForUser'),
     {requestCourseProfileForUser} = require('./GetCourseProfileForUser'),
     {requestUserCalendar}         = require('./GetUserCalendar'),
-    {formatSecondsToDate}         = require('../../../../../../shared/utils/Toolbox');
+    {formatSecondsToDate}         = require('../../Toolbox');
 
 /**
  * Retrieves user profile, enrolled courses and their status by combining several

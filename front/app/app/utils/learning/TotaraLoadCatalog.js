@@ -13,7 +13,7 @@ let {createURL}      = require('./TotaraUtils'),
       uniqueArry,
       removeTagsStr,
       removeEntityStr
-    }                = require('../../../../../../shared/utils/Toolbox'),
+    }                = require('../../Toolbox'),
     webserviceConfig,
     categories,
     hiddenCategories = ['(hidden) Course Templates', 'n/a'],

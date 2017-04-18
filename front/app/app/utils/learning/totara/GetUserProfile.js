@@ -3,7 +3,7 @@
 
 
 let {request}            = require('../../Rest'),
-    {getParameterString} = require('../../../../../../shared/utils/Toolbox');
+    {getParameterString} = require('../../Toolbox');
 
 /**
  * Retrieves user profile from the Moodle core_user_get_users web service.

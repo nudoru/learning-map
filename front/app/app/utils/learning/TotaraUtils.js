@@ -1,7 +1,7 @@
 /*eslint no-undef: "error"*/
 /*eslint-env node*/
 
-let {getParameterString} = require('../../../../../../shared/utils/Toolbox');
+let {getParameterString} = require('../../Toolbox');
 
 module.exports.createURL = (wsurl, token, funct) => {
   return wsurl + '?' + getParameterString({

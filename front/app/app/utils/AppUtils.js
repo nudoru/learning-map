@@ -4,7 +4,7 @@ import {
   removeTagsStr,
   removeEntityStr,
   removeWhiteSpace
-} from '../../../../shared/utils/Toolbox';
+} from './Toolbox';
 
 export const noOp = () => {
 };

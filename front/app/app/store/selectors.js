@@ -5,7 +5,7 @@ import {
   formatSecondsToDate2,
   isString,
   removeArrDupes
-} from '../../../../shared/utils/Toolbox';
+} from '../utils/Toolbox';
 import {
   contentLinkWithId,
   contentTitleToLink,

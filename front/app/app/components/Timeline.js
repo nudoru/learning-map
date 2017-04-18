@@ -4,7 +4,7 @@ import {getTimePeriod} from '../utils/AppUtils';
 import {isPeriodComplete} from '../store/selectors';
 import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
-import {position, addClass, removeClass} from '../../../../shared/utils/DOMToolbox';
+import {position, addClass, removeClass, getElStyleProp, pxToInt} from '../utils/DOMToolbox';
 
 /*
  This scroll behavior completely violates the React methodology, but it works
@@ -26,10 +26,7 @@ class Timeline extends React.Component {
   componentDidMount() {
     this.timelineEl = document.querySelector('.rh-timeline-container');
 
-    // Get the CSS top prop
-    let style             = window.getComputedStyle(this.timelineEl),
-        topstr            = style.getPropertyValue('top');
-    this.initialYPosition = parseInt(topstr.substr(0, topstr.length - 2));
+    this.initialYPosition = pxToInt(getElStyleProp(this.timelineEl, 'top'));
 
     // Get top offset position (location on screen)
     this.repositionAfterYScroll = position(this.timelineEl).top;

@@ -6,7 +6,7 @@
  **/
 
 let {request}            = require('../../Rest'),
-    {getParameterString} = require('../../../../../../shared/utils/Toolbox');
+    {getParameterString} = require('../../Toolbox');
 
 /**
  * Retrieves user course completion information from the Moodle
