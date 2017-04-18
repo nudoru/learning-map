@@ -1,0 +1,46 @@
+.rh-utilitybar
+  position: relative
+  height: 4rem
+  background: #fff
+  text-align: right
+  padding: 0 $base-line-height
+  p
+    position: absolute
+    top: 0
+    left: 1.5rem
+    margin: 0
+    padding: 0
+    @extend .small
+    text-transform: uppercase
+    color: $grey-10
+    font-weight: 800
+    line-height: 4rem
+  .user
+    font-weight: 400
+    color: $blue-dark
+    i.fa
+      padding-right: $base-line-height-half
+  .links
+    @extend %list-horizontal
+    position: absolute
+    top: 0
+    right: 0
+    li, li > a
+      @extend .small
+      +transition-all()
+      cursor: pointer
+      text-transform: uppercase
+      color: $blue-dark
+      font-weight: 800
+      line-height: 4rem
+      margin: 0
+      padding: 0
+      //a:hover
+      //  background: $control-over-color
+    li:after
+      content: "|"
+      font-weight: 300
+      padding: 0 $base-line-height
+    li:last-of-type:after
+      content: ""
+      padding-right: 0

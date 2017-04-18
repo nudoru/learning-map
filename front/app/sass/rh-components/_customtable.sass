@@ -1,0 +1,51 @@
+%custom-table-cell-padding
+  padding: $base-line-height
+
+$custom-table-color-even: #fff
+$custom-table-color-odd: $grey-0
+
+.rh-custom-table
+  width: 100%
+  margin: $base-line-height 0
+  margin-top: $base-line-height-double
+  padding: $base-line-height 0
+  border-radius: $border-radius-small
+  overflow: hidden
+
+  &:last-of-type
+    margin-bottom: 0
+    padding-bottom: 0
+    border-bottom: none
+
+  thead
+    tr
+      td
+        @extend .small
+        background: $blue-dark linear-gradient(rgba(0,0,0,.25), transparent)
+        overflow: hidden
+        padding: $base-line-height-half $base-line-height
+        color: #fff
+        text-shadow: 1px 1px 0 rgba(0,0,0,1)
+        font-weight: 600
+        text-transform: uppercase
+        text-align: center
+        &:first-of-type
+          border-radius: $border-radius-small 0 0 $border-radius-small
+        &:last-of-type
+          border-radius: 0 $border-radius-small $border-radius-small 0
+  tr
+    background-color: $custom-table-color-even
+    border-bottom: 1px solid $grey-1
+    border-left: 1px solid $grey-1
+    border-right: 1px solid $grey-1
+  tr:nth-child(odd)
+    background-color: $custom-table-color-odd
+    td
+      a
+        +fancylinks($blue-dark, $custom-table-color-odd)
+  td
+    @extend %custom-table-cell-padding
+    a
+      +fancylinks($blue-dark, $custom-table-color-even)
+      font-weight: 600
+      color: $blue-dark

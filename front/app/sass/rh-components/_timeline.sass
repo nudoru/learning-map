@@ -1,0 +1,111 @@
+.rh-timeline-container
+  +transition-all(.5s) // to animate setting the top prop as it scrolls
+  //transition-delay: .1s
+  position: absolute
+  top: 0px // script detects this in componentDidMount, this can change here
+  z-index: 9
+  .page-container
+    padding-bottom: 20px // padding for bottom shadow to show
+
+// Added to the el when it starts to move w/ scroll
+.rh-timeline-floating
+  .rh-timeline
+    box-shadow: 3px 3px 10px rgba(0,0,0,.25)
+
+.rh-timeline
+  +transition-all()
+  display: block
+  position: relative
+  width: 100%
+  margin: 0
+  overflow: hidden
+  box-shadow: 1px 1px 3px rgba(0,0,0,.05)
+  background-color: #fff
+  ul
+    display: table
+    position: relative
+    table-layout: fixed
+    width: 100%
+    margin: 0
+    padding: 0
+    list-style: none
+    li
+      display: table-cell
+      position: relative
+      margin: 0
+      .block-label
+        width: 100%
+        text-align: center
+        vertical-align: bottom
+        font-size: 1rem
+        font-weight: 600
+        color: $teal-5
+        padding: 0 $base-line-height-half
+        background-color: rgb(245,245,245)
+      .block
+        +transition-all()
+        background: #fff
+        width: 100%
+        text-align: center
+        vertical-align: middle
+        padding: $base-line-height
+        position: relative
+        &:hover
+          background-color: $teal-1
+        a
+          font-size: 1.2rem
+          line-height: 1.4rem
+          text-decoration: none
+          color: $teal
+          cursor: pointer
+          position: relative
+          span
+            display: block
+            padding-bottom: $base-line-height
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
+          .rh-icon-circle-text-inverse-small
+            box-shadow: 0 0 15px rgba(0,0,0,.15)
+    .past
+      .block-label
+        color: #999
+      .block
+        background-color: #fafafa
+        &:hover
+          background-color: #eee
+        a
+          color: #999
+          .rh-icon-circle-text-inverse-small
+            box-shadow: none
+            background-color: $grey-1
+            color: $grey-10
+            text-shadow: 1px 1px 0 rgba(255,255,255,.25)
+    .current
+      .block-label
+        color: #fff
+        background: $red
+        text-shadow: 1px 1px 0 rgba(0,0,0,.2)
+      .block
+        background: $red linear-gradient(transparent, rgba(255,255,255,.25))
+        box-shadow: 0 0 15px rgba(0,0,0,.2)
+        &:hover
+          background-color: rgb(212, 16, 28)
+        a
+          color: #fff
+          font-weight: 600
+          span
+            text-shadow: 1px 1px 0 rgba(0,0,0,.2)
+          .rh-icon-circle-text-inverse-small
+            background-color: #fff
+            color: $red
+            box-shadow: 0 0 15px rgba(0,0,0,.3)
+            text-shadow: none
+  .complete
+    position: absolute
+    bottom: 3.5rem
+    width: 100%
+    margin-left: .5rem
+    //right: -1rem
+    //top: 3rem
+    //left: 1rem

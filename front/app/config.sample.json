@@ -1,0 +1,128 @@
+{
+  "webservice": {
+    "urlStem": "",
+    "token": "",
+    "lrs": {
+      "endpoint": "",
+      "key": "",
+      "secret": "",
+      "token": "",
+      "version": "1.0.0",
+      "contextID" : "",
+      "contextGroup" : "",
+      "contextParent" : "",
+      "contextCategory": ""
+    },
+    "shadowdb":{
+      "endpoint":"",
+      "token":""
+    }
+  },
+  "defaultuser": "",
+  "currentVersion":"1",
+  "newIfWithinDays":"14",
+  "setup": {
+    "title": "Training Schedule",
+    "secondaryNav":[
+      {"label":"FAQ", "link":""},
+      {"label":"Help + Support", "link":""},
+      {"label":"Feedback", "link":""}
+    ],
+    "interface":{
+      "periodLabel": "Week",
+      "showDateOnPeriod":true
+    },
+    "startEvent":"enroll,637"
+  },
+  "contentTypes": [
+    {
+      "label": "WBT",
+      "icon": "laptop"
+    },
+    {
+      "label": "vILT",
+      "icon": "video-camera"
+    },
+    {
+      "label": "ILT",
+      "icon": "university"
+    },
+    {
+      "label": "OTJ",
+      "icon": "pencil-square-o"
+    },
+    {
+      "label": "Practice",
+      "icon": "wrench"
+    },
+    {
+      "label": "Interaction",
+      "icon": "mouse-pointer"
+    },
+    {
+      "label": "Conversation",
+      "icon": "commenting"
+    },
+    {
+      "label": "Reading",
+      "icon": "book"
+    },
+    {
+      "label": "Email",
+      "icon": "envelope"
+    },
+    {
+      "label": "OTJ",
+      "icon": "wrench"
+    },
+    {
+      "label": "Touch point",
+      "icon": "hand-o-right"
+    },
+    {
+      "label": "Bundle",
+      "icon": "cubes"
+    }
+  ],
+  "structure": [
+    {
+      "version":"1",
+      "startDate": "01-16-17",
+      "introduction": "<p>Use this schedule as you complete learning during your onboarding journey to:</p><ul><li>track your onboarding progress</li><li>prepare for <em>Sales Accelerator</em></li><li>complete weekly to avoid cognitive overload</li></ul>",
+      "instructions":"<p>Required items are marked with a * symbol. Activity completions result from 1) the LMS, 2) content view or 3) manual. Items marked complete cannot be changed. If item status does not update immediately, refresh the page.</p>",
+      "data":[{
+        "period": "1",
+        "category": "Week 1",
+        "title": null,
+        "startDay": "0",
+        "endDay": "6",
+        "summary": null,
+        "topics": [{
+          "title": "Getting Started",
+          "summary": "",
+          "content": [1, 2, 3,"3a"]
+        },
+          {
+            "title": "Course Work",
+            "summary": "",
+            "content": [4,"4a","4b"]
+          }]
+      }]
+    }],
+  "content": [
+    {
+      "active": true,
+      "dateAdded": "01-01-17",
+      "dateUpdated": "01-01-17",
+      "id": 1,
+      "title": "Common IT Terminology Quizlet Learning Tool [Optional]",
+      "contentLink": "",
+      "lmsID": null,
+      "summary": "The quizlet tool helps with memorization. Use on your laptop or phone daily throughout your onboarding.",
+      "duration": ".25 daily",
+      "contentType": 5,
+      "isRequired": null,
+      "requireConfirm": true
+    }
+  ]
+}

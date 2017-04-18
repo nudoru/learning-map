@@ -1,0 +1,24 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "last 3 versions",
+            "Firefox ESR",
+            "not ie <= 10"
+          ]
+        },
+        "useBuiltIns": true,
+        "debug": true
+      }
+    ],
+    "react"
+  ],
+  "plugins": [
+    "transform-class-properties",
+    "transform-object-rest-spread",
+    "transform-es2015-destructuring"
+  ]
+}
