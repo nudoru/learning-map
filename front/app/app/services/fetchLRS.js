@@ -1,10 +1,10 @@
 import Task from 'data.task';
-import DangerousAppState from '../store/DangerousAppState';
+import AppStore from '../store/AppStore';
 import {LRS} from '../utils/learning/lrs/LRS';
 
 // Get LRS statements for the current user id (email) only
 export const fetchUserStatements = () => {
-  let state = DangerousAppState.dangerousGetState(),
+  let state = AppStore.getState(),
       query = [{
         agent: JSON.stringify({
           objectType: 'Agent',
@@ -19,8 +19,6 @@ export const fetchUserStatements = () => {
       console.warn('Error fetching user statements', err);
       reject(err);
     }, data => {
-      // TODO WTF?
-      //DangerousAppState.dangerousSetState({config: data});
       resolve(data);
     });
   });
@@ -32,7 +30,7 @@ export const fetchStatementsForContext = () => {
   return new Task((reject, resolve) => {
     fetchUserStatements().fork(e => reject(e), statements => {
       // TODO REDUX
-      let {config} = DangerousAppState.dangerousGetState(),
+      let {config} = AppStore.getState(),
           res      = statements.statements.reduce((acc, stmnt) => {
             if ((stmnt.context && stmnt.context.platform) && stmnt.context.platform === config.webservice.lrs.contextID) {
               acc.push(stmnt);

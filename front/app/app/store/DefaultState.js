@@ -9,16 +9,21 @@
  shadowEnrollments - Shadow DB data for - enrollmentDetails, userEnrollments
  */
 
+// values here are what will be set via actions/reducers. Additional config props
+//loaded from config file
 export default {
   config           : {
     defaultuser     : '',
-    currentStructure: null,
-    content         : null
+    currentStructure: {},
+    content         : []
   },
-  lrsStatements    : [],
-  shadowEnrollments: null,
-  fullUserProfile  : null,
-  enrolledCourses  : null,
-  userCalendar     : null,
-  coursesInMap     : null
+  lrsStatements    : null,
+  shadowEnrollments: {
+    userEnrollments: [],
+    enrollmentDetails: []
+  },
+  fullUserProfile  : {},
+  enrolledCourses  : [],
+  userCalendar     : [],
+  coursesInMap     : []
 };

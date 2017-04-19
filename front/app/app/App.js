@@ -1,5 +1,7 @@
 import React from 'react';
-import DangerousAppState from './store/DangerousAppState';
+import { connect } from 'react-redux';
+import AppStore from './store/AppStore';
+import {setLRSStatements, setShadowEnrollments} from './store/actions/Actions';
 import {
   useLRS,
   getNewOrUpdatedContentTitles,
@@ -21,26 +23,24 @@ class App extends React.Component {
   constructor () {
     super();
     this.state = {ready: false};
+    this.storeListener;
   }
 
   componentDidMount () {
-    DangerousAppState.dangerousSubscribe('listenforlrs', this.onStateUpdated.bind(this));
+    this.storeListener = AppStore.subscribe(this.onStateUpdated.bind(this));
 
     this.fetchLMSData();
   }
 
   onStateUpdated () {
-    // Referencing by string notation because key will only be present once the
-    // user account has been successfully fetched from the LMS
-    if (DangerousAppState.dangerousGetState()['lrsStatements']) { // eslint-disable-line dot-notation
-      DangerousAppState.dangerousUnsubscribe('listenforlrs');
+    if(AppStore.getState().lrsStatements !== null) {
+      this.storeListener();
       setStructureVersion();
     }
   }
 
   fetchLMSData () {
     fetchLMSData().fork(console.error, () => {
-      console.log('got the lms data!', DangerousAppState.dangerousGetState());
       this.fetchLRSData();
     });
   }
@@ -49,20 +49,17 @@ class App extends React.Component {
   // contextID as set in the config.json file
   fetchLRSData () {
     if(!useLRS()) {
-      // TODO fix
-      // TODO REDUX ACTION
-      DangerousAppState.dangerousSetState({lrsStatements: []});
+      // TODO fix this call ?
+      AppStore.dispatch(setLRSStatements([]));
       this.fetchShadowDBDataEnrollmentData();
     }
     fetchStatementsForContext().fork(e => {
       console.warn('Couldn\'t get LRS statements. An error -OR- no LRS is configured.', e);
-      // TODO REDUX ACTION
-      DangerousAppState.dangerousSetState({lrsStatements: []});
+      AppStore.dispatch(setLRSStatements([]));
       this.fetchShadowDBDataEnrollmentData();
     }, statements => {
       console.log('got the lrs data!', statements);
-      // TODO REDUX ACTION
-      DangerousAppState.dangerousSetState({lrsStatements: statements});
+      AppStore.dispatch(setLRSStatements(statements));
       this.externalLearningActivityLoaded();
     });
   }
@@ -79,8 +76,7 @@ class App extends React.Component {
       this.shadowDBEnrollmentsLoaded();
     }, res => {
       console.log('got the shadow data!', res);
-      // TODO REDUX ACTION
-      DangerousAppState.dangerousSetState({shadowEnrollments: res});
+      AppStore.dispatch(setShadowEnrollments(res));
       this.shadowDBEnrollmentsLoaded();
     });
   }
@@ -94,7 +90,7 @@ class App extends React.Component {
 
   render () {
     if (this.state.ready) {
-      let appState = DangerousAppState.dangerousGetState();
+      let appState = AppStore.getState(); //DangerousAppState.dangerousGetState();
       return (<div>
         <Header title={appState.config.setup.title}
                 secondaryNav={appState.config.setup.secondaryNav}
@@ -102,8 +98,8 @@ class App extends React.Component {
         <div className="header-overlap">
           <Introduction text={appState.config.currentStructure.introduction}
                         newOrUpdated={getNewOrUpdatedContentTitles()}/>
-          <Timeline {...appState.config}/>
-          <LearningMap {...appState}/>
+          <Timeline currentStructure = {appState.config.currentStructure}/>
+          <LearningMap/> // Data injected via react-redux connect
         </div>
       </div>);
     } else {
@@ -115,4 +111,14 @@ class App extends React.Component {
 
 App.propTypes = {};
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    config: state.config
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,78 +1,78 @@
-import * as ACTIONS from './ActionsEnum';
+import * as Actions from './ActionTypes';
 
-export const SetConfig = (payload)  => {
+export const setConfig = (payload)  => {
   return {
-    type: ACTIONS.SET_CONFIG,
+    type: Actions.SET_CONFIG,
     payload
   };
 };
 
-export const SetDefaultUser = (payload)  => {
+export const setDefaultUser = (payload)  => {
   return {
-    type: ACTIONS.SET_DEFAULT_USER,
+    type: Actions.SET_DEFAULT_USER,
     payload
   };
 };
 
-export const SetContent = (payload)  => {
+export const setContent = (payload)  => {
   return {
-    type: ACTIONS.SET_CONTENT,
+    type: Actions.SET_CONTENT,
     payload
   };
 };
 
-export const SetCurrentStructure = (payload)  => {
+export const setCurrentStructure = (payload)  => {
   return {
-    type: ACTIONS.SET_CURRENT_STRUCTURE,
+    type: Actions.SET_CURRENT_STRUCTURE,
     payload
   };
 };
 
-export const SetCurrentStructureDates = (payload)  => {
+export const setCurrentStructureDates = (payload)  => {
   return {
-    type: ACTIONS.SET_CURRENT_STRUCTURE_DATES,
+    type: Actions.SET_CURRENT_STRUCTURE_DATES,
     payload
   };
 };
 
-export const SetLRSStatements = (payload)  => {
+export const setLRSStatements = (payload)  => {
   return {
-    type: ACTIONS.SET_LRS_STATEMENTS,
+    type: Actions.SET_LRS_STATEMENTS,
     payload
   };
 };
 
-export const SetShadowEnrollments = (payload)  => {
+export const setShadowEnrollments = (payload)  => {
   return {
-    type: ACTIONS.SET_SHADOW_ENROLLMENTS,
+    type: Actions.SET_SHADOW_ENROLLMENTS,
     payload
   };
 };
 
-export const SetFullUserProfile = (payload)  => {
+export const setFullUserProfile = (payload)  => {
   return {
-    type: ACTIONS.SET_FULL_USER_PROFILE,
+    type: Actions.SET_FULL_USER_PROFILE,
     payload
   };
 };
 
-export const SetEnrolledCourses = (payload)  => {
+export const setEnrolledCourses = (payload)  => {
   return {
-    type: ACTIONS.SET_ENROLLED_COURSES,
+    type: Actions.SET_ENROLLED_COURSES,
     payload
   };
 };
 
-export const SetUserCalendar = (payload)  => {
+export const setUserCalendar = (payload)  => {
   return {
-    type: ACTIONS.SET_USER_CALENDAR,
+    type: Actions.SET_USER_CALENDAR,
     payload
   };
 };
 
-export const SetCoursesInMap = (payload)  => {
+export const setCoursesInMap = (payload)  => {
   return {
-    type: ACTIONS.SET_COURSES_IN_MAP,
+    type: Actions.SET_COURSES_IN_MAP,
     payload
   };
 };

@@ -1,7 +1,8 @@
 import Task from 'data.task';
 import Either from 'data.either';
 import { is, prop } from 'ramda';
-import DangerousAppState from '../store/DangerousAppState';
+import AppStore from '../store/AppStore';
+import {setFullUserProfile, setEnrolledCourses, setUserCalendar, setCoursesInMap} from '../store/actions/Actions';
 import { requestFullUserProfile } from '../utils/learning/totara/GetFullUserProfile';
 import { requestCourseCatalogEntry } from '../utils/learning/totara/GetCourseCatalogEntry';
 import { requestUserCalendar } from '../utils/learning/totara/GetUserCalendar';
@@ -11,11 +12,10 @@ const coursesInMap = data => data.map(prop('lmsID')).filter(is(Number));
 export const fetchUserProfile = () => {
   return new Task((reject, resolve) => {
     // console.log('getFullUserProfile');
-    let {config}    = DangerousAppState.dangerousGetState();
+    let {config}    = AppStore.getState();
     // console.log('Requesting user profile for ', config.defaultuser);
     requestFullUserProfile(config.webservice, config.defaultuser).then(res => {
-      // TODO REDUX ACTION
-      DangerousAppState.dangerousSetState({fullUserProfile: res});
+      AppStore.dispatch(setFullUserProfile(res));
       resolve(res);
     }).catch(err => {
       console.warn(err, 'Error getting user\'s profile ' + config.defaultuser);
@@ -27,11 +27,10 @@ export const fetchUserProfile = () => {
 export const fetchEnrolledCourses = () => {
   return new Task((reject, resolve) => {
     // console.log('fetchEnrolledCourses');
-    let {config}    = DangerousAppState.dangerousGetState(),
-        courseIds   = DangerousAppState.dangerousGetState().fullUserProfile.enrolledCourses.map(prop('id'));
+    let {config}    = AppStore.getState(),
+        courseIds   = AppStore.getState().fullUserProfile.enrolledCourses.map(prop('id'));
     requestCourseCatalogEntry(config.webservice, courseIds).then(res => {
-      // TODO REDUX ACTION
-      DangerousAppState.dangerousSetState({enrolledCourses: res});
+      AppStore.dispatch(setEnrolledCourses(res));
       resolve(res);
     }).catch(err => {
       reject('Error getting user\'s enrolled courses');
@@ -42,11 +41,10 @@ export const fetchEnrolledCourses = () => {
 export const fetchUserCalendar = () => {
   return new Task((reject, resolve) => {
     // console.log('fetchUserCalendar');
-    let {config}    = DangerousAppState.dangerousGetState();
-    Either.fromNullable(DangerousAppState.dangerousGetState().fullUserProfile.id).fold(console.error, (id) => {
+    let {config}    = AppStore.getState();
+    Either.fromNullable(AppStore.getState().fullUserProfile.id).fold(console.error, (id) => {
       requestUserCalendar(config.webservice, id).then(res => {
-        // TODO REDUX ACTION
-        DangerousAppState.dangerousSetState({userCalendar: res});
+        AppStore.dispatch(setUserCalendar(res));
         resolve(res);
       }).catch(err => {
         reject('Error getting user\'s calendar');
@@ -58,11 +56,10 @@ export const fetchUserCalendar = () => {
 export const fetchCoursesInMap = () => {
   return new Task((reject, resolve) => {
     // console.log('fetchCoursesInMap');
-    let {config}    = DangerousAppState.dangerousGetState(),
+    let {config}    = AppStore.getState(),
         courseIds   = coursesInMap(config.content);
     requestCourseCatalogEntry(config.webservice, courseIds).then(res => {
-      // TODO REDUX ACTION
-      DangerousAppState.dangerousSetState({coursesInMap: res});
+      AppStore.dispatch(setCoursesInMap(res));
       resolve(res);
     }).catch(err => {
       reject('Error getting courses from map');

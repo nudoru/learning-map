@@ -2,7 +2,8 @@ import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ModalMessage from '../rh-components/rh-ModalMessage'
 import IconCircle from '../rh-components/rh-IconCircle'
-import DangerousAppState from '../store/DangerousAppState';
+import AppStore from '../store/AppStore';
+import {setDefaultUser} from '../store/actions/Actions';
 import {fetchUserProfile} from '../services/fetchLMS';
 import {validateInputStr} from '../utils/AppUtils';
 
@@ -41,8 +42,7 @@ class LMSKerberosIDRequest extends React.Component {
       return false;
     }
 
-    // TODO REDUX ACTION
-    DangerousAppState.dangerousSetState({config: {defaultuser: userinput + '@redhat.com'}});
+    AppStore.dispatch(setDefaultUser(userinput + '@redhat.com'));
     this.getUser();
   }
 

@@ -1,18 +1,19 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import logger from 'redux-logger';
 import thunk from 'redux-thunk';
-import DefaultReducer from './reducers/default';
+import { reducers } from './reducers/index';
 import DefaultState from './DefaultState';
 
 // Debugging for Redux-devtools-extension for Chrome
 // https://github.com/zalmoxisus/redux-devtools-extension#usage
 
-/* eslint-disable no-underscore-dangle */
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-underscore-dangle
+//thunk, logger
 const AppStore = createStore(
-  DefaultReducer,
+  reducers,
   DefaultState,
-  applyMiddleware(thunk),
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-/* eslint-enable */
+  composeEnhancers(applyMiddleware())
+);
 
 
 export default AppStore;

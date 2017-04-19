@@ -1,6 +1,5 @@
 import React from 'react';
 import Toggle from 'react-toggle';
-import DangerousAppState from '../store/DangerousAppState';
 import { isPeriodComplete } from '../store/selectors';
 import { Tag, TagHGroup } from '../rh-components/rh-Tag';
 import { StatusIcon, StatusIconTiny } from '../rh-components/rh-StatusIcon';
@@ -10,9 +9,10 @@ import IconCircleText from '../rh-components/rh-IconCircleText';
 // Card showing the week information, overall completion icon, and courses
 //------------------------------------------------------------------------------
 
-// TODO REDUX INJECT CONFIG VIA PROVIDER
 export const PeriodCard = (periodObj) => {
-  let {title,
+  let {
+        config,
+        title,
         category,
         period,
         summary,
@@ -20,17 +20,17 @@ export const PeriodCard = (periodObj) => {
         startDateDisplay,
         endDateDisplay,
         children,
-        timePeriod} = periodObj,
+        timePeriod
+      }               = periodObj,
       cardStyle       = ['period'],
       activitiesLabel = activities === 1 ? 'Activity' : 'Activities',
-      tagRow = null,
+      tagRow          = null,
       activitiesEl    = activities ? (
-          <Tag><em>{activities}</em> {activitiesLabel}</Tag>) : null,
+        <Tag><em>{activities}</em> {activitiesLabel}</Tag>) : null,
       startEl         = startDateDisplay ? (
-          <Tag>Begins <em>{startDateDisplay}</em></Tag>) : null,
+        <Tag>Begins <em>{startDateDisplay}</em></Tag>) : null,
       endEl           = endDateDisplay ? (
-          <Tag>Ends <em>{endDateDisplay}</em></Tag>) : null,
-      {config}        = DangerousAppState.dangerousGetState();
+        <Tag>Ends <em>{endDateDisplay}</em></Tag>) : null;
 
   if (timePeriod === -1) {
     cardStyle.push('period-past');
@@ -40,7 +40,7 @@ export const PeriodCard = (periodObj) => {
     cardStyle.push('period-future');
   }
 
-  if(config.setup.interface.showDateOnPeriod) {
+  if (config.setup.interface.showDateOnPeriod) {
     tagRow = <TagHGroup>{startEl}{endEl}{activitiesEl}</TagHGroup>;
   } else {
     tagRow = <TagHGroup>{activitiesEl}</TagHGroup>;
@@ -55,7 +55,8 @@ export const PeriodCard = (periodObj) => {
             <IconCircleText label={period}/>
             <span className="period-indicator-label">{category}</span>
           </div>
-          <h1>{title}{isPeriodComplete(periodObj) ? <StatusIconTiny status={3}/> : ''}</h1>
+          <h1>{title}{isPeriodComplete(periodObj) ?
+            <StatusIconTiny status={3}/> : ''}</h1>
           <div className="margin-bottom-triple">
             {tagRow}
           </div>
@@ -112,7 +113,7 @@ export const ContentRow = (props) => {
       <StatusCell {...props} />
       <NameCell {...props} />
       <ToggleCell {...props} />
-      <DescriptionCell summary={contentObj.summary} />
+      <DescriptionCell summary={contentObj.summary}/>
     </tr>
   );
 };
@@ -138,9 +139,11 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
                      data-contenturl={contentObj.contentLink}
                      data-contentname={contentObj.title}
                      data-contentid={contentObj.id}
-                     onClick={onLinkClick} dangerouslySetInnerHTML={{__html: contentObj.title}}></a>
+                     onClick={onLinkClick}
+                     dangerouslySetInnerHTML={{__html: contentObj.title}}></a>;
   } else {
-    nameElement = <p data-contentid={contentObj.id} dangerouslySetInnerHTML={{__html: contentObj.title}}></p>
+    nameElement = <p data-contentid={contentObj.id}
+                     dangerouslySetInnerHTML={{__html: contentObj.title}}></p>;
   }
 
   if (contentObj.isRequired) {
@@ -175,7 +178,7 @@ const ToggleCell = ({onCompletedClick, contentObj}) => {
     </div>);
   } else if (contentObj.lmsID) {
     completionToggle =
-      <p className="small">Completion determined on the LMS.</p>
+      <p className="small">Completion determined on the LMS.</p>;
   }
 
   return (<td className="details-completion">
