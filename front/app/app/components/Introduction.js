@@ -1,6 +1,6 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
-//fullname, title,
 const Introduction = ({text, newOrUpdated}) => {
   let neworupdatedList = newOrUpdated.length ? (
       <div><h2>What's new and updated</h2><ul className="introduction-list-newcontent">
@@ -23,4 +23,14 @@ const Introduction = ({text, newOrUpdated}) => {
   )
 };
 
-export default Introduction
+const mapStateToProps = state => {
+  return {
+    text: state.config.currentStructure.introduction
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Introduction);

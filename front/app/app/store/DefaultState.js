@@ -17,7 +17,7 @@ export default {
     currentStructure: {},
     content         : []
   },
-  lrsStatements    : null,
+  lrsStatements    : [],
   shadowEnrollments: {
     userEnrollments: [],
     enrollmentDetails: []

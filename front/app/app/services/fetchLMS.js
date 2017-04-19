@@ -1,6 +1,6 @@
 import Task from 'data.task';
 import Either from 'data.either';
-import { is, prop } from 'ramda';
+import { is, prop, sequence } from 'ramda';
 import AppStore from '../store/AppStore';
 import {setFullUserProfile, setEnrolledCourses, setUserCalendar, setCoursesInMap} from '../store/actions/Actions';
 import { requestFullUserProfile } from '../utils/learning/totara/GetFullUserProfile';
@@ -24,6 +24,7 @@ export const fetchUserProfile = () => {
   });
 };
 
+// Dependant on data from fetchUserProfile
 export const fetchEnrolledCourses = () => {
   return new Task((reject, resolve) => {
     // console.log('fetchEnrolledCourses');
@@ -38,6 +39,7 @@ export const fetchEnrolledCourses = () => {
   });
 };
 
+// Dependant on data from fetchUserProfile
 export const fetchUserCalendar = () => {
   return new Task((reject, resolve) => {
     // console.log('fetchUserCalendar');

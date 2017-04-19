@@ -14,6 +14,8 @@ class LearningMap extends React.Component {
 
   constructor (props) {
     super(props);
+    // Content is copied to the state. When a link is clicked/completed this
+    // copy is modified w/ an isPending status to change the icon.
     this.state = {contents: this.props.config.content};
   }
 
@@ -51,7 +53,7 @@ class LearningMap extends React.Component {
     });
 
     // Send user x loggedin statement, disable for dev and testing to avoid spamming the LRS
-    this._sendLoggedInStatement();
+    //this._sendLoggedInStatement();
   }
 
   _sendLoggedInStatement () {
@@ -88,26 +90,23 @@ class LearningMap extends React.Component {
   }
 
   _sendXAPIStatement (partialStatement) {
-    return;
-    /* Disabled for dev
-     if (!useLRS()) {
-     return;
-     }
-     let {fullUserProfile}        = DangerousAppState.dangerousGetState();
+    if (!useLRS()) {
+      return;
+    }
+    let {fullUserProfile} = this.props;
 
-     partialStatement.subjectName = fullUserProfile.fullname;
-     partialStatement.subjectID   = fullUserProfile.email;
-     LRS.sendStatement(LRS.createStatement(partialStatement))
-     .fork(e => console.warn('Error sending statement', e), r => console.log('Statement sent!', r));
-     */
+    partialStatement.subjectName = fullUserProfile.fullname;
+    partialStatement.subjectID   = fullUserProfile.email;
+    LRS.sendStatement(LRS.createStatement(partialStatement))
+      .fork(e => console.warn('Error sending statement', e), r => console.log('Statement sent!', r));
   }
 
   // Will be passed the <a> element
   _onLinkClick (el) {
     if (el.target) {
       let title = el.target.dataset.contentname,
-          link = el.target.dataset.contenturl,
-          cid = el.target.dataset.contentid;
+          link  = el.target.dataset.contenturl,
+          cid   = el.target.dataset.contentid;
 
       // Make it unique
       link = contentLinkWithId(link, cid);
@@ -122,8 +121,8 @@ class LearningMap extends React.Component {
   _onCompletedClick (el) {
     if (el.target) {
       let title = el.target.dataset.contentname,
-          link = el.target.dataset.contenturl,
-          cid = el.target.dataset.contentid;
+          link  = el.target.dataset.contenturl,
+          cid   = el.target.dataset.contentid;
       if (!link) {
         // Use the "linkified" title for the link
         link = contentTitleToLink(title, cid);
@@ -160,6 +159,7 @@ class LearningMap extends React.Component {
     return res;
   }
 
+  // These are unused
   //_getStateContentObjIndexByLink(link) {
   //  return this.state.contents.findIndex(cnt => cnt.contentLink === link);
   //}
@@ -201,7 +201,7 @@ class LearningMap extends React.Component {
   }
 
   _renderContentRow (contentID) {
-    let {config} = this.props,
+    let {config}   = this.props,
         contentObj = this._getStateContentObjById(contentID),
         isComplete = contentObj.isComplete,
         modNote    = '',

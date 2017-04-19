@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {Link} from 'react-scroll';
 import {getTimePeriod} from '../utils/AppUtils';
 import {isPeriodComplete} from '../store/selectors';
@@ -108,6 +109,18 @@ class Timeline extends React.Component {
 }
 
 Timeline.defaultProps = {};
-Timeline.propTypes    = {};
+Timeline.propTypes    = {
+  currentStructure: React.PropTypes.object
+};
 
-export default Timeline;
+const mapStateToProps = state => {
+  return {
+    currentStructure: state.config.currentStructure
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timeline);
