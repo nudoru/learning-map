@@ -77,8 +77,8 @@ module.exports = env => {
           loader : 'babel-loader',
           exclude: ['/node_modules/'],
           query  : {
-            presets: removeEmpty(['react', isProd ? undefined : 'react-hmre']),
-            compact: true
+            presets: removeEmpty(['es2015','react', isProd ? undefined : 'react-hmre']),
+            compact: false
           }
         }
       ]
