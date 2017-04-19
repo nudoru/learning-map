@@ -16,7 +16,7 @@ class LearningMap extends React.Component {
     super(props);
     // Content is copied to the state. When a link is clicked/completed this
     // copy is modified w/ an isPending status to change the icon.
-    this.state = {contents: this.props.config.content};
+    this.state = {contents: this.props.hydratedContent};
   }
 
   componentDidMount () {
@@ -37,7 +37,7 @@ class LearningMap extends React.Component {
       },
       context: {
         platform         : config.webservice.lrs.contextID,
-        revision         : config.currentStructure.version,
+        revision         : this.props.currentStructure.version,
         contextActivities: {
           grouping: [{id: config.webservice.lrs.contextGroup}],
           parent  : [{
@@ -174,7 +174,7 @@ class LearningMap extends React.Component {
 
   render () {
     return (<div>
-      {this.props.config.currentStructure.data.map(period => this._renderPeriod(period))}
+      {this.props.currentStructure.data.map(period => this._renderPeriod(period))}
     </div>);
   }
 
@@ -189,6 +189,7 @@ class LearningMap extends React.Component {
                         endDateDisplay={endDate}
                         timePeriod={timePeriod}
                         config={this.props.config}
+                        currentStructure = {this.props.currentStructure}
                         {...period}>
       {period.topics.map(topic => this._renderPeriodTopic(topic))}
     </PeriodCard>);
@@ -242,20 +243,24 @@ class LearningMap extends React.Component {
 }
 
 LearningMap.propTypes = {
-  fullUserProfile: React.PropTypes.object,
-  enrolledCourses: React.PropTypes.array,
-  userCalendar   : React.PropTypes.array,
-  coursesInMap   : React.PropTypes.array,
-  config         : React.PropTypes.object
+  fullUserProfile : React.PropTypes.object,
+  enrolledCourses : React.PropTypes.array,
+  userCalendar    : React.PropTypes.array,
+  coursesInMap    : React.PropTypes.array,
+  hydratedContent : React.PropTypes.array,
+  config          : React.PropTypes.object,
+  currentStructure: React.PropTypes.object
 };
 
 const mapStateToProps = state => {
   return {
-    config         : state.config,
-    fullUserProfile: state.fullUserProfile,
-    enrolledCourses: state.enrolledCourses,
-    userCalendar   : state.userCalendar,
-    coursesInMap   : state.coursesInMap
+    config          : state.config,
+    fullUserProfile : state.fullUserProfile,
+    enrolledCourses : state.enrolledCourses,
+    userCalendar    : state.userCalendar,
+    coursesInMap    : state.coursesInMap,
+    hydratedContent : state.hydratedContent,
+    currentStructure: state.currentStructure
   };
 };
 

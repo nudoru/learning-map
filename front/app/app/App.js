@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import AppStore from './store/AppStore';
-import {setLRSStatements, setShadowEnrollments, setCurrentStructure, setContent} from './store/actions/Actions';
+import {setLRSStatements, setShadowEnrollments, setCurrentStructure, setHydratedContent} from './store/actions/Actions';
 import {
   useLRS,
   getNewOrUpdatedContentTitles,
@@ -54,7 +54,7 @@ class App extends React.Component {
 
   externalLearningActivityLoaded () {
     // Will mutate the loaded content based on dates and LMS/LRS content
-    AppStore.dispatch(setContent(getHydratedContent()));
+    AppStore.dispatch(setHydratedContent(getHydratedContent()));
     this.fetchShadowDBDataEnrollmentData();
   }
 

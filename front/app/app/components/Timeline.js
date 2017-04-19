@@ -115,7 +115,7 @@ Timeline.propTypes    = {
 
 const mapStateToProps = state => {
   return {
-    currentStructure: state.config.currentStructure
+    currentStructure: state.currentStructure
   };
 };
 

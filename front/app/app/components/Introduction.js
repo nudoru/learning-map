@@ -25,7 +25,7 @@ const Introduction = ({text, newOrUpdated}) => {
 
 const mapStateToProps = state => {
   return {
-    text: state.config.currentStructure.introduction
+    text: state.currentStructure.introduction
   };
 };
 

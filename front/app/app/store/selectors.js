@@ -130,7 +130,7 @@ export const getContentObjById = id =>
 
 // Get unique content IDs from period topics
 const getContentIDsInStructure = () =>
-  removeArrDupes(AppStore.getState().config.currentStructure.data.reduce((pAcc, period) =>
+  removeArrDupes(AppStore.getState().currentStructure.data.reduce((pAcc, period) =>
     pAcc.concat(period.topics.reduce((tAcc, topic) =>
       tAcc.concat(topic.content), [])), [])).sort();
 

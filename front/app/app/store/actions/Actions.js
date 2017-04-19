@@ -10,8 +10,8 @@ export const setDefaultUser = (payload) => ({
     payload
   });
 
-export const setContent = (payload) => ({
-    type: Actions.SET_CONTENT,
+export const setHydratedContent = (payload) => ({
+    type: Actions.SET_HYDRATEDCONTENT,
     payload
   });
 

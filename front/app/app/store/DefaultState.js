@@ -10,20 +10,21 @@
  */
 
 // values here are what will be set via actions/reducers. Additional config props
-//loaded from config file
+// loaded from config file
 export default {
   config           : {
     defaultuser     : '',
-    currentStructure: {},
-    content         : []
+    currentStructure: {}
   },
   lrsStatements    : [],
   shadowEnrollments: {
-    userEnrollments: [],
+    userEnrollments  : [],
     enrollmentDetails: []
   },
   fullUserProfile  : {},
   enrolledCourses  : [],
   userCalendar     : [],
-  coursesInMap     : []
+  coursesInMap     : [],
+  currentStructure : {},
+  hydratedContent  : []
 };

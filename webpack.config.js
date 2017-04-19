@@ -30,15 +30,13 @@ module.exports = env => {
 
     entry: {
       // Main application
-      app   : appEntryFile,
-      // Vendor libs to include in separate file
-      vendor: ['lodash', 'react', 'react-dom', 'react-redux', 'redux', 'moment', 'react-scroll', 'ramda']
+      app   : appEntryFile
     },
 
     output: {
       path      : appDestPath,
       // Name is replaced with keys from entry block
-      filename  : "[name].[hash].js",
+      filename  : "[name].[chunkhash].js",
       publicPath: isProd ? '' : '/'
     },
 
@@ -89,6 +87,10 @@ module.exports = env => {
     },
 
     plugins: removeEmpty([
+      // If we're in prod, optimization
+      isProd ? undefined : new webpack.DefinePlugin({
+        'process.env': {NODE_ENV: '"production"'}
+      }),
       new webpack.LoaderOptionsPlugin({
         options: {
           postcss () {
@@ -123,12 +125,12 @@ module.exports = env => {
       // If we're not in testing, create a separate vendor bundle file
       isTest ? undefined : new webpack.optimize.CommonsChunkPlugin({
         name     : 'vendor',
-        minChunks: Infinity,
-        filename : '[name].[hash].js',
+        minChunks: function (module) {
+          return module.context && module.context.indexOf('node_modules') !== -1;
+        }
       }),
-      // If we're in prod, optimization
-      isProd ? undefined : new webpack.DefinePlugin({
-        'process.env': {NODE_ENV: '"production"'}
+      isTest ? undefined : new webpack.optimize.CommonsChunkPlugin({
+        name: 'manifest'
       })
     ])
   }

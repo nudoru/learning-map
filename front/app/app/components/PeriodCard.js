@@ -12,6 +12,7 @@ import IconCircleText from '../rh-components/rh-IconCircleText';
 export const PeriodCard = (periodObj) => {
   let {
         config,
+        currentStructure,
         title,
         category,
         period,
@@ -63,7 +64,7 @@ export const PeriodCard = (periodObj) => {
           <div className="text-summary"
                dangerouslySetInnerHTML={{__html: summary}}></div>
           <div className="instructions"
-               dangerouslySetInnerHTML={{__html: config.currentStructure.instructions}}></div>
+               dangerouslySetInnerHTML={{__html: currentStructure.instructions}}></div>
           {children}
         </div>
       </div>
