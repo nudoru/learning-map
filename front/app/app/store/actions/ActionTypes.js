@@ -1,4 +1,4 @@
-export const SET_CONFIG             ='SET_CONFIG';
+export const SET_CONFIG             = 'SET_CONFIG';
 export const SET_DEFAULT_USER       = 'SET_DEFAULT_USER';
 export const SET_HYDRATEDCONTENT    = 'SET_HYDRATEDCONTENT';
 export const SET_CURRENT_STRUCTURE  = 'SET_CURRENT_STRUCTURE';
@@ -8,3 +8,7 @@ export const SET_FULL_USER_PROFILE  = 'SET_FULL_USER_PROFILE';
 export const SET_ENROLLED_COURSES   = 'SET_ENROLLED_COURSES';
 export const SET_USER_CALENDAR      = 'SET_USER_CALENDAR';
 export const SET_COURSES_IN_MAP     = 'SET_COURSES_IN_MAP';
+export const SET_LMS_STATUS         = 'SET_LMS_STATUS';
+export const SET_LRS_STATUS         = 'SET_LRS_STATUS';
+export const SET_SDB_STATUS         = 'SET_SDB_STATUS';
+export const SET_ALLEGO_STATUS      = 'SET_ALLEGO_STATUS';

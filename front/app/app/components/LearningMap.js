@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import AppStore from '../store/AppStore';
+import { setLRSStatus } from '../store/actions/Actions';
 import {
   getNumActivitiesForPeriod,
   useLRS,
@@ -99,7 +101,14 @@ class LearningMap extends React.Component {
     partialStatement.subjectName = fullUserProfile.fullname;
     partialStatement.subjectID   = fullUserProfile.email;
     LRS.sendStatement(LRS.createStatement(partialStatement))
-      .fork(e => console.warn('Error sending statement', e), r => console.log('Statement sent!', r));
+      .fork(e => {
+          console.error('Error sending statement: ', e);
+          AppStore.dispatch(setLRSStatus(false));
+        },
+        r => {
+          console.log('Statement sent!', r);
+          //AppStore.dispatch(setLRSStatus(true));
+        });
   }
 
   // Will be passed the <a> element

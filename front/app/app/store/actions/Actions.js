@@ -49,3 +49,23 @@ export const setCoursesInMap = (payload) => ({
     type: Actions.SET_COURSES_IN_MAP,
     payload
   });
+
+export const setLMSStatus = (payload) => ({
+  type: Actions.SET_LMS_STATUS,
+  payload
+});
+
+export const setLRSStatus = (payload) => ({
+  type: Actions.SET_LRS_STATUS,
+  payload
+});
+
+export const setSDBStatus = (payload) => ({
+  type: Actions.SET_SDB_STATUS,
+  payload
+});
+
+export const setAllegoStatus = (payload) => ({
+  type: Actions.SET_ALLEGO_STATUS,
+  payload
+});

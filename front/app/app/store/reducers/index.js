@@ -9,6 +9,10 @@ import { userCalendar } from './userCalendar';
 import { coursesInMap } from './coursesInMap';
 import { hydratedContent } from './hydratedContent';
 import { currentStructure } from './currentStructure';
+import {connectionLMSStatus} from './connectionLMSStatus';
+import {connectionLRSStatus} from './connectionLRSStatus';
+import {connectionSDBStatus} from './connectionSDBStatus';
+import {connectionAllegoStatus} from './connectionAllegoStatus';
 
 export const reducers = combineReducers({
   config,
@@ -19,5 +23,9 @@ export const reducers = combineReducers({
   userCalendar,
   coursesInMap,
   hydratedContent,
-  currentStructure
+  currentStructure,
+  connectionLMSStatus,
+  connectionLRSStatus,
+  connectionSDBStatus,
+  connectionAllegoStatus
 });
