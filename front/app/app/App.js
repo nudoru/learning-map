@@ -39,12 +39,12 @@ class App extends React.Component {
   // contextID as set in the config.json file
   fetchLRSData () {
     if(!useLRS()) {
-      this.fetchShadowDBDataEnrollmentData();
+      this.externalLearningActivityLoaded();
     }
 
     fetchStatementsForContext().fork(e => {
       console.warn('Couldn\'t get LRS statements. An error -OR- no LRS is configured.', e);
-      this.fetchShadowDBDataEnrollmentData();
+      this.externalLearningActivityLoaded();
     }, statements => {
       console.log('got the lrs data!', statements);
       AppStore.dispatch(setLRSStatements(statements));

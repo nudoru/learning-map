@@ -1,6 +1,6 @@
 import Task from 'data.task';
 import Either from 'data.either';
-import { is, prop, sequence } from 'ramda';
+import { is, prop } from 'ramda';
 import AppStore from '../store/AppStore';
 import {setFullUserProfile, setEnrolledCourses, setUserCalendar, setCoursesInMap} from '../store/actions/Actions';
 import { requestFullUserProfile } from '../utils/learning/totara/GetFullUserProfile';
@@ -15,6 +15,7 @@ export const fetchUserProfile = () => {
     let {config}    = AppStore.getState();
     // console.log('Requesting user profile for ', config.defaultuser);
     requestFullUserProfile(config.webservice, config.defaultuser).then(res => {
+      console.log('Fetched profile',res);
       AppStore.dispatch(setFullUserProfile(res));
       resolve(res);
     }).catch(err => {
@@ -31,6 +32,7 @@ export const fetchEnrolledCourses = () => {
     let {config}    = AppStore.getState(),
         courseIds   = AppStore.getState().fullUserProfile.enrolledCourses.map(prop('id'));
     requestCourseCatalogEntry(config.webservice, courseIds).then(res => {
+      console.log('Fetched enrolled courses', res);
       AppStore.dispatch(setEnrolledCourses(res));
       resolve(res);
     }).catch(err => {
@@ -46,6 +48,7 @@ export const fetchUserCalendar = () => {
     let {config}    = AppStore.getState();
     Either.fromNullable(AppStore.getState().fullUserProfile.id).fold(console.error, (id) => {
       requestUserCalendar(config.webservice, id).then(res => {
+        console.log('Fetched user calendar', res);
         AppStore.dispatch(setUserCalendar(res));
         resolve(res);
       }).catch(err => {
@@ -61,6 +64,7 @@ export const fetchCoursesInMap = () => {
     let {config}    = AppStore.getState(),
         courseIds   = coursesInMap(config.content);
     requestCourseCatalogEntry(config.webservice, courseIds).then(res => {
+      console.log('Fetched courses in map', res);
       AppStore.dispatch(setCoursesInMap(res));
       resolve(res);
     }).catch(err => {

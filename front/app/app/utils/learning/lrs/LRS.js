@@ -139,7 +139,7 @@ export const LRS = {
           resolve(data);
         })
         .catch(err => {
-          console.warn('Error sending statement', err);
+          console.warn('Error getting statements', err);
           reject(err);
         });
     });

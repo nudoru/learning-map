@@ -1,8 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-scroll';
-import {getTimePeriod} from '../utils/AppUtils';
-import {isPeriodComplete} from '../store/selectors';
+import {isPeriodComplete, getTimePeriod} from '../store/selectors';
 import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
 import {position, addClass, removeClass, getElStyleProp, pxToInt} from '../utils/DOMToolbox';

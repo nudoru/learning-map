@@ -4,12 +4,14 @@ import moment from 'moment';
 import {
   formatSecondsToDate2,
   isString,
-  removeArrDupes,
-  removeWhiteSpace
+  removeArrDupes
 } from '../utils/Toolbox';
 import {
+  contentLinkWithId,
+  contentTitleToLink,
   hasLength,
   idMatchObjId,
+  isCompletedToNum,
   noOp,
   stripHTML
 } from '../utils/AppUtils';
@@ -39,38 +41,7 @@ export const useLRS = () => AppStore.getState().config.webservice.lrs != null; /
 
 export const useShadowDB = () => AppStore.getState().config.webservice.shadowdb != null; // eslint-disable-line eqeqeq
 
-// Object<Object<Boolean>> => Number
-export const isCompletedToNum = c => c.status.completed ? 2 : 1;
-
-// Some actions don't have a URL since they're physical tasks. Convert that title
-// into a unique URL for tracking to the LRS' object/subject id prop
-export const contentTitleToLink = (title, id) => 'https://www.redhat.com/en#' + removeWhiteSpace(stripHTML(title)) + '_' + id;
-
-// Several items have the same endpoint/link. Add the id as a hash to unique them
-export const contentLinkWithId = (link, id) => link + '#' + id;
-
 export const getCurrentStructure = () => applyStartDateToStructure(getStructureVersion());
-
-// -1 past, 0 current, 1 future
-// Start and End should be moment instances
-export const getTimePeriod = (startM, endM) => {
-  if (!startM || !endM) {
-    return 2;
-  }
-
-  let nowM = moment();
-
-  // isSame compares down to the millisecond, so convert it to a date string for the compare
-  if (moment(nowM.format('L'), 'MM/DD/YYYY').isSame(moment(startM.format('L'), 'MM/DD/YYYY')) || moment(nowM.format('L'), 'MM/DD/YYYY').isSame(moment(endM.format('L'), 'MM/DD/YYYY'))) {
-    return 0;
-  } else if (moment(startM).isAfter(nowM)) {
-    return 1;
-  } else if (nowM.isAfter(endM)) {
-    return -1;
-  }
-
-  return 0;
-};
 
 // Get the period structure to either config default or last user statement to the LRS
 export const getStructureVersion = () => {
@@ -103,7 +74,7 @@ export const applyStartDateToStructure = (structure) => {
     if (enrollmentDetails) {
       let courseEnrollment = getUserEnrollmentForId(enrollmentDetails[0].id);
       startDate            = formatSecondsToDate2(courseEnrollment.timecreated);
-      console.log('Content dates based on', startEventDataParms, enrollmentDetails, courseEnrollment, startDate);
+      console.log('Content dates based on',startEventDataParms, enrollmentDetails, courseEnrollment, startDate);
     } else {
       console.warn(startEventData + ' but no enrollment for that course');
       startDate = null;
@@ -149,7 +120,7 @@ const applyStartDateToStructureObject = (startDate, structure) => {
 ////////////////////////////////////////////////////////////////////////////////
 
 export const getContentObjById = id =>
-  //Either.fromNullable(AppStore.getState().config.content.filter(idMatchObjId(id))[0])
+  // Either.fromNullable(AppStore.getState().config.content.filter(idMatchObjId(id))[0])
   Either.fromNullable(AppStore.getState().hydratedContent.filter(idMatchObjId(id))[0])
     .fold(
       () => {

@@ -29,14 +29,14 @@ module.exports = env => {
   return {
 
     entry: {
-      // Main application
       app   : appEntryFile
+      //vendor: ['lodash', 'react', 'react-dom', 'react-redux', 'redux', 'moment', 'react-scroll', 'ramda']
     },
 
     output: {
       path      : appDestPath,
       // Name is replaced with keys from entry block
-      filename  : "[name].[chunkhash].js",
+      filename  : "[name].[hash].js",
       publicPath: isProd ? '' : '/'
     },
 
@@ -125,6 +125,7 @@ module.exports = env => {
       // If we're not in testing, create a separate vendor bundle file
       isTest ? undefined : new webpack.optimize.CommonsChunkPlugin({
         name     : 'vendor',
+        //minChunks: Infinity
         minChunks: function (module) {
           return module.context && module.context.indexOf('node_modules') !== -1;
         }

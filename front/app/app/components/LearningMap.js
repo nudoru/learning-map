@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getNumActivitiesForPeriod, useLRS } from '../store/selectors';
 import {
+  getNumActivitiesForPeriod,
+  useLRS,
   getTimePeriod,
-  idMatchObjId,
   contentTitleToLink,
   contentLinkWithId
-} from '../utils/AppUtils';
+} from '../store/selectors';
+import { idMatchObjId } from '../utils/AppUtils';
 import { PeriodCard, PeriodTopicCard, ContentRow } from './PeriodCard';
 import { LRS } from '../utils/learning/lrs/LRS';
 
@@ -189,7 +190,7 @@ class LearningMap extends React.Component {
                         endDateDisplay={endDate}
                         timePeriod={timePeriod}
                         config={this.props.config}
-                        currentStructure = {this.props.currentStructure}
+                        currentStructure={this.props.currentStructure}
                         {...period}>
       {period.topics.map(topic => this._renderPeriodTopic(topic))}
     </PeriodCard>);

@@ -1,3 +1,5 @@
+import {curry} from 'ramda';
+
 /*
  Misc functional utility functions, monads, etc. Based on lots of lessons, talks,
  ets from Brian Lonsdorf and others.
@@ -7,12 +9,16 @@
 // Misc
 //------------------------------------------------------------------------------
 
-//const add = uncurry(x => y => x + y);
-//http://disq.us/p/16dkkq9
-const uncurry = f => (...args) => args.reduce((g, x) => g(x), f);
-
 // if b is false, will return null
-const trueOrNull = b => b || null;
+export const trueOrNull = b => b || null;
+
+// indexOf :: a -> [a] -> Either Number
+export const indexOf = curry((el, arry) => {
+  let idx = arry.indexOf(el);
+  return idx < 0 ? Left() : Right(idx);
+});
+
+export const fmap = curry((f, functor) => functor.map(f));
 
 //------------------------------------------------------------------------------
 // Transducers
@@ -24,11 +30,12 @@ export const tfilterer = (f, cnct) => (acc, x) => f(x) ? cnct(acc, x) : acc;
 
 //------------------------------------------------------------------------------
 // Either monad
-// Implementation from Brian Lonsdorf
+// Original implementation from Brian Lonsdorf
 //------------------------------------------------------------------------------
 
 const Right = x =>
   ({
+    of     : Right(x),
     chain  : f => f(x),
     map    : f => Right(f(x)),
     fold   : (f, g) => g(x),
@@ -40,6 +47,7 @@ const Right = x =>
 
 const Left = x =>
   ({
+    of     : Left(x),
     chain  : f => Left(x),
     map    : f => Left(x),
     fold   : (f, g) => f(x),
@@ -53,8 +61,9 @@ const Left = x =>
 //   .chain(c => tryCatch(() => JSON.parse(c)))
 //   .fold(e => 3000, c => c.port)
 
-export const Either = {
+export const Either = ({
   Left, Right,
+  of          : x => Right(x),
   fromNullable: x => x != null ? Right(x) : Left(null), // eslint-disable-line eqeqeq
   fromBool    : x => x ? Right(x) : Left(null),
   fromTryCatch: f => {
@@ -64,7 +73,7 @@ export const Either = {
       return Left(e);
     }
   }
-};
+});
 
 //------------------------------------------------------------------------------
 // Other monads
