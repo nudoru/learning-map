@@ -33,11 +33,15 @@ import AppStore from './AppStore';
 //export const contentTypesSelector      = memoize(state => state.config.contentTypes);
 //export const structureSelector         = memoize(state => state.config.structure);
 
+export const configSelector = () => AppStore.getState().config;
+export const hydratedContentSelector = () => AppStore.getState().hydratedContent;
+export const lrsStatementsSelector = () => AppStore.getState().lrsStatements;
+
 ////////////////////////////////////////////////////////////////////////////////
 
-export const useLRS = () => AppStore.getState().config.webservice.lrs != null; // eslint-disable-line eqeqeq
+export const useLRS = () => configSelector().webservice.lrs != null; // eslint-disable-line eqeqeq
 
-export const useShadowDB = () => AppStore.getState().config.webservice.shadowdb != null; // eslint-disable-line eqeqeq
+export const useShadowDB = () => configSelector().webservice.shadowdb != null; // eslint-disable-line eqeqeq
 
 // True if there are no errors
 export const getSystemStatus = () => {
@@ -59,7 +63,7 @@ export const getCurrentStructure = () => applyStartDateToStructure(getStructureV
 
 // -1 past, 0 current, 1 future
 // Start and End should be moment instances
-export const getTimePeriod = (startM, endM) => {
+export const getDateRelationship = (startM, endM) => {
   if (!startM || !endM) {
     return 2;
   }
@@ -78,20 +82,21 @@ export const getTimePeriod = (startM, endM) => {
   return 0;
 };
 
-// Get the period structure to either config default or last user statement to the LRS
-export const getStructureVersion = () => {
-  let {config, lrsStatements} = AppStore.getState(),
-      strVersion              = config.currentVersion;
-
-  // Get the version from the most recent LRS statement if there is one
-  Either.fromNullable(lrsStatements[0])
-    .map(c => c.context.revision)
+// Get the version from the most recent LRS statement if there is one
+const getLastLRSContentRevision = (statements) => {
+  Either.fromNullable(statements[0])
+    .map(stmt => stmt.context.revision)
     .fold(noOp, r => {
       console.log('Last context revision in the LRS is ', r);
-      strVersion = r;
+      return r;
     });
+};
 
-  return getStructureForVersion(strVersion, config.structure);
+// Get the period structure to either config default or last user statement to the LRS
+export const getStructureVersion = () => {
+  let strVersion              = getLastLRSContentRevision(lrsStatementsSelector()) || configSelector().currentVersion;
+
+  return getStructureForVersion(strVersion, configSelector().structure);
 };
 
 // Get the period structure for the given version
@@ -101,7 +106,7 @@ const getStructureForVersion = (version, data) =>
 // Based on the start event, apply state/end dates the periods in the structure
 export const applyStartDateToStructure = (structure) => {
   let startDate           = structure.startDate,
-      startEventData      = AppStore.getState().config.setup.startEvent,
+      startEventData      = configSelector().setup.startEvent,
       startEventDataParms = startEventData ? startEventData.split(',') : null;
 
   if (startEventDataParms) {
@@ -155,8 +160,7 @@ const applyStartDateToStructureObject = (startDate, structure) => {
 ////////////////////////////////////////////////////////////////////////////////
 
 export const getContentObjById = id =>
-  //Either.fromNullable(AppStore.getState().config.content.filter(idMatchObjId(id))[0])
-  Either.fromNullable(AppStore.getState().hydratedContent.filter(idMatchObjId(id))[0])
+  Either.fromNullable(hydratedContentSelector().filter(idMatchObjId(id))[0])
     .fold(
       () => {
         console.error('Content with ID ' + id + ' not found!');
@@ -200,7 +204,7 @@ export const getEnrollmentRecordLMSCourse = (lmsID, userEnrolledCourses) =>
 
 // Get URLs (id) for content that has a link and doesn't have an LMS id
 export const getContentIDForLRS = () => {
-  return AppStore.getState().config.content.reduce((acc, cont) => {
+  return hydratedContentSelector().reduce((acc, cont) => {
     if (!cont.lmsID && cont.contentLink) {
       acc.push(cont.contentLink);
     }
@@ -217,9 +221,9 @@ export const getMostRecentStatusForContentID = (id) => {
 };
 
 // Get the "completed" statement if exists then "clicked" or null if not
-export const getBestStatusStatementForContentID = id => getCompletionStatementForID(id) || getClickedStatementForID(id);
+export const getStatusStatementForContentID = id => getCompletionStatementForID(id) || getClickedStatementForID(id);
 
-const getAllStatementsForID       = id => AppStore.getState().lrsStatements.filter(s => s.object.id === id);
+const getAllStatementsForID       = id => lrsStatementsSelector().filter(s => s.object.id === id);
 const getMostRecentStatementForID = id => getAllStatementsForID(id)[0];
 const getCompletionStatementForID = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'completed')[0];
 const getClickedStatementForID    = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'clicked')[0];
@@ -252,7 +256,6 @@ export const getHydratedContent = () => {
   let {fullUserProfile, coursesInMap, config} = AppStore.getState(),
       {content}                               = config;
 
-  // TODO better incorporate this function
   // Apply isNew and isUpdated
   return setContentForNewAndUpdated(moment(new Date()), (parseInt(config.newIfWithinDays) || 30), content)
     .reduce((acc, contobj) => {
@@ -261,9 +264,9 @@ export const getHydratedContent = () => {
           lmsEnrollment = getEnrollmentRecordLMSCourse(o.lmsID, fullUserProfile.enrolledCourses)[0];
 
       if (o.contentLink) {
-        statement = getBestStatusStatementForContentID(contentLinkWithId(o.contentLink, o.id));
+        statement = getStatusStatementForContentID(contentLinkWithId(o.contentLink, o.id));
       } else {
-        statement = getBestStatusStatementForContentID(contentTitleToLink(o.title, o.id));
+        statement = getStatusStatementForContentID(contentTitleToLink(o.title, o.id));
       }
 
       o.isPending     = false;

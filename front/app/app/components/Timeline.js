@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-scroll';
-import {isPeriodComplete, getTimePeriod} from '../store/selectors';
+import {isPeriodComplete, getDateRelationship} from '../store/selectors';
 import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
 import {position, addClass, removeClass, getElStyleProp, pxToInt} from '../utils/DOMToolbox';
@@ -77,7 +77,7 @@ class Timeline extends React.Component {
                     complete = isPeriodComplete(period) ? <div className="complete"><StatusIconTiny status={3}/></div> : null;
 
                 if (period.startdate && period.enddate) {
-                  timePeriod = getTimePeriod(period.startdate, period.enddate);
+                  timePeriod = getDateRelationship(period.startdate, period.enddate);
                   if (timePeriod === -1) {
                     clsName.push('past');
                   } else if (timePeriod === 1) {

@@ -5,7 +5,7 @@ import { setLRSStatus } from '../store/actions/Actions';
 import {
   getNumActivitiesForPeriod,
   useLRS,
-  getTimePeriod,
+  getDateRelationship,
   contentTitleToLink,
   contentLinkWithId
 } from '../store/selectors';
@@ -190,7 +190,7 @@ class LearningMap extends React.Component {
 
   _renderPeriod (period) {
     let periodContentCount = getNumActivitiesForPeriod(period),
-        timePeriod         = getTimePeriod(period.startdate, period.enddate),
+        timePeriod         = getDateRelationship(period.startdate, period.enddate),
         startDate          = period.startdate ? period.startdate.format('l') : '', //'dddd, MMMM Do YYYY'
         endDate            = period.enddate ? period.enddate.format('l') : '';
 
