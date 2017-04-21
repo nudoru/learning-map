@@ -39,6 +39,12 @@ export const useLRS = () => AppStore.getState().config.webservice.lrs != null; /
 
 export const useShadowDB = () => AppStore.getState().config.webservice.shadowdb != null; // eslint-disable-line eqeqeq
 
+// True if there are no errors
+export const getSystemStatus = () => {
+  let state = AppStore.getState();
+  return state.connectionLMSStatus && state.connectionLRSStatus && state.connectionSDBStatus;
+};
+
 // Object<Object<Boolean>> => Number
 export const isCompletedToNum = c => c.status.completed ? 2 : 1;
 

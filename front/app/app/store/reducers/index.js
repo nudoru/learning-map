@@ -12,7 +12,6 @@ import { currentStructure } from './currentStructure';
 import {connectionLMSStatus} from './connectionLMSStatus';
 import {connectionLRSStatus} from './connectionLRSStatus';
 import {connectionSDBStatus} from './connectionSDBStatus';
-import {connectionAllegoStatus} from './connectionAllegoStatus';
 
 export const reducers = combineReducers({
   config,
@@ -26,6 +25,5 @@ export const reducers = combineReducers({
   currentStructure,
   connectionLMSStatus,
   connectionLRSStatus,
-  connectionSDBStatus,
-  connectionAllegoStatus
+  connectionSDBStatus
 });

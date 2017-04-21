@@ -64,8 +64,3 @@ export const setSDBStatus = (payload) => ({
   type: Actions.SET_SDB_STATUS,
   payload
 });
-
-export const setAllegoStatus = (payload) => ({
-  type: Actions.SET_ALLEGO_STATUS,
-  payload
-});

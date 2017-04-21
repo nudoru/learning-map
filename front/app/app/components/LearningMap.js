@@ -107,7 +107,7 @@ class LearningMap extends React.Component {
         },
         r => {
           console.log('Statement sent!', r);
-          //AppStore.dispatch(setLRSStatus(true));
+          AppStore.dispatch(setLRSStatus(true));
         });
   }
 

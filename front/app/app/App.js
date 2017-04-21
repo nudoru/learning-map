@@ -12,6 +12,7 @@ import {
 } from './store/actions/Actions';
 import {
   useLRS,
+  getSystemStatus,
   getNewOrUpdatedContentTitles,
   getCurrentStructure,
   getHydratedContent
@@ -26,17 +27,11 @@ import ModalMessage from './rh-components/rh-ModalMessage';
 import Timeline from './components/Timeline';
 import Introduction from './components/Introduction';
 
-const ErrorMessage = (props) => <ModalMessage error={true}
-                                              dismissible={false}><h1>Connection
-  Problem</h1><p>The connection to one or more back end systems has failed. Your
-  progress may not have loaded correctly and may not save.</p><p>Please refresh the page to try again.</p>
-</ModalMessage>;
-
 class App extends React.Component {
 
   constructor () {
     super();
-    this.state = {ready: false, systemError: false, errorDisplayed: false};
+    this.state = {ready: false, systemError: false};
     this.storeListener;
   }
 
@@ -47,8 +42,8 @@ class App extends React.Component {
 
   onStateUpdated () {
     let state = AppStore.getState();
-    if (!(state.connectionLMSStatus && state.connectionLRSStatus && state.connectionSDBStatus && state.connectionAllegoStatus)) {
-      this.setState({systemError: true, errorDisplayed: false});
+    if (!(getSystemStatus())) {
+      this.setState({systemError: true});
       console.error('Connection to one or more back end systems is down!');
     }
   }
@@ -116,13 +111,30 @@ class App extends React.Component {
           <Timeline/>
           <LearningMap/>
         </div>
-        {this.state.systemError ? <ErrorMessage/> : null}
+        {this.state.systemError ? this.errorMessage() : null}
       </div>);
     } else {
       return <PleaseWaitModal
         message="Loading your information from the LMS"/>;
     }
   }
+
+  closeErrorMessage() {
+    this.setState({systemError: false});
+  }
+
+  errorMessage () {
+    return (<ModalMessage error={true}
+                          dismissible={true}
+                          dismissFunc={this.closeErrorMessage.bind(this)}
+                          dismissButtonLabel="Continue anyway">
+      <h1>Connection
+      Problem</h1><p>The connection to one or more back end systems has encountered a problem.
+      Your progress may not have loaded correctly and may not save.</p><p>Please
+      refresh the page to try again.</p>
+    </ModalMessage>);
+  }
+
 }
 
 App.propTypes = {};
