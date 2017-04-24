@@ -139,11 +139,19 @@
             },
             "showDateOnPeriod": {
               "type": "boolean"
+            },
+            "timelineStyle": {
+              "type": "number"
+            },
+            "cardStyle": {
+              "type": "number"
             }
           },
           "required": [
             "periodLabel",
-            "showDateOnPeriod"
+            "showDateOnPeriod",
+            "timelineStyle",
+            "cardStyle"
           ]
         },
         "startEvent": {

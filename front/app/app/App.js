@@ -12,7 +12,9 @@ import {
 } from './store/actions/Actions';
 import {
   useLRS,
-  getSystemStatus,
+  useShadowDB,
+  startEventSelector,
+  isConnectionSuccessful,
   getNewOrUpdatedContentTitles,
   getCurrentStructure,
   getHydratedContent
@@ -42,7 +44,7 @@ class App extends React.Component {
 
   onStateUpdated () {
     let state = AppStore.getState();
-    if (!(getSystemStatus())) {
+    if (!(isConnectionSuccessful())) {
       this.setState({systemError: true});
       console.error('Connection to one or more back end systems is down!');
     }
@@ -80,7 +82,12 @@ class App extends React.Component {
   externalLearningActivityLoaded () {
     // Will mutate the loaded content based on dates and LMS/LRS content
     AppStore.dispatch(setHydratedContent(getHydratedContent()));
-    this.fetchShadowDBDataEnrollmentData();
+    if(useShadowDB() && startEventSelector().length) {
+      this.fetchShadowDBDataEnrollmentData();
+    } else {
+      console.log('no start event, skipping')
+      this.finalizeContent();
+    }
   }
 
   fetchShadowDBDataEnrollmentData () {
@@ -96,6 +103,10 @@ class App extends React.Component {
   }
 
   shadowDBEnrollmentsLoaded () {
+    this.finalizeContent();
+  }
+
+  finalizeContent() {
     AppStore.dispatch(setCurrentStructure(getCurrentStructure()));
     this.setState({ready: true});
   }

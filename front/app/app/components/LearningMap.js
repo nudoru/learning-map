@@ -7,7 +7,8 @@ import {
   useLRS,
   getDateRelationship,
   contentTitleToLink,
-  contentLinkWithId
+  contentLinkWithId,
+  getHydratedContent
 } from '../store/selectors';
 import { idMatchObjId } from '../utils/AppUtils';
 import { PeriodCard, PeriodTopicCard, ContentRow } from './PeriodCard';
