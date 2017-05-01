@@ -25,39 +25,6 @@ export const fetchUserProfile = () => {
   });
 };
 
-// Dependant on data from fetchUserProfile
-export const fetchEnrolledCourses = () => {
-  return new Task((reject, resolve) => {
-    // console.log('fetchEnrolledCourses');
-    let {config}    = AppStore.getState(),
-        courseIds   = AppStore.getState().fullUserProfile.enrolledCourses.map(prop('id'));
-    requestCourseCatalogEntry(config.webservice, courseIds).then(res => {
-      console.log('Fetched enrolled courses', res);
-      AppStore.dispatch(setEnrolledCourses(res));
-      resolve(res);
-    }).catch(err => {
-      reject('Error getting user\'s enrolled courses');
-    });
-  });
-};
-
-// Dependant on data from fetchUserProfile
-export const fetchUserCalendar = () => {
-  return new Task((reject, resolve) => {
-    // console.log('fetchUserCalendar');
-    let {config}    = AppStore.getState();
-    Either.fromNullable(AppStore.getState().fullUserProfile.id).fold(console.error, (id) => {
-      requestUserCalendar(config.webservice, id).then(res => {
-        console.log('Fetched user calendar', res);
-        AppStore.dispatch(setUserCalendar(res));
-        resolve(res);
-      }).catch(err => {
-        reject('Error getting user\'s calendar');
-      });
-    })
-  });
-};
-
 export const fetchCoursesInMap = () => {
   return new Task((reject, resolve) => {
     // console.log('fetchCoursesInMap');
@@ -76,12 +43,4 @@ export const fetchCoursesInMap = () => {
 // Task
 export const fetchLMSData = () =>
   fetchUserProfile()
-    .chain(res => {
-      return fetchEnrolledCourses();
-    })
-    .chain(res => {
-      return fetchUserCalendar();
-    })
-    .chain(res => {
-      return fetchCoursesInMap();
-    });
+    .chain(fetchCoursesInMap);

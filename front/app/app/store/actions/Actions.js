@@ -35,16 +35,6 @@ export const setFullUserProfile = (payload) => ({
     payload
   });
 
-export const setEnrolledCourses = (payload) => ({
-    type: Actions.SET_ENROLLED_COURSES,
-    payload
-  });
-
-export const setUserCalendar = (payload) => ({
-    type: Actions.SET_USER_CALENDAR,
-    payload
-  });
-
 export const setCoursesInMap = (payload) => ({
     type: Actions.SET_COURSES_IN_MAP,
     payload

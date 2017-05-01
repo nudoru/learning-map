@@ -1,14 +1,10 @@
 import Task from 'data.task';
 import AppStore from '../store/AppStore';
-import {requestUserEnrolledCourseDetails} from '../utils/learning/ShadowDB';
+import { requestUserEnrolledCourseDetails } from '../utils/learningservices/shadow/ShadowDB';
 
 export const getSBUserEnrolledCourseDetails = () => {
   let {config, fullUserProfile} = AppStore.getState();
   return new Task((reject, resolve) => {
-    requestUserEnrolledCourseDetails(fullUserProfile.id, config.webservice.shadowdb).then(res => {
-      resolve(res);
-    }, e => {
-      reject(e);
-    });
+    requestUserEnrolledCourseDetails(config.webservice.shadowdb, fullUserProfile.id).fork(reject, resolve);
   });
 };

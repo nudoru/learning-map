@@ -57,7 +57,7 @@ class LearningMap extends React.Component {
     });
 
     // Send user x loggedin statement, disable for dev and testing to avoid spamming the LRS
-    //this._sendLoggedInStatement();
+    this._sendLoggedInStatement();
   }
 
   _sendLoggedInStatement () {
@@ -255,8 +255,6 @@ class LearningMap extends React.Component {
 
 LearningMap.propTypes = {
   fullUserProfile : React.PropTypes.object,
-  enrolledCourses : React.PropTypes.array,
-  userCalendar    : React.PropTypes.array,
   coursesInMap    : React.PropTypes.array,
   hydratedContent : React.PropTypes.array,
   config          : React.PropTypes.object,
@@ -267,8 +265,6 @@ const mapStateToProps = state => {
   return {
     config          : state.config,
     fullUserProfile : state.fullUserProfile,
-    enrolledCourses : state.enrolledCourses,
-    userCalendar    : state.userCalendar,
     coursesInMap    : state.coursesInMap,
     hydratedContent : state.hydratedContent,
     currentStructure: state.currentStructure

@@ -5,7 +5,6 @@
  enrolledCourses - LMS data for all of the courses the user is enrolled in
  fullUserProfile - LMS data for the user
  lrsStatements - LRS/xAPI statements for the user that match the app's config.webservice.lrs.contextid
- userCalendar - LRS data for the user's calendar
  shadowEnrollments - Shadow DB data for - enrollmentDetails, userEnrollments
  */
 
@@ -22,8 +21,6 @@ export default {
     enrollmentDetails: []
   },
   fullUserProfile       : {},
-  enrolledCourses       : [],
-  userCalendar          : [],
   coursesInMap          : [],
   currentStructure      : {},
   hydratedContent       : [],
