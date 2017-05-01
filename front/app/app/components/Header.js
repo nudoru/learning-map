@@ -18,7 +18,7 @@ const mapStateToProps = state => {
   return {
     title       : state.config.setup.title,
     secondaryNav: state.config.setup.secondaryNav,
-    username    : state.fullUserProfile.fullname
+    username    : state.userProfile.fullname
   };
 };
 

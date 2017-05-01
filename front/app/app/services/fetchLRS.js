@@ -8,7 +8,7 @@ export const fetchUserStatements = () => {
       query = [{
         agent: JSON.stringify({
           objectType: 'Agent',
-          mbox      : 'mailto:' + state.fullUserProfile.email
+          mbox      : 'mailto:' + state.userProfile.email
         })
       }];
 

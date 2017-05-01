@@ -15,13 +15,14 @@ import {
 } from '../utils/AppUtils';
 import AppStore from './AppStore';
 
-
 //export const configSelector            = memoize(state => state.config);
 
-export const configSelector          = () => AppStore.getState().config;
-export const hydratedContentSelector = () => AppStore.getState().hydratedContent;
-export const lrsStatementsSelector   = () => AppStore.getState().lrsStatements;
-export const startEventSelector      = () => configSelector().setup.startEvent;
+export const configSelector              = () => AppStore.getState().config;
+export const hydratedContentSelector     = () => AppStore.getState().hydratedContent;
+export const userStatementsSelector      = () => AppStore.getState().lrsStatements;
+export const startEventSelector          = () => configSelector().setup.startEvent;
+export const userProfileSelector         = () => AppStore.getState().userProfile;
+export const userEnrolledCoursesSelector = () => userProfileSelector().enrolledCourses;
 
 export const useLRS      = () => configSelector().webservice.lrs != null; // eslint-disable-line eqeqeq
 export const useShadowDB = () => configSelector().webservice.shadowdb != null; // eslint-disable-line eqeqeq
@@ -41,7 +42,7 @@ export const contentLinkWithId = (link, id) => link + '#' + id;
 
 export const getCurrentStructure = () =>
   applyStartDateToStructure(startEventSelector(),
-    getStructureVersion(configSelector().structure, getLastLRSContentRevision(lrsStatementsSelector()) || configSelector().currentVersion));
+    getStructureVersion(configSelector().structure, getLastLRSContentRevision(userStatementsSelector()) || configSelector().currentVersion));
 
 const getUserEnrollmentForId = id => AppStore.getState().shadowEnrollments.userEnrollments.filter(e => id === e.enrolid)[0];
 
@@ -167,7 +168,7 @@ export const getEnrollmentRecordLMSCourse = (userEnrolledCourses, courseLMSId) =
   userEnrolledCourses
     .filter(idMatchObjId(courseLMSId));
 
-const getAllStatementsForID       = id => lrsStatementsSelector().filter(s => s.object.id === id);
+const getAllStatementsForID       = id => userStatementsSelector().filter(s => s.object.id === id);
 const getCompletionStatementForID = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'completed')[0];
 const getClickedStatementForID    = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'clicked')[0];
 
@@ -183,7 +184,7 @@ export const isPeriodComplete = obj =>
   isTopicComplete(topic) && res, true);
 
 export const getHydratedContent = () => {
-  let {fullUserProfile, coursesInMap, config} = AppStore.getState(),
+  let {coursesInMap, config} = AppStore.getState(),
       {content}                               = config,
       today                                   = moment(new Date()),
       newIfWithinDays                         = parseInt(config.newIfWithinDays) || 30;
@@ -191,7 +192,7 @@ export const getHydratedContent = () => {
   return content.reduce((acc, contobj) => {
     let o             = Object.assign({}, contobj),
         statement,
-        lmsEnrollment = getEnrollmentRecordLMSCourse(fullUserProfile.enrolledCourses, o.lmsID)[0];
+        lmsEnrollment = getEnrollmentRecordLMSCourse(userEnrolledCoursesSelector(), o.lmsID)[0];
 
     if (o.contentLink) {
       statement = getStatusStatementForContentID(contentLinkWithId(o.contentLink, o.id));

@@ -47,7 +47,7 @@ class ApplicationContainer extends React.Component {
   onStateUpdated () {
     // Keys will only be present once the user account has been successfully
     // fetched from the LMS
-    if (Object.keys(AppStore.getState().fullUserProfile).length) {
+    if (Object.keys(AppStore.getState().userProfile).length) {
       this.storeListener();
       this.setState({hasUser: true});
     }

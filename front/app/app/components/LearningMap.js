@@ -97,10 +97,10 @@ class LearningMap extends React.Component {
     if (!useLRS()) {
       return;
     }
-    let {fullUserProfile} = this.props;
+    let {userProfile} = this.props;
 
-    partialStatement.subjectName = fullUserProfile.fullname;
-    partialStatement.subjectID   = fullUserProfile.email;
+    partialStatement.subjectName = userProfile.fullname;
+    partialStatement.subjectID   = userProfile.email;
     LRS.sendStatement(LRS.createStatement(partialStatement))
       .fork(e => {
           console.error('Error sending statement: ', e);
@@ -254,7 +254,7 @@ class LearningMap extends React.Component {
 }
 
 LearningMap.propTypes = {
-  fullUserProfile : React.PropTypes.object,
+  userProfile     : React.PropTypes.object,
   coursesInMap    : React.PropTypes.array,
   hydratedContent : React.PropTypes.array,
   config          : React.PropTypes.object,
@@ -264,7 +264,7 @@ LearningMap.propTypes = {
 const mapStateToProps = state => {
   return {
     config          : state.config,
-    fullUserProfile : state.fullUserProfile,
+    userProfile     : state.userProfile,
     coursesInMap    : state.coursesInMap,
     hydratedContent : state.hydratedContent,
     currentStructure: state.currentStructure
