@@ -59,7 +59,7 @@ const _getUser = curry((wsConfig, username) =>
     .map(_arrangeResults(username)));
 
 const _requestLRSUser = (wsConfig, username) =>
-  requestAllStatements(wsConfig)(createAgentEmailQuery(username + '@redhat.com'));
+  requestAllStatements(wsConfig)(createAgentEmailQuery(username));
 
 const _arrangeResults = curry((username, results) => ({
   [username]: {

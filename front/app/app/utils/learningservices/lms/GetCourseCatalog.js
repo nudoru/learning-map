@@ -41,12 +41,24 @@ const requestCatalog = (wsOptions, courseIds) => {
     catalogReq  = createLMSQuery(wsOptions, 'core_course_get_courses', courseOptions);
     chainTasks([categoryReq, catalogReq]).fork(reject,
       res => {
-        resolve(_compactCatalog(wsOptions, res));
+        resolve(_compactCatalog(wsOptions, res, (courseIds.length)));
       });
   });
 };
 
-const _compactCatalog = (options, resultArry) => _parseCatalog(options, resultArry[0], resultArry[1]);
+// If hasOptions, then we requested specific course IDs and don't filtere them out
+const _compactCatalog = (options, resultArry, hasOptions) => {
+  let filteredCatalog;
+  if (!hasOptions) {
+    filteredCatalog = resultArry[1]
+      .filter(_isNotInProhibitedCategory(resultArry[0]))
+      .filter(_isNotSiteFormat)
+      .filter(_isForAllLearners);
+  } else {
+    filteredCatalog = resultArry[1];
+  }
+  return _parseCatalog(options, resultArry[0], filteredCatalog);
+};
 
 const _getProhibitedCategoryIds = categories => categories.filter(c => prohibitedCategories.includes(c.name)).map(c => c.id);
 
@@ -64,9 +76,9 @@ const _getCategoryName = (categories, courseCategoryID) =>
 
 const _parseCatalog = (options, categories, catalog) =>
   catalog
-    .filter(_isNotInProhibitedCategory(categories))
-    .filter(_isNotSiteFormat)
-    .filter(_isForAllLearners)
+    //.filter(_isNotInProhibitedCategory(categories))
+    //.filter(_isNotSiteFormat)
+    //.filter(_isForAllLearners)
     .sort(dynamicSortObjArry('fullname'))
     .reduce((acc, course) => {
       acc.push({

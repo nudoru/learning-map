@@ -1,4 +1,4 @@
-import {curry} from 'ramda';
+import {curry, sequence} from 'ramda';
 
 /*
  Misc functional utility functions, monads, etc. Based on lots of lessons, talks,

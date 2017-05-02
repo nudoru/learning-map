@@ -2,25 +2,26 @@ import React from 'react';
 import { connect } from 'react-redux';
 import AppStore from './store/AppStore';
 import {
-  setLRSStatements,
-  setShadowEnrollments,
+  setCoursesInMap,
   setCurrentStructure,
+  setFullUserProfile,
   setHydratedContent,
   setLMSStatus,
-  setLRSStatus,
-  setSDBStatus
+  setLRSStatements,
+  setSDBStatus,
+  setShadowEnrollments
 } from './store/actions/Actions';
 import {
-  useLRS,
-  useShadowDB,
-  startEventSelector,
-  isConnectionSuccessful,
-  getNewOrUpdatedContentTitles,
   getCurrentStructure,
-  getHydratedContent
+  getHydratedContent,
+  getNewOrUpdatedContentTitles,
+  isConnectionSuccessful,
+  startEventSelector,
+  useShadowDB
 } from './store/selectors';
-import { fetchStatementsForContext } from './services/fetchLRS';
-import { fetchLMSData } from './services/fetchLMS';
+import { chainTasks } from './utils/AppUtils';
+import { fetchUserProfile } from './services/fetchUserProfile';
+import { fetchCoursesInMap, fetchLMSData } from './services/fetchLMS';
 import { getSBUserEnrolledCourseDetails } from './services/fetchShadowDb';
 import Header from './components/Header';
 import LearningMap from './components/LearningMap';
@@ -33,13 +34,13 @@ class App extends React.Component {
 
   constructor () {
     super();
-    this.state = {ready: false, systemError: false};
+    this.state = {ready: false, systemError: false, errorMessage: null};
     this.storeListener;
   }
 
   componentDidMount () {
     this.storeListener = AppStore.subscribe(this.onStateUpdated.bind(this));
-    this.fetchLMSData();
+    this.fetchProfiles();
   }
 
   onStateUpdated () {
@@ -49,42 +50,31 @@ class App extends React.Component {
     }
   }
 
-  fetchLMSData () {
-    fetchLMSData().fork(e => {
-      console.error('LMS Error: ', e);
+  fetchProfiles () {
+    chainTasks([fetchUserProfile(), fetchCoursesInMap()]).fork(e => {
+      console.error('Could not get initial app data!', e);
+      this.setState({errorMessage: e});
       AppStore.dispatch(setLMSStatus(false));
     }, res => {
-      // res was the last in the chain, or course in map
-      this.fetchLRSData();
-    });
-  }
+      console.log('Got user profile', res[0]);
+      console.log('Got courses in map', res[1]);
 
-  // Fetches all statements for the current user's email and then filters for the
-  // contextID as set in the config.json file
-  fetchLRSData () {
-    if (!useLRS()) {
-      this.externalLearningActivityLoaded();
-    }
+      let profile = res[0][0][Object.keys(res[0][0])];
 
-    fetchStatementsForContext().fork(e => {
-      console.warn('Couldn\'t get LRS statements. An error -OR- no LRS is configured.', e);
-      console.error('LRS Error: ', e);
-      AppStore.dispatch(setLRSStatus(false));
-      this.externalLearningActivityLoaded();
-    }, statements => {
-      console.log('got the lrs data!', statements);
-      AppStore.dispatch(setLRSStatements(statements));
+      AppStore.dispatch(setCoursesInMap(res[1]));
+      AppStore.dispatch(setFullUserProfile(profile.lms));
+      AppStore.dispatch(setLRSStatements(profile.lrs));
+
       this.externalLearningActivityLoaded();
     });
   }
 
   externalLearningActivityLoaded () {
-    // Will mutate the loaded content based on dates and LMS/LRS content
     AppStore.dispatch(setHydratedContent(getHydratedContent()));
-    if(useShadowDB() && startEventSelector().length) {
+    if (useShadowDB() && startEventSelector().length) {
       this.fetchShadowDBDataEnrollmentData();
     } else {
-      console.log('no start event, skipping')
+      console.log('no start event, skipping');
       this.finalizeContent();
     }
   }
@@ -92,6 +82,7 @@ class App extends React.Component {
   fetchShadowDBDataEnrollmentData () {
     getSBUserEnrolledCourseDetails().fork(e => {
       console.error('ShadowDB Error: ', e);
+      this.setState({errorMessage: e});
       AppStore.dispatch(setSDBStatus(false));
       this.shadowDBEnrollmentsLoaded();
     }, res => {
@@ -105,7 +96,7 @@ class App extends React.Component {
     this.finalizeContent();
   }
 
-  finalizeContent() {
+  finalizeContent () {
     AppStore.dispatch(setCurrentStructure(getCurrentStructure()));
     this.setState({ready: true});
   }
@@ -123,12 +114,14 @@ class App extends React.Component {
         {this.state.systemError ? this.errorMessage() : null}
       </div>);
     } else {
-      return <PleaseWaitModal
-        message="Loading your information from the LMS"/>;
+      return (<div>
+        <PleaseWaitModal message="Loading your information from the LMS"/>
+        {this.state.systemError ? this.errorMessage() : null}
+      </div>);
     }
   }
 
-  closeErrorMessage() {
+  closeErrorMessage () {
     this.setState({systemError: false});
   }
 
@@ -138,9 +131,12 @@ class App extends React.Component {
                           dismissFunc={this.closeErrorMessage.bind(this)}
                           dismissButtonLabel="Continue anyway">
       <h1>Connection
-      Problem</h1><p>The connection to one or more back end systems has encountered a problem.
+        Problem</h1><p>The connection to one or more back end systems has
+      encountered a problem.
       Your progress may not have loaded correctly and may not save.</p><p>Please
       refresh the page to try again.</p>
+      {this.state.errorMessage ?
+        <p><em>{this.state.errorMessage}</em></p> : null}
     </ModalMessage>);
   }
 

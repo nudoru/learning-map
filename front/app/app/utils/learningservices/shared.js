@@ -145,7 +145,7 @@ const createLMSQuery = (wsOptions, fn, params, resultKey) =>
       });
   });
 
-const createLRSQuery = (wsOptions, method = 'POST', params, body = '') =>
+const createLRSQuery = (wsOptions, method = 'POST', params, body) =>
   new Task((reject, resolve) => {
     let url = is(String, params) ? wsOptions.endpoint + params : wsOptions.endpoint + '/data/xAPI/statements' + parameterize(params);
 

@@ -1,4 +1,5 @@
-import {compose, curry, both, contains} from 'ramda';
+import Task from 'data.task';
+import {compose, curry, both, contains, sequence} from 'ramda';
 import {
   removeTagsStr,
   removeEntityStr
@@ -6,6 +7,9 @@ import {
 
 export const noOp = () => {
 };
+
+// Chain an array of Tasks in to one task
+export const chainTasks = (taskArry) => sequence(Task.of, taskArry);
 
 //------------------------------------------------------------------------------
 // Composabile f()s

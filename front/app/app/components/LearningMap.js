@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import AppStore from '../store/AppStore';
 import { setLRSStatus } from '../store/actions/Actions';
 import {
+  configSelector,
   getNumActivitiesForPeriod,
   useLRS,
   getDateRelationship,
   contentTitleToLink,
-  contentLinkWithId,
-  getHydratedContent
+  contentLinkWithId
 } from '../store/selectors';
 import { idMatchObjId } from '../utils/AppUtils';
 import { PeriodCard, PeriodTopicCard, ContentRow } from './PeriodCard';
-import { LRS } from '../utils/learning/lrs/LRS';
+import { setStatementDefaults, sendFragment} from '../utils/learningservices/lrs/LRS';
 
 class LearningMap extends React.Component {
 
@@ -35,7 +35,7 @@ class LearningMap extends React.Component {
 
     let {config} = this.props;
 
-    LRS.setStatementDefaults({
+    setStatementDefaults({
       result : {
         completion: true
       },
@@ -93,15 +93,15 @@ class LearningMap extends React.Component {
     });
   }
 
-  _sendXAPIStatement (partialStatement) {
+  _sendXAPIStatement (fragment) {
     if (!useLRS()) {
       return;
     }
     let {userProfile} = this.props;
 
-    partialStatement.subjectName = userProfile.fullname;
-    partialStatement.subjectID   = userProfile.email;
-    LRS.sendStatement(LRS.createStatement(partialStatement))
+    fragment.subjectName = userProfile.fullname;
+    fragment.subjectID   = userProfile.email;
+    sendFragment(configSelector().webservice.lrs)(fragment)
       .fork(e => {
           console.error('Error sending statement: ', e);
           AppStore.dispatch(setLRSStatus(false));

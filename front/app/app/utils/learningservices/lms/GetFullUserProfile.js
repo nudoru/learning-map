@@ -74,7 +74,7 @@ const _requestBaseUserProfile = (wsOptions, username, reqOptions) =>
 
       chainTasks(tasks).fork(reject,
         resArray => {
-          if (resArray.length == 2) {
+          if (resArray.length === 2) {
             userProfile.calendar        = resArray[0];
             userProfile.enrolledCourses = resArray[1][0].enrolledcourses;
           } else {

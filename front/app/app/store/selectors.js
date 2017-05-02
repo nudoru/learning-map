@@ -9,15 +9,32 @@ import {
 import { hasLength, idMatchObjId, noOp, stripHTML } from '../utils/AppUtils';
 import AppStore from './AppStore';
 
-export const configSelector              = () => AppStore.getState().config;
-export const hydratedContentSelector     = () => AppStore.getState().hydratedContent;
-export const userStatementsSelector      = () => AppStore.getState().lrsStatements;
-export const startEventSelector          = () => configSelector().setup.startEvent;
-export const userProfileSelector         = () => AppStore.getState().userProfile;
-export const userEnrolledCoursesSelector = () => userProfileSelector().enrolledCourses;
-export const currentStructureSelector    = () => AppStore.getState().currentStructure;
-export const coursesInMapSelector        = () => AppStore.getState().coursesInMap;
-export const shadowDBEnrollmentsSelector = () => AppStore.getState().shadowEnrollments;
+let STATEMENTS_FOR_CONTEXT_CACHE;
+
+export const configSelector                   = () => AppStore.getState().config;
+export const hydratedContentSelector          = () => AppStore.getState().hydratedContent;
+export const startEventSelector               = () => configSelector().setup.startEvent;
+export const userProfileSelector              = () => AppStore.getState().userProfile;
+export const userEnrolledCoursesSelector      = () => userProfileSelector().enrolledCourses;
+export const currentStructureSelector         = () => AppStore.getState().currentStructure;
+export const coursesInMapSelector             = () => AppStore.getState().coursesInMap;
+export const shadowDBEnrollmentsSelector      = () => AppStore.getState().shadowEnrollments;
+export const userStatementsSelector           = () => AppStore.getState().lrsStatements;
+export const userStatementsSelectorForContext = () => {
+  if (STATEMENTS_FOR_CONTEXT_CACHE) {
+    return STATEMENTS_FOR_CONTEXT_CACHE;
+  }
+  STATEMENTS_FOR_CONTEXT_CACHE = filterStatementsForContext(configSelector().webservice.lrs.contextID, userStatementsSelector());
+  return STATEMENTS_FOR_CONTEXT_CACHE;
+};
+
+const filterStatementsForContext = curry((contextId, statements) =>
+  statements.reduce((acc, stmnt) => {
+    if ((stmnt.context && stmnt.context.platform) && stmnt.context.platform === contextId) {
+      acc.push(stmnt);
+    }
+    return acc;
+  }, []));
 
 export const useLRS      = () => configSelector().webservice.lrs != null; // eslint-disable-line eqeqeq
 export const useShadowDB = () => configSelector().webservice.shadowdb != null; // eslint-disable-line eqeqeq
@@ -37,7 +54,7 @@ export const contentLinkWithId = (link, id) => link + '#' + id;
 
 export const getCurrentStructure = () =>
   applyStartDateToStructure(startEventSelector(),
-    getStructureVersion(configSelector().structure, getLastLRSContentRevision(userStatementsSelector()) || configSelector().currentVersion));
+    getStructureVersion(configSelector().structure, getLastLRSContentRevision(userStatementsSelectorForContext()) || configSelector().currentVersion));
 
 const getUserEnrollmentForId = id => shadowDBEnrollmentsSelector().userEnrollments.filter(e => id === e.enrolid)[0];
 
@@ -163,7 +180,7 @@ export const getEnrollmentRecordLMSCourse = (userEnrolledCourses, courseLMSId) =
   userEnrolledCourses
     .filter(idMatchObjId(courseLMSId));
 
-const getAllStatementsForID       = id => userStatementsSelector().filter(s => s.object.id === id);
+const getAllStatementsForID       = id => userStatementsSelectorForContext().filter(s => s.object.id === id);
 const getCompletionStatementForID = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'completed')[0];
 const getClickedStatementForID    = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'clicked')[0];
 
