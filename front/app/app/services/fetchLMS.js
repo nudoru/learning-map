@@ -1,21 +1,25 @@
 import Task from 'data.task';
-import Either from 'data.either';
 import { is, prop } from 'ramda';
 import AppStore from '../store/AppStore';
-import {setFullUserProfile, setEnrolledCourses, setUserCalendar, setCoursesInMap} from '../store/actions/Actions';
+import { configSelector } from '../store/selectors';
+import {
+  setCoursesInMap,
+  setEnrolledCourses,
+  setFullUserProfile,
+  setUserCalendar
+} from '../store/actions/Actions';
 import { requestFullUserProfile } from '../utils/learning/totara/GetFullUserProfile';
 import { requestCourseCatalogEntry } from '../utils/learning/totara/GetCourseCatalogEntry';
-import { requestUserCalendar } from '../utils/learning/totara/GetUserCalendar';
 
 const coursesInMap = data => data.map(prop('lmsID')).filter(is(Number));
 
 export const fetchUserProfile = () => {
   return new Task((reject, resolve) => {
     // console.log('getFullUserProfile');
-    let {config}    = AppStore.getState();
+    let config = configSelector();
     // console.log('Requesting user profile for ', config.defaultuser);
     requestFullUserProfile(config.webservice, config.defaultuser).then(res => {
-      console.log('Fetched profile',res);
+      console.log('Fetched profile', res);
       AppStore.dispatch(setFullUserProfile(res));
       resolve(res);
     }).catch(err => {
@@ -28,14 +32,14 @@ export const fetchUserProfile = () => {
 export const fetchCoursesInMap = () => {
   return new Task((reject, resolve) => {
     // console.log('fetchCoursesInMap');
-    let {config}    = AppStore.getState(),
-        courseIds   = coursesInMap(config.content);
+    let config    = configSelector(),
+        courseIds = coursesInMap(config.content);
     requestCourseCatalogEntry(config.webservice, courseIds).then(res => {
       console.log('Fetched courses in map', res);
       AppStore.dispatch(setCoursesInMap(res));
       resolve(res);
     }).catch(err => {
-      reject('Error getting courses from map');
+      reject('Error getting courses from map '+err);
     });
   });
 };

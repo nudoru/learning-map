@@ -1,18 +1,19 @@
 import Task from 'data.task';
-import AppStore from '../store/AppStore';
-import {LRS} from '../utils/learning/lrs/LRS';
+import { configSelector, userProfileSelector } from '../store/selectors';
+import { LRS } from '../utils/learning/lrs/LRS';
 
 // Get LRS statements for the current user id (email) only
 export const fetchUserStatements = () => {
-  let state = AppStore.getState(),
-      query = [{
+  let config      = configSelector(),
+      userProfile = userProfileSelector(),
+      query       = [{
         agent: JSON.stringify({
           objectType: 'Agent',
-          mbox      : 'mailto:' + state.userProfile.email
+          mbox      : 'mailto:' + userProfile.email
         })
       }];
 
-  LRS.configure(state.config.webservice.lrs);
+  LRS.configure(config.webservice.lrs);
 
   return new Task((reject, resolve) => {
     LRS.getStatements(query).fork(err => {
@@ -30,8 +31,8 @@ export const fetchStatementsForContext = () => {
   return new Task((reject, resolve) => {
     fetchUserStatements().fork(e => reject(e), statements => {
       // TODO REDUX
-      let {config} = AppStore.getState(),
-          res      = statements.statements.reduce((acc, stmnt) => {
+      let config = configSelector(),
+          res    = statements.statements.reduce((acc, stmnt) => {
             if ((stmnt.context && stmnt.context.platform) && stmnt.context.platform === config.webservice.lrs.contextID) {
               acc.push(stmnt);
             }

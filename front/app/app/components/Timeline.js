@@ -1,10 +1,16 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {Link} from 'react-scroll';
-import {isPeriodComplete, getDateRelationship} from '../store/selectors';
-import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
+import { connect } from 'react-redux';
+import { Link } from 'react-scroll';
+import { isPeriodComplete, getDateRelationship } from '../store/selectors';
+import { StatusIconTiny } from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
-import {position, addClass, removeClass, getElStyleProp, pxToInt} from '../utils/DOMToolbox';
+import {
+  position,
+  addClass,
+  removeClass,
+  getElStyleProp,
+  pxToInt
+} from '../utils/DOMToolbox';
 
 /*
  This scroll behavior completely violates the React methodology, but it works
@@ -12,18 +18,18 @@ import {position, addClass, removeClass, getElStyleProp, pxToInt} from '../utils
 
 class Timeline extends React.Component {
 
-  constructor() {
+  constructor () {
     super();
     this.state = {};
 
-    this.lastScrollYPosition    = 0;
-    this.isWaiting              = false;
-    this.initialYPosition       = 0;
+    this.lastScrollYPosition = 0;
+    this.isWaiting = false;
+    this.initialYPosition = 0;
     this.repositionAfterYScroll = 0;
-    this.timelineEl             = null;
+    this.timelineEl = null;
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.timelineEl = document.querySelector('.rh-timeline-container');
 
     this.initialYPosition = pxToInt(getElStyleProp(this.timelineEl, 'top'));
@@ -34,11 +40,11 @@ class Timeline extends React.Component {
     window.addEventListener('scroll', this._onWindowScroll.bind(this));
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     window.removeEventListener('scroll', this._onWindowScroll.bind(this));
   }
 
-  _onWindowScroll(e) {
+  _onWindowScroll (e) {
     this.lastScrollYPosition = window.scrollY;
     if (!this.isWaiting) {
       window.requestAnimationFrame(() => {
@@ -49,7 +55,7 @@ class Timeline extends React.Component {
     this.isWaiting = true;
   }
 
-  _reposition(yPosition) {
+  _reposition (yPosition) {
     if (yPosition > this.repositionAfterYScroll) {
       this._setTimelineElTopPosition(yPosition - this.repositionAfterYScroll + this.initialYPosition);
       addClass(this.timelineEl, 'rh-timeline-floating');
@@ -59,11 +65,11 @@ class Timeline extends React.Component {
     }
   }
 
-  _setTimelineElTopPosition(top) {
+  _setTimelineElTopPosition (top) {
     this.timelineEl.style.top = top + 'px';
   }
 
-  render() {
+  render () {
     let {currentStructure} = this.props;
 
     return (
@@ -74,7 +80,9 @@ class Timeline extends React.Component {
             <ul>
               {currentStructure.data.map((period, i) => {
                 let timePeriod, clsName = [],
-                    complete = isPeriodComplete(period) ? <div className="complete"><StatusIconTiny status={3}/></div> : null;
+                    complete            = isPeriodComplete(period) ?
+                      <div className="complete"><StatusIconTiny status={3}/>
+                      </div> : null;
 
                 if (period.startdate && period.enddate) {
                   timePeriod = getDateRelationship(period.startdate, period.enddate);
@@ -92,11 +100,12 @@ class Timeline extends React.Component {
                     to={'period' + period.period} smooth={true} offset={-150}
                     duration={500}>
                     <span>{period.category}</span>
-                    <IconCircleText label={period.period} style='inverse-small'/>
-                    </Link>
+                    <IconCircleText label={period.period}
+                                    style='inverse-small'/>
+                  </Link>
                     {complete}
                   </div>
-                </li>
+                </li>;
               })}
             </ul>
           </div>

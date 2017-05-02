@@ -43,7 +43,6 @@ class App extends React.Component {
   }
 
   onStateUpdated () {
-    let state = AppStore.getState();
     if (!(isConnectionSuccessful())) {
       this.setState({systemError: true});
       console.error('Connection to one or more back end systems is down!');
@@ -113,7 +112,6 @@ class App extends React.Component {
 
   render () {
     if (this.state.ready) {
-      let appState = AppStore.getState(); //DangerousAppState.dangerousGetState();
       // Props are injected via react-redux connect
       return (<div>
         <Header/>

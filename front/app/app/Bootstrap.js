@@ -3,7 +3,8 @@ import { Provider } from 'react-redux';
 import ModalMessage from './rh-components/rh-ModalMessage';
 import App from './App';
 import AppStore from './store/AppStore';
-import { setConfig} from './store/actions/Actions';
+import { userProfileSelector } from './store/selectors';
+import { setConfig } from './store/actions/Actions';
 import { fetchConfigData } from './services/fetchConfig';
 import LMSKerberosIDRequest from './components/LMSKerberosIDRequest';
 
@@ -47,7 +48,8 @@ class ApplicationContainer extends React.Component {
   onStateUpdated () {
     // Keys will only be present once the user account has been successfully
     // fetched from the LMS
-    if (Object.keys(AppStore.getState().userProfile).length) {
+    //if (Object.keys(AppStore.getState().userProfile).length) {
+    if (Object.keys(userProfileSelector()).length) {
       this.storeListener();
       this.setState({hasUser: true});
     }

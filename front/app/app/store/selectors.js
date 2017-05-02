@@ -1,21 +1,13 @@
 import Either from 'data.either';
-import { curry, memoize } from 'ramda';
+import { curry } from 'ramda';
 import moment from 'moment';
 import {
   formatSecondsToDate2,
-  isString,
   removeArrDupes,
   removeWhiteSpace
 } from '../utils/Toolbox';
-import {
-  hasLength,
-  idMatchObjId,
-  noOp,
-  stripHTML
-} from '../utils/AppUtils';
+import { hasLength, idMatchObjId, noOp, stripHTML } from '../utils/AppUtils';
 import AppStore from './AppStore';
-
-//export const configSelector            = memoize(state => state.config);
 
 export const configSelector              = () => AppStore.getState().config;
 export const hydratedContentSelector     = () => AppStore.getState().hydratedContent;
@@ -23,6 +15,9 @@ export const userStatementsSelector      = () => AppStore.getState().lrsStatemen
 export const startEventSelector          = () => configSelector().setup.startEvent;
 export const userProfileSelector         = () => AppStore.getState().userProfile;
 export const userEnrolledCoursesSelector = () => userProfileSelector().enrolledCourses;
+export const currentStructureSelector    = () => AppStore.getState().currentStructure;
+export const coursesInMapSelector        = () => AppStore.getState().coursesInMap;
+export const shadowDBEnrollmentsSelector = () => AppStore.getState().shadowEnrollments;
 
 export const useLRS      = () => configSelector().webservice.lrs != null; // eslint-disable-line eqeqeq
 export const useShadowDB = () => configSelector().webservice.shadowdb != null; // eslint-disable-line eqeqeq
@@ -44,9 +39,9 @@ export const getCurrentStructure = () =>
   applyStartDateToStructure(startEventSelector(),
     getStructureVersion(configSelector().structure, getLastLRSContentRevision(userStatementsSelector()) || configSelector().currentVersion));
 
-const getUserEnrollmentForId = id => AppStore.getState().shadowEnrollments.userEnrollments.filter(e => id === e.enrolid)[0];
+const getUserEnrollmentForId = id => shadowDBEnrollmentsSelector().userEnrollments.filter(e => id === e.enrolid)[0];
 
-const getEnrollmentDetailsForCourseId = id => AppStore.getState().shadowEnrollments.enrollmentDetails.filter(e => id === e[0].courseid)[0];
+const getEnrollmentDetailsForCourseId = id => shadowDBEnrollmentsSelector().enrollmentDetails.filter(e => id === e[0].courseid)[0];
 
 // Determine if the compare date is within a range of days from the start date
 const isDateWithinNewRange = curry((startDate, rangeDays, compareDate) =>
@@ -143,7 +138,7 @@ export const getContentObjById = id =>
 
 // Get unique content IDs from period topics
 const getContentIDsInStructure = () =>
-  removeArrDupes(AppStore.getState().currentStructure.data.reduce((pAcc, period) =>
+  removeArrDupes(currentStructureSelector().data.reduce((pAcc, period) =>
     pAcc.concat(period.topics.reduce((tAcc, topic) =>
       tAcc.concat(topic.content), [])), [])).sort();
 
@@ -184,10 +179,11 @@ export const isPeriodComplete = obj =>
   isTopicComplete(topic) && res, true);
 
 export const getHydratedContent = () => {
-  let {coursesInMap, config} = AppStore.getState(),
-      {content}                               = config,
-      today                                   = moment(new Date()),
-      newIfWithinDays                         = parseInt(config.newIfWithinDays) || 30;
+  let coursesInMap    = coursesInMapSelector(),
+      config          = configSelector(),
+      {content}       = config,
+      today           = moment(new Date()),
+      newIfWithinDays = parseInt(config.newIfWithinDays) || 30;
 
   return content.reduce((acc, contobj) => {
     let o             = Object.assign({}, contobj),
