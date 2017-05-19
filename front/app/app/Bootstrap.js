@@ -64,14 +64,12 @@ class ApplicationContainer extends React.Component {
 
   render () {
     if (this.state.loading) {
-      console.log('please wait modal')
       return <LoadingMessage/>;
     } else if (this.state.isError) {
       return <ErrorMessage/>;
     } else if (!this.state.hasUser) {
       return <LMSKerberosIDRequest/>;
     } else {
-      console.log('app')
       return <Application/>;
     }
   }

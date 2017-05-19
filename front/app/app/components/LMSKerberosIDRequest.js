@@ -1,19 +1,22 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ModalMessage from '../rh-components/rh-ModalMessage';
-import IconCircle from '../rh-components/rh-IconCircle';
+import PleaseWaitModal from '../rh-components/rh-PleaseWaitModal';
 import AppStore from '../store/AppStore';
 import { configSelector } from '../store/selectors';
 import { setCurrentUser } from '../store/actions/Actions';
 import { requestUserProfile } from '../utils/learningservices/lms/GetUserProfile';
 import { validateInputStr } from '../utils/AppUtils';
-import {Status} from '../rh-components/rh-Status';
+import { Status } from '../rh-components/rh-Status';
 import {
-  HForm,
-  FormHGroupRow,
   FormHGroup,
+  FormHGroupRow,
   HInputDecorator
 } from '../rh-components/rh-Form';
+
+const VerifyMessage = () =>
+  <PleaseWaitModal><h1>Verifying your profile ...</h1>
+  </PleaseWaitModal>;
 
 class LMSKerberosIDRequest extends React.Component {
 
@@ -110,7 +113,6 @@ class LMSKerberosIDRequest extends React.Component {
           connected to the corporate network or VPN to access.</p>
             <FormHGroupRow>
               <FormHGroup>
-                <HInputDecorator icon="user"/>
                 <input ref="emailInput" type="text" maxLength="30"
                        defaultValue={this.state.usernameInput}
                        onInput={this.onEmailInputChange.bind(this)}/>
@@ -125,11 +127,7 @@ class LMSKerberosIDRequest extends React.Component {
         </form>
       </div>);
     } else if (isFetching) {
-      content = (<div><h1>Loading your profile ...</h1>
-        <div className="text-center">
-          <i className="fa fa-spinner fa-pulse fa-2x fa-fw"/>
-        </div>
-      </div>);
+      content = (<VerifyMessage/>);
     }
 
     return (

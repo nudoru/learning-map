@@ -20,7 +20,6 @@ const Popupsimple = ({
   if (error) {
     boxClass.push('error');
   }
-console.log('pop up simple')
   content = <div className={boxClass.join(' ')}>
     {icon ? <IconCircle icon={icon} /> : null}
     {title ? <h1>{title}</h1> : null}

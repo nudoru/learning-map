@@ -102,17 +102,23 @@ export const applyStartDateToStructure = (startEventData, structure) => {
   let startDate;
 
   if (startEventData.length) {
-    let startEventDataParms = startEventData.split(','),
-        enrollmentDetails   = getEnrollmentDetailsForCourseId(parseInt(startEventDataParms[1]));
+    let startEventDataParms = startEventData.split(',');
 
-    if (enrollmentDetails) {
-      // Get enrollment date from loaded shadow db data
-      let courseEnrollment = getUserEnrollmentForId(enrollmentDetails[0].id);
-      startDate            = formatSecondsToDate2(courseEnrollment.timecreated);
-      console.log('Content dates based on', startEventDataParms, enrollmentDetails, courseEnrollment, startDate);
-    } else {
-      console.warn(startEventData + ' but no enrollment for that course');
-      startDate = null;
+    //enroll,637
+    if (startEventDataParms[0] === 'enroll') {
+      let enrollmentDetails = getEnrollmentDetailsForCourseId(parseInt(startEventDataParms[1]));
+      if (enrollmentDetails) {
+        // Get enrollment date from loaded shadow db data
+        let courseEnrollment = getUserEnrollmentForId(enrollmentDetails[0].id);
+        startDate            = formatSecondsToDate2(courseEnrollment.timecreated);
+        console.log('Content dates based on', startEventDataParms, enrollmentDetails, courseEnrollment, startDate);
+      } else {
+        console.warn(startEventData + ' but no enrollment for that course');
+        startDate = null;
+      }
+    } else if (startEventDataParms[0] === 'date') {
+      startDate = new Date(startEventDataParms[1]);
+      console.log('Content dates based on', startEventDataParms, startDate);
     }
   }
 
@@ -235,7 +241,7 @@ export const getHydratedContent = () => {
       // If there is no record then you are not enrolled, otherwise you must
       // be incomplete or complete. Not started isn't available
       let statusKey = lmsEnrollment.status.completionstatus || lmsEnrollment.status;
-      o.lmsStatus = statusKey.completed ? 2 : 1;
+      o.lmsStatus   = statusKey.completed ? 2 : 1;
 
       //console.log(lmsEnrollment.id, statusKey, o.lmsStatus)
 
