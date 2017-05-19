@@ -1,0 +1,187 @@
+$card-horiz-width: 25rem
+$card-margin: 2rem
+$card-padding: $base-line-height-double
+
+.rh-card-container-horizontal-table
+  display: flex
+  .rh-card
+    flex: 1
+
+.rh-card-container-horizontal
+  display: flex
+  //min-height: 100%
+  min-width: 100%
+  flex-direction: row
+  flex-wrap: wrap
+  align-items: flex-start
+  justify-content: space-between
+  .rh-card
+    flex: 2
+    margin-right: $base-line-height
+    margin-bottom: $base-line-height
+    &:last-of-type
+      margin-right: 0
+
+.rh-card-container-horizontal-decorative
+  @extend .rh-card-container-horizontal
+  margin-top: $base-line-height-triple
+  margin-bottom: $base-line-height-triple
+  .rh-card
+    box-shadow: $box-shadow-xlarge
+    margin: 0
+    margin-right: $base-line-height-triple*2
+
+.rh-card-container-vertical
+  display: flex
+  min-width: 100%
+  flex-direction: column
+  .rh-card
+    flex: 1
+    margin-bottom: $base-line-height
+
+.rh-card-container-masonry-33
+  display: flex
+  min-width: 100%
+  flex-wrap: wrap
+  align-items: flex-start
+  justify-content: center
+  .rh-card
+    box-shadow: $box-shadow-xlarge
+    width: calc(33.33333333% - #{$base-line-height})
+    margin-right: $base-line-height
+    margin-bottom: $base-line-height
+
+.rh-card-container-masonry-50
+  display: flex
+  min-width: 100%
+  flex-wrap: wrap
+  align-items: flex-start
+  justify-content: center
+  .rh-card
+    box-shadow: $box-shadow-xlarge
+    width: calc(50% - #{$base-line-height})
+    margin-right: $base-line-height
+    margin-bottom: $base-line-height
+
+.rh-card
+  vertical-align: top
+  position: relative
+  margin: 0
+  box-shadow: $box-shadow-small
+  background-color: #fff
+  //.padded-topbottom
+  //  padding-top: $base-line-height
+  //  padding-bottom: $base-line-height
+  p
+    margin-bottom: 0
+
+.rh-card-header
+  padding: $card-padding
+  padding-bottom: $card-padding/2
+  overflow: hidden
+  border-bottom: 1px solid rgba(0,0,0,.05)
+  h1,h2,h3,h4,h5,h6
+    margin: 0
+  h1
+    @extend h3
+    margin: 0
+    padding: 0
+    font-weight: 400
+    color: $red
+    line-height: $base-line-height-double + $base-line-height-half
+  .rh-card-title-icon
+    text-align: center
+    margin-top: $base-line-height-double
+
+%card-header-for-bg
+  +small-headers
+  padding-top: $base-line-height-double
+  padding-bottom: $base-line-height-half
+  h1
+    font-weight: 600
+    line-height: $base-line-height-double
+
+.rh-card-header-controls
+  padding: $card-padding/2 $card-padding
+  overflow: hidden
+  border-bottom: 1px solid rgba(0,0,0,.05)
+  background-color: $grey-0
+
+.rh-card-content
+  padding: $card-padding
+  &:last-child
+    margin-bottom: 0
+
+
+.rh-card-footer
+  padding: $card-padding/2 $card-padding
+  text-align: center
+  background-color: rgba(0,0,0,.02)
+
+.rh-card-cta
+  margin-top: 4rem
+
+.rh-card-dark
+  +background-black
+  h1, h2, h3, h4, h5, h6, p, td, li, a, label
+    color: #fff
+  .rh-card-footer
+    a.cta
+      color: #fff
+      &:hover
+        background: $control-over-color-dark
+
+.rh-card-light
+  background: #fff
+
+.rh-card-bars
+  +background-greybars
+
+.rh-card-shaded
+  background: $grey-1
+
+.rh-card-narrow
+  box-shadow: none
+  .rh-card-header, .rh-card-content, .rh-card-footer
+    padding: $base-line-height
+
+
+.rh-card-header-dark-blue
+  +background-darkblue-bars
+  +white-text
+  @extend %card-header-for-bg
+  h1
+    text-shadow: $text-shadow-dark
+
+.rh-card-info
+  border: 1px solid $control-info-color
+  .rh-card-header
+    @extend %card-header-for-bg
+    background-color: $control-info-color
+    +white-text
+    h1
+      text-shadow: $text-shadow-dark
+
+.rh-card-success
+  border: 1px solid $control-success-color
+  .rh-card-header
+    @extend %card-header-for-bg
+    background-color: $control-success-color
+    +white-text
+    h1
+      text-shadow: $text-shadow-dark
+
+//.rh-card-pipes
+//  background: rgba(255,255,255,.75) url('../images/sample_image_light.jpg')
+//  background-position: -1px -1px
+//
+//.rh-card-sea
+//  @extend .rh-card-shaded
+//  background: url('../images/sample_image_mid.jpg')
+//  background-position: -1px -1px
+//
+//.rh-card-bridge
+//  @extend .rh-card-dark
+//  background: url('../images/sample_image_dark.jpg')
+//  background-position: -1px -1px
+

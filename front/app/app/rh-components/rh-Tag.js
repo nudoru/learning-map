@@ -1,5 +1,8 @@
 import React from 'react';
 
-export const Tag = ({children}) => <span className="rh-tag">{children}</span>;
+export const TagHGroup = ({children, className = ''}) => <div
+  className={'rh-tag-hgroup ' + className}>{children}</div>;
+export const TagVGroup = ({children, className = ''}) => <div
+  className={'rh-tag-vgroup ' + className}>{children}</div>;
 
-export const TagHGroup = ({children}) => <div className="rh-tag-hgroup">{children}</div>;
+export const Tag = ({children}) => <div className="rh-tag">{children}</div>;

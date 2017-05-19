@@ -81,7 +81,7 @@ class Timeline extends React.Component {
               {currentStructure.data.map((period, i) => {
                 let timePeriod, clsName = [],
                     complete            = isPeriodComplete(period) ?
-                      <div className="complete"><StatusIconTiny status={3}/>
+                      <div className="complete"><StatusIconTiny type="success"/>
                       </div> : null;
 
                 if (period.startdate && period.enddate) {

@@ -1,0 +1,79 @@
+.block-links
+  margin: 0
+  padding: 0
+  overflow: hidden
+  li
+    list-style: none
+    margin-left: 0
+    background: $blue
+    a:before
+      content: '\f18e'
+      font-family: 'FontAwesome'
+      font-weight: 400
+      padding-right: $base-line-height-half
+      color: rgba(255,255,255,.75)
+      &:hover
+        text-decoration: none
+    a
+      +transition-all()
+      @extend %control-button-text
+      display: block
+      padding: $base-line-height
+      color: #fff
+    a:hover
+      text-decoration: none
+    em
+      @extend .small
+      display: block
+      font-style: italic
+      font-weight: 400
+      text-transform: none
+    span.children
+      display: block
+      width: 100%
+      padding: $base-line-height
+      padding-top: $base-line-height-half
+
+.block-links-shaded
+  @extend .block-links
+  li
+    background: $grey-9
+    a
+      text-shadow: $text-shadow-dark
+    a:hover
+      background: $grey-7
+
+.block-links-blue
+  @extend .block-links
+  li
+    background: $blue
+    a
+      text-shadow: $text-shadow-dark
+    a:hover
+      background: $blue-8
+
+.block-links-white
+  @extend .block-links
+  li
+    background: #fff
+    border: 1px solid $grey-1
+    a
+      color: $color-body
+      text-shadow: $text-shadow-light
+    a:hover
+      background: $grey-2
+    a:before
+      color: $red
+
+.block-links-horizontal
+  display: flex
+  align-items: flex-start
+  li
+    margin-right: $base-line-height
+    &:last-of-type
+      padding-right: 0
+
+
+.block-links-vertical
+  li
+    margin-bottom: $base-line-height-half

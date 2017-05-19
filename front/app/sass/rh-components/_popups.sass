@@ -1,0 +1,95 @@
+.rh-popup-simple
+  position: relative
+  background: #fff
+  padding: $base-line-height-double
+  text-align: center
+  border-top: 3px solid $control-info-color
+  box-shadow: $box-shadow-xlarge
+  .rh-icon-circle-icon
+    //@extend .rh-icon-outline
+    position: relative
+    margin: 0 auto
+    margin-top: -5rem
+    margin-bottom: $base-line-height-double
+    background-color: $blue
+  h1
+    @extend .h1-small
+    margin: 0
+    padding-bottom: $base-line-height-double
+    line-height: $base-line-height-double + $base-line-height-half
+  button
+    //@extend .rh-button-neutral
+    @extend .rh-button-block
+    margin-top: $base-line-height-double
+  &.error
+    border-color: $control-danger-color
+    h1
+      color: $control-danger-color-dark
+    .rh-icon-circle-icon
+      background-color: $red
+
+.modal-appear
+  .rh-modal-cover, .rh-modal-cover-dismissable
+    transition: all 0.5s ease-out
+    opacity: 0
+    visibility: hidden
+  .rh-popup-simple, .rh-modal-box-error
+    @extend .animated
+    visibility: hidden
+
+.modal-appear.modal-appear-active
+  .rh-modal-cover, .rh-modal-cover-dismissable
+    opacity: 1
+    visibility: visible
+  .rh-popup-simple, .rh-modal-box-error
+    @extend .flipInX
+    visibility: visible
+
+.modal-enter
+  .rh-modal-cover, .rh-modal-cover-dismissable
+    transition: all 0.5s ease-out
+    opacity: 0
+    visibility: hidden
+  .rh-popup-simple, .rh-modal-box-error
+    @extend .animated
+    visibility: hidden
+
+.modal-enter.modal-enter-active
+  .rh-modal-cover, .rh-modal-cover-dismissable
+    opacity: 1
+    visibility: visible
+  .rh-popup-simple, .rh-modal-box-error
+    @extend .flipInX
+    visibility: visible
+
+.modal-leave
+  .rh-modal-cover, .rh-modal-cover-dismissable
+    transition: all 0.5s ease-out
+    opacity: 1
+  .rh-popup-simple, .rh-modal-box-error
+    @extend .animated
+
+.modal-leave.modal-leave-active
+  .rh-modal-cover, .rh-modal-cover-dismissable
+    opacity: 0
+  .rh-popup-simple, .rh-modal-box-error
+    @extend .flipOutX
+
+// Used by LMSKerberosIdRequest
+.rh-login
+  input
+    width: 143px
+    text-align: right
+    font-weight: 600
+
+// ...in a modal
+.rh-popup-container
+  .full-window-cover-center
+    z-index: 101
+  .rh-popup-simple
+    width: 50%
+  .rh-panel
+    width: 75%
+
+
+

@@ -1,12 +1,17 @@
 $icon-size: 8rem
+$icon-icon-font-size: 3.4rem
+$icon-size-small: 3rem
+$icon-icon-font-size-small: 1.4rem
 
 =circle-icon($size, $forecolor, $iconcolor)
+  position: relative
   width: $size
   height: $size
   border-radius: $size / 2
-  background: $forecolor
+  background: $forecolor $dark-gradient
   color: $iconcolor
-  font-size: 3.4rem
+  text-shadow: $text-shadow-dark
+  font-size: $icon-icon-font-size
   font-weight: 300
   line-height: $size
   text-align: center
@@ -14,6 +19,18 @@ $icon-size: 8rem
 
 .rh-icon-circle
   +circle-icon($icon-size, $red, #fff)
+
+.rh-icon-circle-icon
+  +circle-icon($icon-size, $red, #fff)
+  line-height: $base-line-height
+  padding-top: ($icon-size/2) - ($icon-icon-font-size / 2) - .1rem
+
+.rh-icon-circle-icon-small
+  +circle-icon($icon-size-small, $blue-dark, #fff)
+  line-height: $base-line-height
+  font-size: $icon-icon-font-size-small
+  padding-top: ($icon-size-small/2) - ($icon-icon-font-size-small / 2)
+  display: inline-block
 
 .rh-icon-circle-image
   +circle-icon($icon-size, $color-nocolor, $color-body)
@@ -25,18 +42,34 @@ $icon-size: 8rem
     top: 0
     left: 0
 
-
 .rh-icon-circle-text
-  +circle-icon(6rem, #fff, $teal)
-  display: block
+  +circle-icon($icon-size, $blue-dark, #fff)
   font-size: 2rem
   font-weight: 600
-  line-height: 5.9rem // line-height at 6rem looks low of middle
+  line-height: $icon-size
   text-align: center
-  margin: 0 auto
+
+.rh-icon-circle-text-big
+  font-size: 4rem
+
+.rh-icon-horizontal-group
+  width: 100%
+  text-align: center
+  .rh-icon-circle-icon, .rh-icon-circle, .rh-icon-circle-image, .rh-icon-circle-text
+    display: inline-block
+    margin-right: $base-line-height-double
+    &:last-of-type
+      margin-right: 0
+
+.rh-icon-outline
+  border: 2px solid $blue
+  background: #fff
+  color: $control-neutral-color-dark
+  text-shadow: none
 
 .rh-icon-circle-text-inverse-small
   +circle-icon(4rem, $teal, #fff)
+  background-image: none
   display: block
   font-weight: 600
   font-style: normal

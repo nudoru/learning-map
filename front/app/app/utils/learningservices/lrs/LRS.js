@@ -91,6 +91,8 @@ const createStatement = (partialStatement) => {
       {
         subjectName,
         subjectID,
+        subjectAccount,
+        subjectAccountID,
         verbDisplay,
         objectID,
         objectType,
@@ -104,8 +106,13 @@ const createStatement = (partialStatement) => {
 
   statement = defaults({
     actor : {
-      name: subjectName,
-      mbox: 'mailto:' + subjectID
+      name      : subjectName,
+      mbox      : 'mailto:' + subjectID,
+      objectType: 'Agent'
+      //account   : {
+      //  homePage: subjectAccount,
+      //  name    : subjectAccountID
+      //}
     },
     verb  : {
       id     : verbURLPrefix + verbDisplay.toLowerCase(),

@@ -1,0 +1,74 @@
+// Originally based on https://codepen.io/alexerlandsson/pen/KzLXvL
+
+$step-primary: $red
+$step-previous: $grey-3
+$step-next: $grey-1
+$stepbar-height: 40px
+
+.rh-stepbar
+  @extend .list-plain
+  display: flex
+  width: 100%
+  border-radius: $border-radius-small
+  overflow: hidden
+  margin-bottom: $base-line-height-double
+
+  .stepbar-item
+    +transition-all()
+    position: relative
+    background-color: $step-previous
+    width: 100%
+
+    &:before,
+    &:after
+      content: ""
+      position: absolute
+      pointer-events: none
+      z-index: 1
+
+    &:before
+      $before-size: 10px
+      right: -($stepbar-height + ($stepbar-height / 2) - ($before-size / 2))
+      top: -($before-size)
+      border: ($stepbar-height / 2 + $before-size) solid rgba(255,255,255,0)
+      border-left-color: #fff
+
+    &:after
+      right: -($stepbar-height - 5px)
+      top: 0
+      border: ($stepbar-height / 2) solid rgba(255,255,255,0)
+      border-left-color: $step-previous
+
+    &:first-child
+      .stepbar-link
+        padding-left: 0
+
+    &:last-child
+      &:before, &:after
+        content: none
+
+    //&:hover
+    //  width: 115%
+
+    &.current
+      background-color: $step-primary
+      .stepbar-link
+        color: #fff
+        text-shadow: $text-shadow-dark
+        font-weight: 600
+      &:after
+        border-left-color: $step-primary
+      ~ .stepbar-item
+        background-color: $step-next
+        &:after
+          border-left-color: $step-next
+
+    .stepbar-link
+      @extend %control-button-text
+      display: block
+      height: $stepbar-height
+      line-height: $stepbar-height
+      padding-left: ($stepbar-height / 2)
+      text-align: center
+      color: $color-body
+      text-shadow: $text-shadow-light

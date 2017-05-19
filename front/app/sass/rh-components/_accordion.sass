@@ -1,0 +1,67 @@
+.rh-accordion
+  @extend .rh-panel
+  margin-bottom: $base-line-height-half
+  .rh-panel-header
+    +transition-all()
+    @extend .ripple
+    cursor: pointer
+    background-image: $light-gradient
+    &:hover
+      background-color: #fff
+      .rh-panel-header-icon > i
+        color: $blue
+      .rh-panel-header-label
+        h1, span, p, li, em
+          color: $blue
+    .rh-panel-header-label
+      h1, i, span, p, li, td
+        @extend .noselect
+        @extend %panel-headerfooter-text
+        font-weight: 400
+        color: $grey-8
+        em
+          font-weight: 600
+          text-transform: uppercase
+          font-style: normal
+          color: $blue-dark
+  .rh-panel-content
+    padding: $base-line-height
+
+//section.rh-accordion section.rh-accordion
+//  border: 1px solid #0f0 !important
+
+//section.rh-accordion ~ section.rh-accordion
+//  border: 1px solid #f00 !important
+
+.rh-accordion-vgroup
+  margin-bottom: $base-line-height
+  .rh-accordion
+    margin-bottom: -0.2rem
+    //&:not(:last-child)
+    //  border-bottom: 1px solid $grey-1
+
+.rh-accordion-shadows
+  .rh-panel-content
+    background-image: $dark-gradient
+    box-shadow: inset 3px 3px 30px rgba(0,0,0,.05)
+
+// This is a ul
+.rh-accordion-header-label-list
+  @extend .list-plain
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding-left: $base-line-height
+  li.f1
+    flex: 1
+  li:not(:last-of-type)
+    padding-right: $base-line-height-double
+  li
+    .rh-statusicon-tiny
+      position: relative
+      top: .3rem
+    .rh-status-label
+      position: relative
+      top: .3rem
+      margin-left: $base-line-height
+      margin-right: 0

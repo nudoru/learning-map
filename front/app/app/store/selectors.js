@@ -234,10 +234,14 @@ export const getHydratedContent = () => {
     if (lmsEnrollment) {
       // If there is no record then you are not enrolled, otherwise you must
       // be incomplete or complete. Not started isn't available
-      o.lmsStatus = lmsEnrollment.status.completed ? 2 : 1;
+      let statusKey = lmsEnrollment.status.completionstatus || lmsEnrollment.status;
+      o.lmsStatus = statusKey.completed ? 2 : 1;
+
+      //console.log(lmsEnrollment.id, statusKey, o.lmsStatus)
+
       if (o.lmsStatus === 2) {
         // Totara dates are seconds since 1/1/70 12:00am
-        o.lmsStatusDate = moment(new Date(parseInt(lmsEnrollment.status.completions[0].timecompleted * 1000)));
+        o.lmsStatusDate = moment(new Date(parseInt(statusKey.completions[0].timecompleted * 1000)));
       }
     }
 

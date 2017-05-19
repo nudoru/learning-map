@@ -108,7 +108,8 @@ module.exports = env => {
         ]),
       new ExtractTextPlugin({
         filename : 'style.css',
-        allChunks: true
+        allChunks: true,
+        disable: !isProd
       }),
       // Disabled, was causing CSS classes referenced in conditional statements
       // to not be present in output

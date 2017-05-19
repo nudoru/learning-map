@@ -10,10 +10,9 @@ class UtilityBar extends React.Component {
   componentDidMount() {}
 
   render() {
-    // <p>{this.props.label}</p>
+    let welcome = this.props.welcome ? (<p className="user"><i className="fa fa-user"/> Welcome,&nbsp; <strong>{this.props.username}!</strong></p>) : null;
     return (<div className="rh-utilitybar">
-      <p className="user"><i className="fa fa-user"/> Welcome,&nbsp;
-        <strong>{this.props.username}!</strong></p>
+      {welcome}
       {this.renderLinks()}
     </div>);
   }
@@ -35,7 +34,7 @@ class UtilityBar extends React.Component {
 }
 
 UtilityBar.defaultProps = {
-  username: 'Joe Learner'
+  username: null
 };
 UtilityBar.propTypes = {
   label: React.PropTypes.string,

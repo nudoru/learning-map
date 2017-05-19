@@ -1,0 +1,24 @@
+.rh-breadcrumbs-container
+  display: flex
+  align-items: center
+  height: $breadcrumbs-height
+
+.rh-breadcrumbs
+  @extend %list-horizontal
+  //padding: 2.2rem 0 !important
+  li, li > a
+    @extend .small
+    font-weight: 600
+    text-transform: uppercase
+    margin: 0
+    padding: 0
+    a, a:hover, a:visited
+      color: $color-link
+  li:after
+    content: "\f101"
+    font-family: FontAwesome
+    font-weight: 400
+    color: $grey-6
+    padding: 0 $base-line-height
+  li:last-of-type:after
+    content: ""

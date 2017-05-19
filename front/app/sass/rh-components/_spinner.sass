@@ -1,0 +1,47 @@
+// From Patternfly https://github.com/patternfly/patternfly/blob/master/src/less/spinner.less
+// Modifications by Matt Perkins
+
+@keyframes rotation
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(359deg)
+
+$color-spinner-track: rgba(0,0,0,.05)
+$color-spinner-mark: $blue
+
+.spinner 
+  animation: rotation 1200ms infinite linear
+  border-bottom: 4px solid $color-spinner-track
+  border-left: 4px solid $color-spinner-track
+  border-right: 4px solid $color-spinner-track
+  border-top: 4px solid $color-spinner-mark
+  border-radius: 100%
+  height: ($base-line-height * 2)
+  margin: 0 auto
+  position: relative
+  width: ($base-line-height * 2)
+  &.spinner-inline
+    display: inline-block
+    margin-left: 3px
+  &.spinner-xlg
+    border-width: 8px
+    height: ($base-line-height * 4)
+    width: ($base-line-height * 4)
+  &.spinner-lg
+    border-width: 5px
+    height: ($base-line-height * 3)
+    width: ($base-line-height * 3)
+  &.spinner-sm 
+    border-width: 2px
+    height: ($base-line-height * 1.5)
+    width: ($base-line-height * 1.5)
+  &.spinner-xs 
+    border-width: 1px
+    height: $base-line-height
+    width: $base-line-height
+  &.spinner-inverse 
+    border-bottom-color: $color-spinner-track
+    border-left-color: $color-spinner-track
+    border-right-color: $color-spinner-track
+    border-top-color: #fff

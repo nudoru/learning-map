@@ -53,6 +53,13 @@ h1
   margin-top: $base-line-height
   line-height: 4.2rem
 
+.h1-small
+  @extend %header-base
+  font-weight: 400
+  font-size: 2.6rem
+  margin-top: $base-line-height
+  line-height: $base-line-height-double + $base-line-height-half
+
 h2
   @extend %header-base
   font-size: 2.2rem
@@ -177,6 +184,28 @@ hr
   border-bottom: 1px solid $grey-2
   margin: $base-line-height-triple 0
   padding: 0
+
+=white-text
+  h1,h2,h3,h4,h5,h6,p,li,pre,blockquote
+    color: #fff
+
+=small-headers
+  h1
+    @extend h3
+  h2
+    @extend h4
+  h3
+    @extend h5
+  h4
+    @extend h6
+
+=small-text
+  p, a, ul, ol, li, pre, td, th, dl, dd, dt
+    @extend %body-base-small
+
+=big-text
+  p, a, ul, ol, li, pre, td, th, dl, dd, dt
+    @extend %body-base-alt
 
 //------------------------------------------------------------------------------
 // Images

@@ -1,11 +1,17 @@
 .rh-tag-hgroup
-  margin-top: $base-line-height
-  margin-bottom: $base-line-height
-  span
-    display: inline
-    margin-right: $base-line-height-half
+  position: relative
+  .rh-tag
+    display: inline-block
+    margin-right: $base-line-height-quarter
+    margin-bottom: $base-line-height-half
 
-// Should be a <span>
+.rh-tag-vgroup
+  position: relative
+  .rh-tag
+    display: table
+    width: auto
+    margin-bottom: $base-line-height-quarter
+
 .rh-tag
   @extend .small
   text-transform: uppercase
@@ -22,4 +28,38 @@
     font-style: normal
     font-weight: 600
     color: $blue-dark
+    text-transform: none
+
+//.rh-tag
+//  padding: $base-line-height-half
+//  background: #fff
+//  border: 1px solid $control-info-color
+//  border-radius: $border-radius-small
+//  font-size: $base-font-size-small
+//  line-height: $base-font-size-small
+//  text-transform: uppercase
+//  color: $control-info-color
+//  i.fa
+//    padding-right: $base-line-height-half
+//  em
+//    font-style: normal
+//    font-weight: 600
+//    text-transform: none
+
+.rh-tag-solid
+  +text-emboss-shadow
+  padding: $base-line-height-half
+  background: $control-info-color $light-gradient
+  border-radius: $border-radius-small
+  font-size: $base-font-size-small
+  line-height: $base-font-size-small
+  text-transform: uppercase
+  color: #fff
+  //box-shadow: $box-shadow-xsmall
+  //text-shadow: $text-shadow-dark
+  i.fa
+    padding-right: $base-line-height-half
+  em
+    font-style: normal
+    font-weight: 600
     text-transform: none

@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { config } from './config';
 import { lrsStatements } from './lrsStatements';
 import { shadowEnrollments } from './shadowEnrollments';
+import {currentUser } from './currentUser';
 import { userProfile } from './userProfile';
 import { coursesInMap } from './coursesInMap';
 import { hydratedContent } from './hydratedContent';
@@ -15,6 +16,7 @@ export const reducers = combineReducers({
   config,
   lrsStatements,
   shadowEnrollments,
+  currentUser,
   userProfile,
   coursesInMap,
   hydratedContent,

@@ -1,42 +1,46 @@
 .rh-statusicon
-  +circle-icon(2.8rem, $grey-4, #fff)
+  +circle-icon(2.8rem, $control-neutral-color, #fff)
+  line-height: $base-line-height
+  padding-top: (2.8rem/2) - (1rem / 2)
   font-size: 1rem
-  padding: 1px 0 0 0
-  text-shadow: 1px 1px 0 rgba(0,0,0,.2)
+  //padding: 1px 0 0 0
+  text-shadow: $text-shadow-dark
   display: inline-block
   i.fa
     color: $grey-1
 
 .rh-statusicon-tiny
-  +circle-icon(1.8rem, $grey-4, #fff)
-  font-size: .8rem
-  padding: 1px 0 0 0
-  text-shadow: 1px 1px 0 rgba(0,0,0,.2)
+  +circle-icon(2rem, $control-neutral-color, #fff)
+  line-height: $base-line-height-half
+  padding-top: (1.8rem/2) - (.8rem / 2)
+  font-size: .6rem
+  //padding: 1px 0 0 0
+  text-shadow: $text-shadow-dark
   display: inline-block
   i.fa
-    color: $grey-1
+    font-size: .6rem !important
 
 .rh-statusicon-none
   i.fa
     color: inherit
 
 .rh-statusicon-inprogress
-  background: $blue !important
+  background: $control-info-color !important
   i.fa
-    color: #fff
-    padding-left: 4px
+    color: #fff !important
+    padding-left: 3px
 
-.rh-statusicon-fail
-  background: $red !important
+.rh-statusicon-danger
+  background: $control-danger-color !important
   i.fa
-    color: #fff
+    color: #fff !important
 
-.rh-statusicon-pass
-  background: $green !important
+.rh-statusicon-success
+  background: $control-success-color !important
   i.fa
-    color: #fff
+    color: #fff !important
 
 .rh-statusicon-pending
-  background: $blue !important
+  background: $control-info-color !important
   i.fa
-    color: #fff
+    color: #fff !important

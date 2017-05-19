@@ -1,0 +1,74 @@
+// Original implementation from http://codepen.io/zeroskillz/pen/mPmENy
+
+.rh-donutchart {
+  border-radius: 50%;
+  display: block;
+}
+
+.rh-donutchart-white .rh-donutchart-text {
+  fill: #fff;
+}
+
+.rh-donutchart-white .rh-donutchart-track {
+  stroke: rgba(255, 255, 255, .1);
+}
+
+.rh-donutchart-white .rh-donutchart-indicator {
+  stroke: #fff;
+}
+
+.rh-donutchart-success .rh-donutchart-text {
+  fill: $control-success-color-dark;
+}
+
+.rh-donutchart-success .rh-donutchart-indicator {
+  stroke: $control-success-color;
+}
+
+.rh-donutchart-warning .rh-donutchart-text {
+  fill: $control-warning-color-dark;
+}
+
+.rh-donutchart-warning .rh-donutchart-indicator {
+  stroke: $control-warning-color;
+}
+
+.rh-donutchart-danger .rh-donutchart-text {
+  fill: $control-danger-color-dark;
+}
+
+.rh-donutchart-danger .rh-donutchart-indicator {
+  stroke: $control-danger-color;
+}
+
+.rh-donutchart-text {
+  font-family: $base-font-content;
+  fill: $blue-dark;
+}
+
+.rh-donutchart-text-val {
+  font-size: $base-font-size-large;
+}
+
+.rh-donutchart-text-percent {
+  font-size: $base-font-size-small;
+}
+
+.rh-donutchart-text-label {
+  font-size: $base-font-size-small;
+}
+
+.rh-donutchart-track {
+  fill: transparent;
+  stroke: rgba(0, 0, 0, .1);
+  stroke-width: 5;
+}
+
+.rh-donutchart-indicator {
+  fill: transparent;
+  stroke: $blue;
+  stroke-width: 5;
+  stroke-dasharray: 0 10000;
+  transition: stroke-dasharray .3s ease;
+}
+

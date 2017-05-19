@@ -25,10 +25,14 @@ import { fetchCoursesInMap, fetchLMSData } from './services/fetchLMS';
 import { getSBUserEnrolledCourseDetails } from './services/fetchShadowDb';
 import Header from './components/Header';
 import LearningMap from './components/LearningMap';
-import { PleaseWaitModal } from './components/PleaseWaitModal';
+import PleaseWaitModal from './rh-components/rh-PleaseWaitModal';
 import ModalMessage from './rh-components/rh-ModalMessage';
 import Timeline from './components/Timeline';
 import Introduction from './components/Introduction';
+
+const LoadingMessage = () =>
+  <PleaseWaitModal><h1>Loading your profile ...</h1>
+  </PleaseWaitModal>;
 
 class App extends React.Component {
 
@@ -51,7 +55,14 @@ class App extends React.Component {
   }
 
   fetchProfiles () {
-    chainTasks([fetchUserProfile(), fetchCoursesInMap()]).fork(e => {
+    let state = AppStore.getState(),
+        user = state.config.defaultuser;
+
+    if(state.currentUser.length) {
+      user = state.currentUser;
+    }
+
+    chainTasks([fetchUserProfile(user), fetchCoursesInMap()]).fork(e => {
       console.error('Could not get initial app data!', e);
       this.setState({errorMessage: e});
       AppStore.dispatch(setLMSStatus(false));
@@ -115,7 +126,7 @@ class App extends React.Component {
       </div>);
     } else {
       return (<div>
-        <PleaseWaitModal message="Loading your information from the LMS"/>
+        <LoadingMessage/>
         {this.state.systemError ? this.errorMessage() : null}
       </div>);
     }
@@ -126,12 +137,15 @@ class App extends React.Component {
   }
 
   errorMessage () {
-    return (<ModalMessage error={true}
-                          dismissible={true}
-                          dismissFunc={this.closeErrorMessage.bind(this)}
-                          dismissButtonLabel="Continue anyway">
-      <h1>Connection
-        Problem</h1><p>The connection to one or more back end systems has
+    return (<ModalMessage
+      message={{
+        title: 'Connection Problem',
+        icon : 'exclamation',
+        error: true,
+        buttonOnClick: this.closeErrorMessage.bind(this),
+        buttonLabel: "Continue anyway"
+      }}>
+      <p>The connection to one or more back end systems has
       encountered a problem.
       Your progress may not have loaded correctly and may not save.</p><p>Please
       refresh the page to try again.</p>

@@ -1,26 +1,27 @@
 import React from 'react';
 
-const styleMap = ['none', 'inprogress', 'fail', 'pass', 'pending'];
+const styleMap = ['none', 'inprogress', 'danger', 'success', 'pending'];
 const iconMap  = ['circle-o', 'play', 'times', 'check', 'refresh'];
 
-export const StatusIcon = ({status}) => {
 
-  status = status || 0;
+
+export const StatusIcon = ({type}) => {
+  //let index = styleMap.indexOf(type);
+  let index = type; // for backwards compat w/ old learning map code
 
   return (
-    <div className={'rh-statusicon rh-statusicon-' + styleMap[status]}>
-      <i className={'fa fa-' + iconMap[status]}/>
+    <div className={'rh-statusicon rh-statusicon-' + styleMap[index]}>
+      <i className={'fa fa-' + iconMap[index]}/>
     </div>
   );
 };
 
-export const StatusIconTiny = ({status}) => {
-
-  status = status || 0;
+export const StatusIconTiny = ({type}) => {
+  let index = styleMap.indexOf(type);
 
   return (
-    <div className={'rh-statusicon-tiny rh-statusicon-' + styleMap[status]}>
-      <i className={'fa fa-' + iconMap[status]}/>
+    <div className={'rh-statusicon-tiny rh-statusicon-' + styleMap[index]}>
+      <i className={'fa fa-' + iconMap[index]}/>
     </div>
   );
 };

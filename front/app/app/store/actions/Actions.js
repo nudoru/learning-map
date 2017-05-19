@@ -5,8 +5,8 @@ export const setConfig = (payload) => ({
     payload
   });
 
-export const setDefaultUser = (payload) => ({
-    type: Actions.SET_DEFAULT_USER,
+export const setCurrentUser = (payload) => ({
+    type: Actions.SET_CURRENT_USER,
     payload
   });
 

@@ -57,7 +57,7 @@ export const PeriodCard = (periodObj) => {
             <span className="period-indicator-label">{category}</span>
           </div>
           <h1>{title}{isPeriodComplete(periodObj) ?
-            <StatusIconTiny status={3}/> : ''}</h1>
+            <StatusIconTiny type="success"/> : ''}</h1>
           <div className="margin-bottom-triple">
             {tagRow}
           </div>
@@ -121,7 +121,7 @@ export const ContentRow = (props) => {
 
 const StatusCell = ({status}) => {
   return (<td className='details-course-status'>
-    <StatusIcon status={status}/>
+    <StatusIcon type={status}/>
   </td>);
 };
 
@@ -156,7 +156,7 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
 
   return (<td className="details-course-name">
     {nameElement}{newOrUpdated}{required}
-    <TagHGroup>{tagModType}{tagDuration}{tagStatus}</TagHGroup>
+    <TagHGroup className="margin-top">{tagModType}{tagDuration}{tagStatus}</TagHGroup>
   </td>);
 };
 

@@ -57,7 +57,7 @@ class LearningMap extends React.Component {
     });
 
     // Send user x loggedin statement, disable for dev and testing to avoid spamming the LRS
-    this._sendLoggedInStatement();
+    //this._sendLoggedInStatement();
   }
 
   _sendLoggedInStatement () {
@@ -99,8 +99,13 @@ class LearningMap extends React.Component {
     }
     let {userProfile} = this.props;
 
+    console.log('profile',userProfile);
+
     fragment.subjectName = userProfile.fullname;
     fragment.subjectID   = userProfile.email;
+    fragment.subjectAccount   = 'https://learning.redhat.com';
+    fragment.subjectAccountID   = userProfile.id; //userProfile.idnumber is the Oracle Party id
+
     sendFragment(configSelector().webservice.lrs)(fragment)
       .fork(e => {
           console.error('Error sending statement: ', e);

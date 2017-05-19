@@ -1,52 +1,172 @@
 %control-button-text
   font-family: $base-font-header
-  font-weight: 700
+  font-weight: 600
   text-transform: uppercase
   font-size: 1.6rem
+
+$control-button-size: 4rem
 
 .rh-button
   +transition-all
   @extend %control-button-text
-  height: 4rem
-  padding: 0 4rem 0 4rem
-  line-height: 4rem
+  @extend .ripple
+  height: $control-button-size
+  padding: 0 $control-button-size 0 $control-button-size
+  line-height: $control-button-size
   margin: 0
   background: $red
   border: none
   color: #fff
   border: 1px solid $color-nocolor
+  box-shadow: $box-shadow-xsmall
+  text-shadow: $text-shadow-dark
   &:hover
-    background: rgb(161, 4, 12)
+    background: $red-dark-1
   &.disabled, &.disabled:hover
     cursor: not-allowed
     background: $grey-3
     color: $grey-1
     border-color: $grey-3
 
+.rh-button-secondary
+  background: $blue
+  &:hover
+    background: darken($blue, 10%)
+
+.rh-button-neutral
+  background: $control-neutral-color
+  &:hover
+    background: darken($control-neutral-color, 15%)
+
+.rh-button-negative
+  background: #fff
+  color: $red
+  &:hover
+    background: darken(#fff, 10%)
+
+.rh-button-hollow
+  background: none
+  border: 1px solid $red
+  color: $red
+  text-shadow: none
+  &:hover
+    background: rgba(255,255,255,.5)
+    border: 1px solid $red-dark-1
+    color: $red-dark-1
+
+.rh-button-neutral-hollow
+  background: none
+  border: 1px solid darken($control-neutral-color, 35%)
+  color: darken($control-neutral-color, 35%)
+  text-shadow: none
+  &:hover
+    background: rgba(255,255,255,.5)
+    border: 1px solid darken($control-neutral-color, 45%)
+    color: darken($control-neutral-color, 45%)
+
+.rh-button-secondary-hollow
+  background: none
+  border: 1px solid $blue
+  color: $blue
+  text-shadow: none
+  &:hover
+    background: rgba(255,255,255,.5)
+    border: 1px solid $blue-7
+    color: $blue-7
+
+.rh-button-negative-hollow
+  background: none
+  border: 1px solid #fff
+  text-shadow: none
+  color: #fff
+  &:hover
+    background: rgba(255,255,255,.25)
+
+.rh-button-text
+  background: none
+  border: 1px solid transparent
+  color: $red
+  box-shadow: none
+  text-shadow: none
+  padding: 0 $control-button-size/2 0 $control-button-size/2
+  &:hover
+    background: rgba(255,255,255,.5)
+    border: 1px solid transparent
+    color: $red-dark-1
+
+.rh-button-neutral-text
+  @extend .rh-button-text
+  color: darken($control-neutral-color, 35%)
+  &:hover
+    color: darken($control-neutral-color, 45%)
+
+.rh-button-secondary-text
+  @extend .rh-button-text
+  color: $blue
+  &:hover
+    color: $blue-7
+
+.rh-button-negative-text
+  @extend .rh-button-text
+  color: #fff
+  &:hover
+    color: #fff
+
 .rh-button-block
   display: block
   width: 100%
 
-.rh-button-secondary
-  background: none
-  border: 1px solid $red
-  color: $red
-  &:hover
-    background: none
-    border: 1px solid rgb(161, 4, 12)
-    color: rgb(161, 4, 12)
+.rh-button-icon
+  border-radius: 50%
+  padding: 0
+  width: $control-button-size
 
-.rh-button-admin
-  background: rgb(122, 133, 138)
-  &:hover
-    background: rgb(89, 102, 109)
+.rh-button-small
+  font-size: $base-font-size-small
+  height: 3rem
+  line-height: 3rem
+  padding: 0 $control-button-size/2 0 $control-button-size/2
+
+.rh-button-small.rh-button-icon
+  padding: 0
+  width: 3rem
 
 .rh-button-container-horiz
   width: 100%
   display: block
   margin: $base-line-height 0
   text-align: center
-  button
+  button:not(:last-of-type)
     margin-right: $base-line-height
-  &:last-of-type
-    margin-right: 0
+
+.rh-button-group-horiz
+  width: 100%
+  display: block
+  margin: $base-line-height 0
+  text-align: center
+  button
+    margin: 0
+    border-radius: 0
+    box-shadow: none
+    &:first-child
+      border-radius: $border-radius-small 0 0 $border-radius-small
+    &:last-child
+      border-radius: 0 $border-radius-small $border-radius-small 0
+
+.rh-button-group-vert
+  display: inline-block
+  margin: $base-line-height 0
+  text-align: center
+  button
+    display: block
+    width: 100%
+    margin: 0
+    border-radius: 0
+    box-shadow: none
+    &:first-child
+      border-radius: $border-radius-small $border-radius-small 0 0
+    &:last-child
+      border-radius: 0 0 $border-radius-small $border-radius-small
+  .rh-button-icon
+    padding-left: $base-line-height
+    padding-right: $base-line-height

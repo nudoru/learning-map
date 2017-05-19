@@ -20,6 +20,7 @@ export default {
     userEnrollments  : [],
     enrollmentDetails: []
   },
+  currentUser        : '',
   userProfile        : {},
   coursesInMap       : [],
   currentStructure   : {},

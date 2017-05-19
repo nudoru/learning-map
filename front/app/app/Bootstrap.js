@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import ModalMessage from './rh-components/rh-ModalMessage';
+import PleaseWaitModal from './rh-components/rh-PleaseWaitModal';
 import App from './App';
 import AppStore from './store/AppStore';
 import { userProfileSelector } from './store/selectors';
@@ -8,11 +9,17 @@ import { setConfig } from './store/actions/Actions';
 import { fetchConfigData } from './services/fetchConfig';
 import LMSKerberosIDRequest from './components/LMSKerberosIDRequest';
 
-const LoadingMessage = (props) => <ModalMessage dismissible={false}><h1>Please
-  wait ...</h1></ModalMessage>;
-const ErrorMessage   = (props) => <ModalMessage error={true}
-                                                dismissible={false}><h1>There
-  was a problem loading the configuration.</h1></ModalMessage>;
+const LoadingMessage = () =>
+  <PleaseWaitModal><h1>Please wait ...</h1>
+  </PleaseWaitModal>;
+
+const ErrorMessage = () =>
+  <ModalMessage message={{
+    title: 'There was a problem loading the configuration.',
+    icon : 'exclamation',
+    error: true
+  }}>
+  </ModalMessage>;
 
 const Application = (props) => <Provider store={AppStore}>
   <App/>
@@ -48,8 +55,8 @@ class ApplicationContainer extends React.Component {
   onStateUpdated () {
     // Keys will only be present once the user account has been successfully
     // fetched from the LMS
-    //if (Object.keys(AppStore.getState().userProfile).length) {
-    if (Object.keys(userProfileSelector()).length) {
+    if (AppStore.getState().currentUser.length) {
+    //if (Object.keys(userProfileSelector()).length) {
       this.storeListener();
       this.setState({hasUser: true});
     }
@@ -57,12 +64,14 @@ class ApplicationContainer extends React.Component {
 
   render () {
     if (this.state.loading) {
+      console.log('please wait modal')
       return <LoadingMessage/>;
     } else if (this.state.isError) {
       return <ErrorMessage/>;
     } else if (!this.state.hasUser) {
       return <LMSKerberosIDRequest/>;
     } else {
+      console.log('app')
       return <Application/>;
     }
   }

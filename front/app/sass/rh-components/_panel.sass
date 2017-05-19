@@ -1,0 +1,87 @@
+$panel-border-outside: 1px solid $grey-1
+$panel-border-inside: 1px solid $grey-2
+$panel-header-height: $base-line-height*3.5
+$panel-footer-height: 4.4rem
+
+.rh-panel
+  position: relative
+  background: #fff
+  border: $panel-border-outside
+  margin-bottom: $base-line-height
+
+%panel-area-common
+  position: relative
+  padding: 0 $base-line-height
+
+%panel-headerfooter-text
+  font-size: 1.4rem
+  padding: 0
+  margin: 0
+  font-weight: 600
+  color: $control-neutral-color-dark
+
+.rh-panel-header
+  @extend %panel-area-common
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding-left: 0
+  background: $grey-0
+  border-bottom: $panel-border-inside
+  height: $panel-header-height
+  line-height: $panel-header-height
+
+.rh-panel-header-icon
+  position: relative
+  display: inline-block
+  padding: 0 $base-line-height
+  width: $panel-header-height
+  height: $panel-header-height - .1rem
+  //border-bottom: $panel-border-inside // the background color overlays the header background color
+  text-align: center
+  background-color: rgba(255,255,255,.5)
+  i.fa
+    font-size: 1.6rem
+    line-height: $panel-header-height
+    color: $blue-dark
+
+.rh-panel-header-label
+  display: inline-block
+  flex: 1
+  padding-left: $base-line-height
+  h1
+    @extend %panel-headerfooter-text
+    display: inline
+
+.rh-panel-header-buttons,
+.rh-panel-footer-buttons
+  //position: absolute
+  //right: $base-line-height
+  //top: $base-line-height-half
+  //text-align: right
+  button
+    @extend .rh-button-small
+  button:not(:last-of-type)
+    margin-right: $base-line-height
+  &:last-of-type
+    margin-right: 0
+
+.rh-panel-content
+  @extend %panel-area-common
+  padding-top: $base-line-height
+  padding-bottom: $base-line-height
+
+.rh-panel-footer
+  @extend %panel-area-common
+  display: flex
+  align-items: center
+  justify-content: space-between
+  background: rgba(0,0,0,.1)
+  border-top: $panel-border-inside
+  height: $panel-footer-height
+  line-height: $panel-footer-height
+  text-shadow: $text-shadow-light
+  //box-shadow: inset 0px 3px 5px rgba(0,0,0,.1)
+  h1
+    @extend %panel-headerfooter-text
+

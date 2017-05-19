@@ -1,0 +1,29 @@
+.rh-tabs-vert
+  margin-bottom: 4rem
+  ul
+    @extend %list-horizontal
+    height: 4rem
+    border-bottom: 1px solid $red
+
+li.rh-tab
+  margin: 0
+  padding: 0
+  a
+    +transition-all()
+    @extend %control-button-text
+    @extend .ripple
+    line-height: 4rem
+    padding: 2rem 4rem
+    color: $red
+    cursor: pointer
+  a:hover
+    background: $control-over-color
+    text-decoration: none
+li.rh-tab.active
+  a
+    background: $red
+    color: #fff
+    text-shadow: $text-shadow-dark
+  a:hover
+    text-decoration: none
+    color: #fff

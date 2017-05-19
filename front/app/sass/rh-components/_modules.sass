@@ -3,7 +3,7 @@
   max-width: 100%
   overflow: hidden
   margin: 0
-  padding: 6rem 0 8rem 0
+  padding: $base-line-height-triple 0 $base-line-height-triple 0
 
 .rh-page-module-title
   @extend .section-title
@@ -21,11 +21,37 @@
 .rh-page-module-white
   background: #fff
 
+.rh-page-module-bars
+  +background-greybars
+
 .rh-page-module-shaded
   background: $color-pagebg-light
 
+.rh-page-module-blue
+  +white-text
+  background: $blue
+
 .rh-page-module-red
+  +white-text
   background: $red
-  color: #fff !important
-  h1,h2,h3,h4,h5,h6,p,li
-    color: #fff
+
+.rh-page-module-dark
+  +white-text
+  +background-black
+
+.rh-page-module-full
+  @extend .flex-full-center
+  min-height: 100vh
+
+.rh-page-module-full-homepage
+  @extend .flex-full-center
+  +background-greybars
+  min-height: calc(100vh - #{$header-height-homepage})
+
+.rh-page-module-full-subpage
+  @extend .flex-full-center
+  min-height: calc(100vh - #{$header-height-subpage})
+
+.rh-page-module-full-subpage-bc
+  @extend .flex-full-center
+  min-height: calc(100vh - #{$header-height-subpage} - #{$breadcrumbs-height})

@@ -1,0 +1,99 @@
+.rh-status
+  position: relative
+  overflow: hidden
+  display: table
+  table-layout: fixed
+  height: $form-el-height
+  width: 100%
+  margin: $base-line-height-half 0
+  background: $control-neutral-color-light
+  border-radius: $border-radius-small
+  .icon
+    display: table-cell
+    vertical-align: middle
+    width: $form-el-height
+    padding: $base-line-height-half 0
+    text-align: center
+    color: $control-neutral-color-dark
+    text-shadow: $text-shadow-light
+  .message
+    @extend %body-base-small
+    display: table-cell
+    background: $control-neutral-color-dark $dark-gradient
+    vertical-align: middle
+    border-radius: $border-radius-small
+    padding: $base-line-height-half $base-line-height
+    height: $form-el-height
+    text-transform: uppercase
+    text-shadow: $text-shadow-dark
+    color: #fff
+
+.rh-status-info
+  @extend .rh-status
+  background-color: lighten($control-info-color-light, 25%)
+  .icon
+    color: $control-info-color
+  .message
+    background-color: $control-info-color
+
+.rh-status-success
+  @extend .rh-status
+  background-color: lighten($control-success-color-light, 10%)
+  .icon
+    color: $control-success-color
+  .message
+    background-color: $control-success-color
+
+.rh-status-warning
+  @extend .rh-status
+  background-color: lighten($control-warning-color-light, 10%)
+  .icon
+    color: $control-warning-color
+  .message
+    background-color: $control-warning-color
+
+.rh-status-danger
+  @extend .rh-status
+  background-color: lighten($control-danger-color-light, 10%)
+  .icon
+    color: $control-danger-color
+  .message
+    background-color: $control-danger-color
+
+
+.rh-status-label
+  @extend .rh-status
+  width: auto
+  height: auto
+  background: $control-neutral-color-dark $dark-gradient
+  display: inline-block
+  margin: 0 $base-line-height-half
+  .icon
+    padding: $base-line-height-quarter $base-line-height
+    padding-right: 0
+    width: auto
+    text-shadow: $text-shadow-dark
+    i.fa
+      color: #fff !important
+  .message
+    text-transform: none
+    padding: $base-line-height-quarter $base-line-height-half
+    padding-right: $base-line-height
+    height: auto
+    background: none
+
+.rh-status-label-info
+  @extend .rh-status-label
+  background: $control-info-color $dark-gradient
+
+.rh-status-label-success
+  @extend .rh-status-label
+  background: $control-success-color $dark-gradient
+
+.rh-status-label-warning
+  @extend .rh-status-label
+  background: $control-warning-color $dark-gradient
+
+.rh-status-label-danger
+  @extend .rh-status-label
+  background: $control-danger-color $dark-gradient

@@ -1,26 +1,23 @@
 import React from 'react';
 
-class IconCircleText extends React.Component {
-  render() {
-    let style = 'rh-icon-circle-text';
+const IconCircleText = ({label, style, center, className}) => {
+  let cls = 'rh-icon-circle-text';
 
-    if (this.props.style) {
-      style += '-' + this.props.style;
-    }
-
-    return (<div className={style}>
-      {this.props.label}
-    </div>);
+  if (style) {
+    cls += '-' + style;
   }
-}
 
-IconCircleText.defaultProps = {
-  label: 'Label',
-  style: null
-};
-IconCircleText.propTypes    = {
-  label: React.PropTypes.string,
-  style: React.PropTypes.string
+  if (center) {
+    cls += ' margin-center';
+  }
+
+  if (className) {
+    cls += ' ' + className;
+  }
+
+  return (<div className={cls}>
+    <span>{label}</span>
+  </div>);
 };
 
 export default IconCircleText;

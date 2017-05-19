@@ -22,8 +22,12 @@ $ms--2: 0.382rem
 $ms--3: 0.236rem
 $ms--4: 0.146rem
 
-$base-font-size: $ms-0
+$base-font-size-large: $ms-3
+$base-font-size: $ms-2
+$base-font-size-small: $ms-1
+$base-font-size-tiny: $ms-0
 $base-line-height: $ms-1 //1.1rem // html font size set to 1rem = 10px
+$base-line-height-quarter: ($base-line-height * .25)
 $base-line-height-half: ($base-line-height * .5)
 $base-line-height-double: ($base-line-height * 2)
 $base-line-height-triple: ($base-line-height * 3)
@@ -36,6 +40,10 @@ $border-radius: $base-line-height
 //------------------------------------------------------------------------------
 
 // RH Palette
+$red-light-1: rgb(208,170,171)
+$red-light-2: rgb(207,131,131)
+$red-light-3: rgb(205,88,88)
+$red-light-4: rgb(204,48,49)
 $red: rgb(202, 6, 18)
 $red-dark-1: rgb(162, 4, 12)
 $red-dark-2: rgb(129, 2, 8)
@@ -65,6 +73,8 @@ $blue-3: rgb(156, 228, 242)
 $blue-4: rgb(132, 221, 239)
 $blue-5: rgb(107, 214, 236)
 $blue-6: rgb(62, 200, 229)
+$blue-7: rgb(12, 175, 215)
+$blue-8: rgb(0, 160, 205)
 $blue-light: rgb(164, 219, 231)
 $blue-light-1: rgb(232, 246, 249)
 $blue-light-2: rgb(210, 237, 243)
@@ -125,12 +135,67 @@ $control-over-color-dark: rgba(255, 255, 255, .25)
 $control-primary-color: $blue-dark-2
 $control-primary-color-dark: $blue-dark
 
-$control-success-color: $green
-$control-warning-color: $gold
-$control-danger-color: $red
-$control-info-color: $blue
-$control-neutral-color: $grey-light
+
+// From patternfly
+$control-success-color: rgb(66, 156, 65)
+$control-success-color-light: rgb(206, 229, 206)
+$control-success-color-dark: rgb(48, 118, 45)
+$control-warning-color: rgb(235, 122, 40)
+$control-warning-color-light: rgb(250, 221, 199)
+$control-warning-color-dark: rgb(178, 92, 26)
+$control-danger-color: rgb(202, 6, 18)
+$control-danger-color-light: rgb(241, 190, 194)
+$control-danger-color-dark: rgb(138, 3, 9)
+$control-info-color: rgb(22, 185, 225)
+$control-info-color-light: rgb(126, 219, 241)
+$control-info-color-dark: rgb(14, 139, 171)
+$control-neutral-color: rgb(187, 187, 187)
+$control-neutral-color-light: rgb(229, 229, 229)
+$control-neutral-color-dark: $grey-9
+
+$light-gradient: linear-gradient(to bottom, transparent, rgba(255,255,255,.1))
+$dark-gradient: linear-gradient(to bottom, transparent, rgba(0,0,0,.1))
+$text-shadow-light: 1px 1px 0 rgba(255,255,255,.5)
+$text-shadow-dark: 1px 1px 0 rgba(0,0,0,.25)
+$text-shadow-dark-small: 1px 1px 3px rgba(0,0,0,.25)
+$box-shadow-light: 1px 1px 0 rgba(255,255,255,.5)
+$box-shadow-dark: 1px 1px 0 rgba(0,0,0,.2)
+$box-shadow-xsmall: 0 1px 1px 0 rgba(0,0,0,.2)
+$box-shadow-small: 1px 1px 3px rgba(0,0,0,.2)
+$box-shadow-medium: 2px 2px 7px rgba(0,0,0,.2)
+$box-shadow-large: 5px 5px 15px rgba(0,0,0,.2)
+$box-shadow-xlarge: 5px 5px 30px rgba(0,0,0,.2)
+
+$form-el-height: 4rem
+$form-el-border: 1px solid $grey-3
+$form-el-border-focus: 1px solid $control-info-color
+$form-el-border-error: 1px solid $control-danger-color
+
+// Metrics defined for later calculations
+$header-height-homepage: 19rem
+$header-height-homepage-extend: 15rem
+$header-height-subpage: 12rem
+$breadcrumbs-height: $base-line-height * 4
+
+$barsgradient: linear-gradient(-45deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.2) 22%,rgba(255,255,255,.1) 22.01%,rgba(255,255,255,0) 85%,rgba(255,255,255,.15) 85.01%,rgba(255,255,255,0) 100%)
+
+=text-emboss-shadow
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, .15), 1px 1px 0 rgba(255, 255, 255, .1)
 
 // From the SAML login page
-=greybars
+=background-greybars
   background: linear-gradient(-45deg,#fff 0%,#eee 22%,#f6f6f6 22.01%,#fff 85%,#fafafa 85.01%,#fff 100%)
+//background-size: cover
+//background-attachment: fixed
+
+=background-darkblue-bars
+  background: $blue-dark $barsgradient
+
+// From footer on redhat.hom
+=background-black
+  background: #292e33
+  background-image: linear-gradient(to bottom, #000, #292e33)
+
+=background-darkblue
+  background: $blue-dark
+  background-image: linear-gradient(rgba(0,0,0,.25), transparent)
