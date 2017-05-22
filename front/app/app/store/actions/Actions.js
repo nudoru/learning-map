@@ -25,6 +25,11 @@ export const setLRSStatements = (payload) => ({
     payload
   });
 
+export const setAllegoStatements = (payload) => ({
+  type: Actions.SET_ALLEGO_STATEMENTS,
+  payload
+});
+
 export const setShadowEnrollments = (payload) => ({
     type: Actions.SET_SHADOW_ENROLLMENTS,
     payload

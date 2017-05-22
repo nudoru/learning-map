@@ -8,6 +8,7 @@ import {
   setHydratedContent,
   setLMSStatus,
   setLRSStatements,
+  setAllegoStatements,
   setSDBStatus,
   setShadowEnrollments
 } from './store/actions/Actions';
@@ -23,6 +24,7 @@ import { chainTasks } from './utils/AppUtils';
 import { fetchUserProfile } from './services/fetchUserProfile';
 import { fetchCoursesInMap, fetchLMSData } from './services/fetchLMS';
 import { getSBUserEnrolledCourseDetails } from './services/fetchShadowDb';
+import {fetchAllegoLRSStatements} from './services/fetchAllegoLRS';
 import Header from './components/Header';
 import LearningMap from './components/LearningMap';
 import PleaseWaitModal from './rh-components/rh-PleaseWaitModal';
@@ -76,7 +78,11 @@ class App extends React.Component {
       AppStore.dispatch(setFullUserProfile(profile.lms));
       AppStore.dispatch(setLRSStatements(profile.lrs));
 
-      this.externalLearningActivityLoaded();
+      fetchAllegoLRSStatements().fork(console.warn, s => {
+        AppStore.dispatch(setAllegoStatements(s));
+        this.externalLearningActivityLoaded();
+      });
+
     });
   }
 

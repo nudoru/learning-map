@@ -1,9 +1,11 @@
-var {curry, concat}          = require('ramda'),
+let {curry, concat}          = require('ramda'),
     Task                     = require('data.task'),
     {requestFullUserProfile} = require('../lms/GetFullUserProfile'),
     {
       createAgentEmailQuery,
-      requestAllStatements
+      requestAllStatements,
+      createAggregateQuery,
+      requestAggregate
     }                        = require('../lrs/LRS'),
     {chainTasks}             = require('../shared');
 
@@ -55,11 +57,13 @@ const _toTaskArray = (wsConfig, list) => list.map(_getUser(wsConfig));
 
 const _getUser = curry((wsConfig, username) =>
   chainTasks([requestFullUserProfile(wsConfig, username, {calendar: false}),
-    _requestLRSUser(wsConfig.lrs, username)])
+    _requestLRSUser(wsConfig, username)])
     .map(_arrangeResults(username)));
 
 const _requestLRSUser = (wsConfig, username) =>
-  requestAllStatements(wsConfig)(createAgentEmailQuery(username));
+  wsConfig.hasOwnProperty('lrs') ? requestAggregate(wsConfig.lrs, createAggregateQuery({
+    ['statement.actor.mbox']: 'mailto:' + username
+  })) : Task.of([]);
 
 const _arrangeResults = curry((username, results) => ({
   [username]: {

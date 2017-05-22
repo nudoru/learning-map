@@ -58,9 +58,9 @@ export const PeriodCard = (periodObj) => {
           </div>
           <h1>{title}{isPeriodComplete(periodObj) ?
             <StatusIconTiny type="success"/> : ''}</h1>
-          <div className="margin-bottom-triple">
-            {tagRow}
-          </div>
+          {/*<div className="margin-bottom-triple">*/}
+            {/*{tagRow}*/}
+          {/*</div>*/}
           <div className="text-summary"
                dangerouslySetInnerHTML={{__html: summary}}></div>
           <div className="instructions"

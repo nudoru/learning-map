@@ -11,18 +11,18 @@
  *
  */
 
-let Task                     = require('data.task'),
-    Either                   = require('data.either'),
-    {curry, compose, concat} = require('ramda'),
-    verbDictionary           = require('./ADL-Verbs'),
-    activityDictionary       = require('./ADL-Activity'),
-    {defaults}               = require('lodash'),
-    {createLRSQuery}         = require('../shared'),
-    verbURLPrefix            = 'http://adlnet.gov/expapi/verbs/',
-    activityURLPrefix        = 'http://adlnet.gov/expapi/activities/',
-    defaultLanguage          = 'en-US',
+let Task                           = require('data.task'),
+    Either                         = require('data.either'),
+    {curry, compose, concat}       = require('ramda'),
+    verbDictionary                 = require('./ADL-Verbs'),
+    activityDictionary             = require('./ADL-Activity'),
+    {defaults}                     = require('lodash'),
+    {createLRSQuery, parameterize} = require('../shared'),
+    verbURLPrefix                  = 'http://adlnet.gov/expapi/verbs/',
+    activityURLPrefix              = 'http://adlnet.gov/expapi/activities/',
+    defaultLanguage                = 'en-US',
     lrsOptions,
-    defaultProps             = {};
+    defaultProps                   = {};
 
 // Set connection options
 // obj -> endpoint: Str, token: Str, version: Str
@@ -91,8 +91,6 @@ const createStatement = (partialStatement) => {
       {
         subjectName,
         subjectID,
-        subjectAccount,
-        subjectAccountID,
         verbDisplay,
         objectID,
         objectType,
@@ -106,13 +104,8 @@ const createStatement = (partialStatement) => {
 
   statement = defaults({
     actor : {
-      name      : subjectName,
-      mbox      : 'mailto:' + subjectID,
-      objectType: 'Agent'
-      //account   : {
-      //  homePage: subjectAccount,
-      //  name    : subjectAccountID
-      //}
+      name: subjectName,
+      mbox: 'mailto:' + subjectID
     },
     verb  : {
       id     : verbURLPrefix + verbDisplay.toLowerCase(),
@@ -148,12 +141,23 @@ const sendStatement = curry((options, statement) => {
 const sendFragment = curry((options, fragment) => compose(sendStatement(options), createStatement)(fragment));
 
 // Helper to create an LRS statement query from an email address
-const createAgentEmailQuery = email => ({
-  agent: JSON.stringify({
-    objectType: 'Agent',
-    mbox      : `mailto:${email}`
-  })
-});
+const createAgentEmailQuery = email => {
+  if (!validateEmail(email)) {
+    console.error('createAgentEmailQuery with "' + email + '" is not a valid email address. Request will fail.');
+  }
+
+  return ({
+    agent: JSON.stringify({
+      objectType: 'Agent',
+      mbox      : `mailto:${email}`
+    })
+  });
+};
+
+const validateEmail = email => {
+  let regex = /.+@.+/;
+  return regex.test(email);
+};
 
 // Get first 100 statements from the LRS
 // Statement may be an individual ID, array or null for all of them
@@ -170,6 +174,7 @@ const requestStatements = curry((options, query) => {
     );
 });
 
+// Recursively query for all user statements
 const requestAllStatements = curry((options, query) => {
   if (options) {
     setLRSOptions(options);
@@ -205,35 +210,64 @@ const requestAllStatements = curry((options, query) => {
 
 });
 
-/*let acc = [],
- counter = 0,
- more;
-
- if (options) {
- setLRSOptions(options);
+/*
+ {
+ ['statement.actor.mbox']        : 'mailto:' + email,
+ ['statement.context.platform']  : platform,
+ ['statement.verb.display.en-US']: verbDisplay,
+ ['statement.verb.id']           : verbId,
+ ['statement.object.id']         : objectId,
+ voided                          : false
  }
+ */
 
- //'/data/xAPI/statements?agent=%7B%22objectType%22%3A%22Agent%22%2C%22mbox%22%3A%22mailto%3Amperkins%40redhat.com%22%7D&offset=100'
- const makeQuery = (more) => Either.fromNullable(options || lrsOptions)
- .fold(
- () => new Task.rejected('getStatements: Need LRS options'),
- () => {
- return more ? createLRSQueryWithParam(lrsOptions, 'GET', more) : createLRSQuery(lrsOptions, 'GET', query)
- }
- );
+// https://docs.mongodb.com/manual/core/aggregation-pipeline/
+const createAggregateQuery = (match) => {
+  if (!match.hasOwnProperty('voided')) {
+    match.voided = false;
+  }
 
- const doFetch = () => new Task((rej, res) => {
- makeQuery().fork(rej, statements => {
- if (statements.more !== null) {
- console.log('res has a more!', statements.more);
- res('foo');
- } else {
- res(statements);
- }
- });
- });
+  let pipeline = [
+    {
+      ['$match']: match
+    },
+    {
+      ['$project']: {
+        ['_id']  : 0,
+        statement: 1
+      }
+    }
+    //{
+    //  ['$sort']: {
+    //    'statement.timestamp': 1
+    //  }
+    //}
+  ];
 
- return doFetch();*/
+  //2017-05-02T18:15:44.138400+00:00
+
+  return '/api/v1/statements/aggregate?pipeline=' + encodeURIComponent(JSON.stringify(pipeline));
+};
+
+//http://docs.learninglocker.net/statements_api/#aggregate
+/* Results will be:
+ res => {result: [{statement:{...}, ...]}
+ Map unwraps this and returns an array of just statements
+ */
+const requestAggregate = curry((options, query) => {
+  if (options) {
+    setLRSOptions(options);
+  }
+
+  return Either.fromNullable(options || lrsOptions)
+    .fold(
+      () => new Task.rejected('requestAggregate: Need LRS options'),
+      () => createLRSQuery(lrsOptions, 'GET', query).map(res => res.result.reduce((acc, s) => {
+        acc.push(s.statement);
+        return acc;
+      }, []))
+    );
+});
 
 module.exports = {
   setLRSOptions,
@@ -245,5 +279,7 @@ module.exports = {
   sendFragment,
   createAgentEmailQuery,
   requestStatements,
-  requestAllStatements
+  requestAllStatements,
+  requestAggregate,
+  createAggregateQuery
 };

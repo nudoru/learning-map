@@ -1,7 +1,7 @@
 import Task from 'data.task';
 import { is, prop } from 'ramda';
 import { configSelector } from '../store/selectors';
-import {requestCatalog} from '../utils/learningservices/lms/GetCourseCatalog'
+import { requestCatalog } from '../utils/learningservices/lms/GetCourseCatalog';
 
 const coursesInMap = data => data.map(prop('lmsID')).filter(is(Number));
 

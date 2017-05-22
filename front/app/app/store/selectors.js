@@ -228,7 +228,8 @@ export const getHydratedContent = () => {
     o.lrsStatusDate = null;
     o.lmsDetails    = null;
 
-    if (o.lmsID) {
+    if (o.lmsID || o.hasOwnProperty('allegoID') && o.allegoID.length) {
+    //if (o.lmsID) {
       o.requireConfirm = false;
     }
 

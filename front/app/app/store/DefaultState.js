@@ -21,6 +21,7 @@ export default {
     enrollmentDetails: []
   },
   currentUser        : '',
+  allegoStatements   : [],
   userProfile        : {},
   coursesInMap       : [],
   currentStructure   : {},
