@@ -19,6 +19,7 @@ export const userEnrolledCoursesSelector      = () => userProfileSelector().enro
 export const currentStructureSelector         = () => AppStore.getState().currentStructure;
 export const coursesInMapSelector             = () => AppStore.getState().coursesInMap;
 export const shadowDBEnrollmentsSelector      = () => AppStore.getState().shadowEnrollments;
+export const allegoStatementsSelector         = () => AppStore.getState().allegoStatements;
 export const userStatementsSelector           = () => AppStore.getState().lrsStatements;
 export const userStatementsSelectorForContext = () => {
   if (STATEMENTS_FOR_CONTEXT_CACHE) {
@@ -201,6 +202,21 @@ export const isPeriodComplete = obj =>
   obj.topics.reduce((res, topic) =>
   isTopicComplete(topic) && res, true);
 
+export const getAllegoStatement = (idArr, verb) =>
+  allegoStatementsSelector()
+    .filter(filterStatementVerb(verb))
+    .filter(filterStatementAllegoID(idArr));
+
+export const filterStatementVerb = curry((verb, el) => el.verb.display['en-US'] === verb);
+
+export const filterStatementAllegoID = curry((idArr, el) => {
+  let statementid = el.object.id.split('_')[1]; // "https://my.allego.com#scored_174014"
+  return idArr.indexOf(statementid) >= 0;
+});
+
+//  "allegoVerb":"scored",
+//  "allegoID":["174014"],
+
 export const getHydratedContent = () => {
   let coursesInMap    = coursesInMapSelector(),
       config          = configSelector(),
@@ -211,7 +227,24 @@ export const getHydratedContent = () => {
   return content.reduce((acc, contobj) => {
     let o             = Object.assign({}, contobj),
         statement,
+        allegoStatement,
         lmsEnrollment = getEnrollmentRecordLMSCourse(userEnrolledCoursesSelector(), o.lmsID)[0];
+
+    o.isNew            = isDateWithinNewRange(today, newIfWithinDays, o.dateAdded);
+    o.isUpdated        = isDateWithinNewRange(today, newIfWithinDays, o.dateUpdated);
+    o.isPending        = false;
+    o.lmsStatus        = 0;
+    o.lmsStatusDate    = null;
+    o.lrsStatus        = null;
+    o.lrsStatusDate    = null;
+    o.allegoStatus     = null;
+    o.allegoStatusDate = null;
+    o.lmsDetails       = null;
+
+    if (o.lmsID || o.hasOwnProperty('allegoID') && o.allegoID.length) {
+      //if (o.lmsID) {
+      o.requireConfirm = false;
+    }
 
     if (o.contentLink) {
       statement = getStatusStatementForContentID(contentLinkWithId(o.contentLink, o.id));
@@ -219,23 +252,18 @@ export const getHydratedContent = () => {
       statement = getStatusStatementForContentID(contentTitleToLink(o.title, o.id));
     }
 
-    o.isNew         = isDateWithinNewRange(today, newIfWithinDays, o.dateAdded);
-    o.isUpdated     = isDateWithinNewRange(today, newIfWithinDays, o.dateUpdated);
-    o.isPending     = false;
-    o.lmsStatus     = 0;
-    o.lmsStatusDate = null;
-    o.lrsStatus     = null;
-    o.lrsStatusDate = null;
-    o.lmsDetails    = null;
-
-    if (o.lmsID || o.hasOwnProperty('allegoID') && o.allegoID.length) {
-    //if (o.lmsID) {
-      o.requireConfirm = false;
-    }
-
     if (statement) {
       o.lrsStatus     = statement.verb.display['en-US'];
       o.lrsStatusDate = moment(statement.timestamp);
+    }
+
+    if (o.hasOwnProperty('allegoID')) {
+      allegoStatement = getAllegoStatement(o.allegoID, o.allegoVerb);
+      console.log('Allego statement(s)', allegoStatement);
+      if (allegoStatement.length) {
+        o.allegoStatus     = allegoStatement[0].verb.display['en-US'];
+        o.allegoStatusDate = moment(allegoStatement[0].timestamp);
+      }
     }
 
     if (lmsEnrollment) {
@@ -258,7 +286,7 @@ export const getHydratedContent = () => {
       o.summary     = o.summary || stripHTML(o.lmsDetails.summary);
     }
 
-    o.isComplete = o.lmsStatus === 2 || (o.lrsStatus === 'clicked' && !o.requireConfirm || o.lrsStatus === 'completed' && o.requireConfirm);
+    o.isComplete = o.lmsStatus === 2 || (o.lrsStatus === 'clicked' && !o.requireConfirm || o.lrsStatus === 'completed' && o.requireConfirm) || o.allegoStatus !== null;
 
     acc.push(o);
     return acc;

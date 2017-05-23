@@ -180,6 +180,9 @@ const ToggleCell = ({onCompletedClick, contentObj}) => {
   } else if (contentObj.lmsID) {
     completionToggle =
       <p className="small">Completion determined on the LMS.</p>;
+  } else if (contentObj.hasOwnProperty('allegoID')) {
+    completionToggle =
+      <p className="small">Completion determined on Allego.</p>;
   }
 
   return (<td className="details-completion">
