@@ -1,12 +1,16 @@
 import React from 'react';
-import Toggle from 'react-toggle';
-import {isPeriodComplete} from '../store/selectors';
+import {
+  contentLinkWithId, contentTitleToLink,
+  isPeriodComplete
+} from '../store/selectors';
 import {Tag, TagHGroup} from '../rh-components/rh-Tag';
 import {StatusIcon, StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
 import {TextArea} from "../rh-components/rh-Form";
 import {Col, Grid, Row} from "../rh-components/rh-Grid";
 import {Button} from "../rh-components/rh-Button";
+import {XAPILink} from "./xAPILink";
+import {XAPIToggle} from "./xAPIToggle";
 
 //------------------------------------------------------------------------------
 // Card showing the week information, overall completion icon, and courses
@@ -143,12 +147,14 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
     className="details-course-name-newOrUpdated">{contentObj.isNew ? ' (New) ' : (contentObj.isUpdated ? ' (Updated) ' : null)}</span>;
 
   if (contentObj.contentLink) {
-    nameElement = <a href={contentObj.contentLink} target="_blank"
-                     data-contenturl={contentObj.contentLink}
-                     data-contentname={contentObj.title}
-                     data-contentid={contentObj.id}
-                     onClick={onLinkClick}
-                     dangerouslySetInnerHTML={{__html: contentObj.title}}></a>;
+    // The content id is appended to the link to generate the id so that it's unique.
+    // The same link could be used for more than one content item
+    nameElement = <XAPILink
+      href={contentObj.contentLink}
+      id={contentLinkWithId(contentObj.contentLink, contentObj.id)}
+      onClick={onLinkClick}>
+      {contentObj.title}
+    </XAPILink>
   } else {
     nameElement = <p data-contentid={contentObj.id}
                      dangerouslySetInnerHTML={{__html: contentObj.title}}></p>;
@@ -162,21 +168,25 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
 };
 
 const ToggleCell = ({onCompletedClick, contentObj}) => {
-  let completionToggle;
+  let completionToggle, toggleId;
 
   if (contentObj.requireConfirm) {
+    if (!contentObj.contentLink) {
+      // Use the "linkified" title for the link
+      toggleId = contentTitleToLink(contentObj.title, contentObj.id);
+    } else {
+      // Make it unique
+      toggleId = contentLinkWithId(contentObj.contentLink, contentObj.id);
+    }
+
     completionToggle = (<div>
-      <label>
-        <Toggle
-          data-contenturl={contentObj.contentLink}
-          data-contentname={contentObj.title}
-          data-contentid={contentObj.id}
-          defaultChecked={contentObj.isComplete}
-          disabled={contentObj.isComplete}
-          onChange={onCompletedClick}/>
-        <span
-          className="toggle-label">{contentObj.isComplete ? 'Completed' : 'Mark complete'}</span>
-      </label>
+      <XAPIToggle
+        id={toggleId}
+        title={contentObj.title}
+        disabled={contentObj.isComplete}
+        complete={contentObj.isComplete}
+        onClick={onCompletedClick}
+      />
     </div>);
   } else if (contentObj.lmsID) {
     completionToggle =
@@ -211,5 +221,5 @@ const ReflectionInput = ({reflectionPrompt, disabled}) => {
     <Row><Col
       className='text-right padding-top'><Button>Save</Button></Col></Row>
   </Grid>
-}
+};
 

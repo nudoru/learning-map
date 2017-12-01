@@ -8,6 +8,8 @@ import {setLRSStatus} from "../store/actions/Actions";
 
 let propsCache;
 
+// export const getLRSConnectionInfo = _ => propsCache.config.webservice.lrs;
+
 export const connectToLRS = (props) => {
   if (!useLRS()) {
     return;
@@ -74,7 +76,7 @@ export const sendCompletedStatement = (name, link) => {
 
 export const sendStatementForLink = (verb, name, link) => {
   // some links may not have URL, just default to the context ID
-  link = link || this.props.config.webservice.lrs.contextID;
+  link = link || propsCache.config.webservice.lrs.contextID;
   sendXAPIStatement({
     verbDisplay: verb,
     objectName : name,

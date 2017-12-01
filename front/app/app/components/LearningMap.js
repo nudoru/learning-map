@@ -2,18 +2,12 @@ import React from 'react';
 import ModalMessage from '../rh-components/rh-ModalMessage';
 import {
   areRequiredActivitiesCompleted,
-  contentLinkWithId,
-  contentTitleToLink,
   getDateRelationship,
   getNumActivitiesForPeriod
 } from '../store/selectors';
 import {idMatchObjId} from '../utils/AppUtils';
 import {ContentRow, PeriodCard, PeriodTopicCard} from './PeriodCard';
-import {
-  connectToLRS,
-  sendCompletedStatement,
-  sendLinkStatement
-} from './LRSProvider';
+import {connectToLRS} from './LRSProvider';
 
 class LearningMap extends React.PureComponent {
 
@@ -50,42 +44,13 @@ class LearningMap extends React.PureComponent {
     connectToLRS(this.props);
   }
 
-  // Will be passed the <a> element
-  _onLinkClick(el) {
-    if (el.target) {
-      // TODO this isn't working
-      let title = el.target.dataset.contentname,
-          link  = el.target.dataset.contenturl,
-          cid   = el.target.dataset.contentid;
 
-      // Make it unique
-      link = contentLinkWithId(link, cid);
 
-      sendLinkStatement(title, link);
-      this._updateStateContentStatus(title, link, cid, true);
-    }
-  }
-
-  // Will be passed the checkbox element from the react-toggle component
-  // Name (innerHTML) and link (url) are added as data-* attributes on the element
-  _onCompletedClick(el) {
-    if (el.target) {
-      let title = el.target.dataset.contentname,
-          link  = el.target.dataset.contenturl,
-          cid   = el.target.dataset.contentid;
-      if (!link) {
-        // Use the "linkified" title for the link
-        link = contentTitleToLink(title, cid);
-      } else {
-        // Make it unique
-        link = contentLinkWithId(link, cid);
-      }
-      console.log('Toggled', title, link);
-      sendCompletedStatement(title, link);
-      this._updateStateContentStatus(title, el.target.dataset.contenturl, cid, true, true);
-    }
-  }
-
+  // TODO this need to be move to the app state?
+  // on link click
+  // this._updateStateContentStatus(title, link, cid, true);
+  // on completed toggle
+  //this._updateStateContentStatus(title, el.target.dataset.contenturl, cid, true, true);
   _updateStateContentStatus(title, link, id, isPending = true, isCompleted = false) {
     let idx      = this._getStateContentObjIndexById(id),
         newState = this.state.contents;
@@ -195,11 +160,16 @@ class LearningMap extends React.PureComponent {
                        modType={config.contentTypes[contentObj.contentType].label}
                        modIcon={config.contentTypes[contentObj.contentType].icon}
                        modNote={modNote}
-                       onLinkClick={this._onLinkClick.bind(this)}
-                       onCompletedClick={this._onCompletedClick.bind(this)}
+                       onLinkClick={this._onLinkClickCb}
+                       onCompletedClick={this._onCompletedClickCb}
     />;
   }
-}
 
+  // this._updateStateContentStatus(title, link, cid, true);
+  _onLinkClickCb = ({title, id}) => console.log('Link clicked',title, id);
+
+  //this._updateStateContentStatus(title, el.target.dataset.contenturl, cid, true, true);
+  _onCompletedClickCb = ({title, id}) => console.log('Toggle clicked',title, id);
+}
 
 export default LearningMap;
