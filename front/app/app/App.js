@@ -1,5 +1,4 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import AppStore from './store/AppStore';
 import {
   setAllegoStatements,
@@ -32,9 +31,8 @@ import ModalMessage from './rh-components/rh-ModalMessage';
 import Timeline from './components/Timeline';
 import Introduction from './components/Introduction';
 
-const LoadingMessage = () =>
-  <PleaseWaitModal><h1>Loading your profile ...</h1>
-  </PleaseWaitModal>;
+const LoadingMessage = () => <PleaseWaitModal><h1>Loading your profile ...</h1>
+</PleaseWaitModal>;
 
 class App extends React.Component {
 
@@ -79,7 +77,6 @@ class App extends React.Component {
       AppStore.dispatch(setLRSStatements(profile.lrs));
 
       fetchAllegoLRSStatements().fork(console.warn, s => {
-        //console.log('Got allego!',s);
         AppStore.dispatch(setAllegoStatements(s));
         this.externalLearningActivityLoaded();
       });
@@ -122,17 +119,8 @@ class App extends React.Component {
   render() {
     const state = AppStore.getState();
 
-    /*
-    config          : state.config,
-    userProfile     : state.userProfile,
-    coursesInMap    : state.coursesInMap,
-    hydratedContent : state.hydratedContent,
-    currentStructure: state.currentStructure
-     */
-
     if (this.state.ready) {
-      // Props are injected via react-redux connect
-      return (<div>
+      return <div>
         <Header/>
         <div className="header-overlap">
           <Introduction text={state.currentStructure.introduction}
@@ -144,12 +132,12 @@ class App extends React.Component {
                        currentStructure={state.currentStructure}/>
         </div>
         {this.state.systemError ? this.errorMessage() : null}
-      </div>);
+      </div>;
     } else {
-      return (<div>
+      return <div>
         <LoadingMessage/>
         {this.state.systemError ? this.errorMessage() : null}
-      </div>);
+      </div>;
     }
   }
 
@@ -158,7 +146,7 @@ class App extends React.Component {
   }
 
   errorMessage() {
-    return (<ModalMessage
+    return <ModalMessage
       message={{
         title        : 'Connection Problem',
         icon         : 'exclamation',
@@ -173,21 +161,8 @@ class App extends React.Component {
         refresh the page to try again.</p>
       {this.state.errorMessage ?
         <p><em>{this.state.errorMessage}</em></p> : null}
-    </ModalMessage>);
+    </ModalMessage>;
   }
-
 }
 
-App.propTypes = {};
-
-const mapStateToProps = state => {
-  return {
-    config: state.config
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
