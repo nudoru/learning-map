@@ -1,7 +1,7 @@
 {
-  "name": "react-starter-2-app",
-  "version": "0.1.0",
-  "description": "Starting point for React 15, Babel 6 and Webpack beta 2 projects",
+  "name": "Learning Map",
+  "version": "1.5.0",
+  "description": "Learning Map Application",
   "engines": {
     "node": ">=4"
   },
@@ -24,14 +24,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nudoru/React-Starter-2.git"
+    "url": "git+https://github.com/nudoru/learning-map.git"
   },
   "author": "Matt Perkins <hello@mattperkins.me> (http://mattperkins.me)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nudoru/React-Starter-2/issues"
+    "url": "https://github.com/nudoru/learning-map/issues"
   },
-  "homepage": "https://github.com/nudoru/React-Starter-2#readme",
+  "homepage": "https://github.com/nudoru/learning-map#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
