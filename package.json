@@ -32,14 +32,6 @@
     "url": "https://github.com/nudoru/learning-map/issues"
   },
   "homepage": "https://github.com/nudoru/learning-map#readme",
-  "dependencies": {
-    "body-parser": "^1.15.2",
-    "cookie-parser": "^1.4.3",
-    "express": "^4.14.0",
-    "morgan": "^1.7.0",
-    "path": "^0.12.7",
-    "serve-favicon": "^2.3.0"
-  },
   "devDependencies": {
     "autoprefixer": "^6.5.1",
     "babel-cli": "^6.10.1",
