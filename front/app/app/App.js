@@ -1,14 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import AppStore from './store/AppStore';
 import {
+  setAllegoStatements,
   setCoursesInMap,
   setCurrentStructure,
   setFullUserProfile,
   setHydratedContent,
   setLMSStatus,
   setLRSStatements,
-  setAllegoStatements,
   setSDBStatus,
   setShadowEnrollments
 } from './store/actions/Actions';
@@ -20,10 +20,10 @@ import {
   startEventSelector,
   useShadowDB
 } from './store/selectors';
-import { chainTasks } from './utils/AppUtils';
-import { fetchUserProfile } from './services/fetchUserProfile';
-import { fetchCoursesInMap, fetchLMSData } from './services/fetchLMS';
-import { getSBUserEnrolledCourseDetails } from './services/fetchShadowDb';
+import {chainTasks} from './utils/AppUtils';
+import {fetchUserProfile} from './services/fetchUserProfile';
+import {fetchCoursesInMap, fetchLMSData} from './services/fetchLMS';
+import {getSBUserEnrolledCourseDetails} from './services/fetchShadowDb';
 import {fetchAllegoLRSStatements} from './services/fetchAllegoLRS';
 import Header from './components/Header';
 import LearningMap from './components/LearningMap';
@@ -38,29 +38,29 @@ const LoadingMessage = () =>
 
 class App extends React.Component {
 
-  constructor () {
+  constructor() {
     super();
     this.state = {ready: false, systemError: false, errorMessage: null};
     this.storeListener;
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.storeListener = AppStore.subscribe(this.onStateUpdated.bind(this));
     this.fetchProfiles();
   }
 
-  onStateUpdated () {
+  onStateUpdated() {
     if (!(isConnectionSuccessful())) {
       this.setState({systemError: true});
       console.error('Connection to one or more back end systems is down!');
     }
   }
 
-  fetchProfiles () {
+  fetchProfiles() {
     let state = AppStore.getState(),
-        user = state.config.defaultuser;
+        user  = state.config.defaultuser;
 
-    if(state.currentUser.length) {
+    if (state.currentUser.length) {
       user = state.currentUser;
     }
 
@@ -79,6 +79,7 @@ class App extends React.Component {
       AppStore.dispatch(setLRSStatements(profile.lrs));
 
       fetchAllegoLRSStatements().fork(console.warn, s => {
+        //console.log('Got allego!',s);
         AppStore.dispatch(setAllegoStatements(s));
         this.externalLearningActivityLoaded();
       });
@@ -86,7 +87,7 @@ class App extends React.Component {
     });
   }
 
-  externalLearningActivityLoaded () {
+  externalLearningActivityLoaded() {
     AppStore.dispatch(setHydratedContent(getHydratedContent()));
     if (useShadowDB() && startEventSelector().length) {
       this.fetchShadowDBDataEnrollmentData();
@@ -96,7 +97,7 @@ class App extends React.Component {
     }
   }
 
-  fetchShadowDBDataEnrollmentData () {
+  fetchShadowDBDataEnrollmentData() {
     getSBUserEnrolledCourseDetails().fork(e => {
       console.error('ShadowDB Error: ', e);
       this.setState({errorMessage: e});
@@ -109,24 +110,38 @@ class App extends React.Component {
     });
   }
 
-  shadowDBEnrollmentsLoaded () {
+  shadowDBEnrollmentsLoaded() {
     this.finalizeContent();
   }
 
-  finalizeContent () {
+  finalizeContent() {
     AppStore.dispatch(setCurrentStructure(getCurrentStructure()));
     this.setState({ready: true});
   }
 
-  render () {
+  render() {
+    const state = AppStore.getState();
+
+    /*
+    config          : state.config,
+    userProfile     : state.userProfile,
+    coursesInMap    : state.coursesInMap,
+    hydratedContent : state.hydratedContent,
+    currentStructure: state.currentStructure
+     */
+
     if (this.state.ready) {
       // Props are injected via react-redux connect
       return (<div>
         <Header/>
         <div className="header-overlap">
-          <Introduction newOrUpdated={getNewOrUpdatedContentTitles()}/>
-          <Timeline/>
-          <LearningMap/>
+          <Introduction text={state.currentStructure.introduction}
+                        newOrUpdated={getNewOrUpdatedContentTitles()}/>
+          <Timeline currentStructure={state.currentStructure}/>
+          <LearningMap config={state.config} userProfile={state.userProfile}
+                       coursesInMap={state.coursesInMap}
+                       hydratedContent={state.hydratedContent}
+                       currentStructure={state.currentStructure}/>
         </div>
         {this.state.systemError ? this.errorMessage() : null}
       </div>);
@@ -138,23 +153,24 @@ class App extends React.Component {
     }
   }
 
-  closeErrorMessage () {
+  closeErrorMessage() {
     this.setState({systemError: false});
   }
 
-  errorMessage () {
+  errorMessage() {
     return (<ModalMessage
       message={{
-        title: 'Connection Problem',
-        icon : 'exclamation',
-        error: true,
+        title        : 'Connection Problem',
+        icon         : 'exclamation',
+        error        : true,
         buttonOnClick: this.closeErrorMessage.bind(this),
-        buttonLabel: "Continue anyway"
+        buttonLabel  : "Continue anyway"
       }}>
       <p>The connection to one or more back end systems has
-      encountered a problem.
-      Your progress may not have loaded correctly and may not save.</p><p>Please
-      refresh the page to try again.</p>
+        encountered a problem.
+        Your progress may not have loaded correctly and may not save.</p>
+      <p>Please
+        refresh the page to try again.</p>
       {this.state.errorMessage ?
         <p><em>{this.state.errorMessage}</em></p> : null}
     </ModalMessage>);

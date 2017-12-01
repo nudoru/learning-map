@@ -1,8 +1,7 @@
 import React from 'react';
-import {connect} from 'react-redux';
 
 const Introduction = ({text, newOrUpdated}) => {
-  let neworupdatedList = newOrUpdated.length ? (
+  const neworupdatedList = newOrUpdated.length ? (
       <div><h2>What's new and updated</h2><ul className="introduction-list-newcontent">
         {
           newOrUpdated.map(title => <li>{title}</li>)
@@ -23,14 +22,4 @@ const Introduction = ({text, newOrUpdated}) => {
   )
 };
 
-const mapStateToProps = state => {
-  return {
-    text: state.currentStructure.introduction
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Introduction);
+export default Introduction;

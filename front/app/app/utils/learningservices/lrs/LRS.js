@@ -29,36 +29,11 @@ let Task                           = require('data.task'),
 // token is the key/secret or user/pass base 64 encoded: 'key:secret' -> base64
 const setLRSOptions = (obj) => {
   lrsOptions = obj;
-  setDefaultsFromOptions(lrsOptions);
 };
 
 // Set defaults to be applied to each statement
 const setStatementDefaults = (defaultObj) => {
   defaultProps = Object.assign(Object.create(null), defaultObj);
-};
-
-// Set basic statement props that I've commonly used
-const setDefaultsFromOptions = (options) => {
-  setStatementDefaults({
-    result : {
-      completion: true
-    },
-    context: {
-      platform         : options.contextID,
-      revision         : '1',
-      contextActivities: {
-        grouping: [{id: options.contextGroup}],
-        parent  : [{
-          id        : options.contextParent,
-          objectType: 'Activity'
-        }],
-        category: [{
-          id        : options.contextCategory,
-          definition: {type: 'http://id.tincanapi.com/activitytype/source'}
-        }]
-      }
-    }
-  });
 };
 
 const _getDictionaryWordsList = (dictionary) => {
@@ -119,6 +94,9 @@ const createStatement = (partialStatement) => {
       }
     }
   }, defaultProps);
+
+  console.log('LRS statement', statement);
+
   return statement;
 };
 
@@ -126,7 +104,9 @@ const createStatement = (partialStatement) => {
 // statement may be an array of statements
 // ex: sendStatement(opts, createStatement(fragment)).fork(console.warn, log);
 const sendStatement = curry((options, statement) => {
+
   if (options) {
+    // lrsOptions will be set to options
     setLRSOptions(options);
   }
 
@@ -164,6 +144,7 @@ const validateEmail = email => {
 // ex: requestStatements(opts, createAgentEmailQuery('blueberry@pietown.com')).fork(console.warn, log);
 const requestStatements = curry((options, query) => {
   if (options) {
+    // lrsOptions will be set to options
     setLRSOptions(options);
   }
 

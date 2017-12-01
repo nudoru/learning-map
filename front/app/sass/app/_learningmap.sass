@@ -33,6 +33,10 @@
       margin-bottom: 0
   ul, ol
     margin: $base-line-height 0
+  a
+    text-decoration: none
+  a:hover
+    text-decoration: underline
   +max-width(800px)
     p, li, a
       font-size: 1.4rem
@@ -103,7 +107,7 @@
   margin-top: $base-line-height-triple*2
   margin-bottom: $base-line-height-triple*2
   h1
-    padding-bottom: 0
+    padding-bottom: $base-line-height
     position: relative
     .rh-statusicon-tiny
       position: relative
@@ -251,3 +255,21 @@ td.details-course-description
 .details-course-name-newOrUpdated
   color: $blue
   font-style: italic
+
+.reflection-group
+  background-color: rgba(0,0,0,.025)
+  border: 1px solid rgba(0,0,0,.1)
+  border-radius: $border-radius-small
+  margin-top: $base-line-height-double
+  padding: $base-line-height
+
+.reflection-text-area
+  margin-right: $base-line-height-double
+  border: 1px solid rgba(0,0,0,.1)
+  border-radius: $border-radius-small
+  box-shadow: none
+
+.reflection-prompt
+  font-weight: 600
+  color: $blue
+  padding-bottom: $base-line-height

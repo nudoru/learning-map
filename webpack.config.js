@@ -75,8 +75,14 @@ module.exports = env => {
           loader : 'babel-loader',
           exclude: ['/node_modules/'],
           query  : {
+            plugins: [
+              "transform-class-properties",
+              "transform-object-rest-spread",
+              "transform-es2015-destructuring"
+            ],
             presets: removeEmpty(['es2015','react', isProd ? undefined : 'react-hmre']),
-            compact: false
+            compact: false,
+            comments: false
           }
         }
       ]
@@ -98,6 +104,7 @@ module.exports = env => {
           }
         }
       }),
+      new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
       new HTMLPlugin({
         title   : 'Application',
         template: 'front/app/index.html'

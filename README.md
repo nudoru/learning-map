@@ -1,4 +1,4 @@
-# Learning Map v1
+# Learning Map v1.5
 hello@mattperkins.me
 
 Learning Map application that integrates with Moodle LMS, Learning Locker LRS, and PostGREST copy of Moodle DB.

@@ -4,6 +4,19 @@ import PopupSimple from './rh-PopupSimple';
 
 /**
  * Simple modal message cover
+ * <ModalMessage
+ modal={{
+      dismissible: true,
+      dismissFunc: () => {}
+    }}
+ message={{
+      title        : 'Complete',
+      icon         : 'check-circle-o',
+      buttonLabel  : 'Continue',
+      buttonOnClick: () => {}
+    }}>
+ <p>You've completed all activities required for accreditation!</p>
+ </ModalMessage>
  */
 
 const ModalMessage = ({modal, message, children}) => {

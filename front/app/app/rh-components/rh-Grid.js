@@ -5,9 +5,8 @@
 
 import React from 'react';
 
-export const Grid = ({children}) => {
-  // className="fxgrid-container-fluid"
-  return <div>{children}</div>;
+export const Grid = props => {
+  return <div {...props}/>;
 };
 
 export const Row = ({children, modifier, className}) => {

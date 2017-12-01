@@ -1,81 +1,47 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-scroll';
-import { isPeriodComplete, getDateRelationship } from '../store/selectors';
-import { StatusIconTiny } from '../rh-components/rh-StatusIcon';
+import {Link} from 'react-scroll';
+import {getDateRelationship, isPeriodComplete} from '../store/selectors';
+import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
-import {
-  position,
-  addClass,
-  removeClass,
-  getElStyleProp,
-  pxToInt
-} from '../utils/DOMToolbox';
+import {getElStyleProp, position, pxToInt} from '../utils/DOMToolbox';
+import {ScrollWatch} from "./ScrollWatch";
 
-/*
- This scroll behavior completely violates the React methodology, but it works
- */
+class Timeline extends React.PureComponent {
 
-class Timeline extends React.Component {
+  static defaultProps = {};
+  static propTypes    = {
+    currentStructure: React.PropTypes.object
+  };
 
-  constructor () {
-    super();
-    this.state = {};
+  isWaiting              = false;
+  initialYPosition       = 0;
+  repositionAfterYScroll = 0;
+  timelineEl             = null;
 
-    this.lastScrollYPosition = 0;
-    this.isWaiting = false;
-    this.initialYPosition = 0;
-    this.repositionAfterYScroll = 0;
-    this.timelineEl = null;
-  }
-
-  componentDidMount () {
+  componentDidMount() {
     this.timelineEl = document.querySelector('.rh-timeline-container');
-
     this.initialYPosition = pxToInt(getElStyleProp(this.timelineEl, 'top'));
-
-    // Get top offset position (location on screen)
     this.repositionAfterYScroll = position(this.timelineEl).top;
-
-    window.addEventListener('scroll', this._onWindowScroll.bind(this));
   }
 
-  componentWillUnmount () {
-    window.removeEventListener('scroll', this._onWindowScroll.bind(this));
-  }
+  render() {
+    const {currentStructure} = this.props;
 
-  _onWindowScroll (e) {
-    this.lastScrollYPosition = window.scrollY;
-    if (!this.isWaiting) {
-      window.requestAnimationFrame(() => {
-        this._reposition(this.lastScrollYPosition);
-        this.isWaiting = false;
-      });
-    }
-    this.isWaiting = true;
-  }
+    return <ScrollWatch render={(x, y) => {
 
-  _reposition (yPosition) {
-    if (yPosition > this.repositionAfterYScroll) {
-      this._setTimelineElTopPosition(yPosition - this.repositionAfterYScroll + this.initialYPosition);
-      addClass(this.timelineEl, 'rh-timeline-floating');
-    } else {
-      removeClass(this.timelineEl, 'rh-timeline-floating');
-      this._setTimelineElTopPosition(this.initialYPosition);
-    }
-  }
+      let newYPosition;
 
-  _setTimelineElTopPosition (top) {
-    this.timelineEl.style.top = top + 'px';
-  }
+      if (y > this.repositionAfterYScroll) {
+        newYPosition = y - this.repositionAfterYScroll + this.initialYPosition;
+      } else {
+        newYPosition = this.initialYPosition;
+      }
 
-  render () {
-    let {currentStructure} = this.props;
+      const tlStyle = {top: newYPosition};
 
-    return (
-      <div className="content-region rh-timeline-container">
+      return <div style={tlStyle}
+                  className="content-region rh-timeline-container">
         <div className="page-container">
-
           <div className="rh-timeline">
             <ul>
               {currentStructure.data.map((period, i) => {
@@ -97,7 +63,9 @@ class Timeline extends React.Component {
 
                 return <li key={i} className={clsName.join(' ')}>
                   <div className="block"><Link
-                    to={'period' + period.period} smooth={true} offset={-150}
+                    to={'period' + period.period}
+                    smooth={true}
+                    offset={-150}
                     duration={500}>
                     <span>{period.category}</span>
                     <IconCircleText label={period.period}
@@ -112,23 +80,8 @@ class Timeline extends React.Component {
 
         </div>
       </div>
-    );
+    }}/>;
   }
 }
 
-Timeline.defaultProps = {};
-Timeline.propTypes    = {
-  currentStructure: React.PropTypes.object
-};
-
-const mapStateToProps = state => {
-  return {
-    currentStructure: state.currentStructure
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Timeline);
+export default Timeline;

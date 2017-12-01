@@ -1,125 +1,59 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import AppStore from '../store/AppStore';
-import { setLRSStatus } from '../store/actions/Actions';
+import ModalMessage from '../rh-components/rh-ModalMessage';
 import {
-  configSelector,
-  getNumActivitiesForPeriod,
-  useLRS,
-  getDateRelationship,
+  areRequiredActivitiesCompleted,
+  contentLinkWithId,
   contentTitleToLink,
-  contentLinkWithId
+  getDateRelationship,
+  getNumActivitiesForPeriod
 } from '../store/selectors';
-import { idMatchObjId } from '../utils/AppUtils';
-import { PeriodCard, PeriodTopicCard, ContentRow } from './PeriodCard';
-import { setStatementDefaults, sendFragment} from '../utils/learningservices/lrs/LRS';
+import {idMatchObjId} from '../utils/AppUtils';
+import {ContentRow, PeriodCard, PeriodTopicCard} from './PeriodCard';
+import {
+  connectToLRS,
+  sendCompletedStatement,
+  sendLinkStatement
+} from './LRSProvider';
 
-class LearningMap extends React.Component {
+class LearningMap extends React.PureComponent {
 
-  constructor (props) {
-    super(props);
-    // Content is copied to the state. When a link is clicked/completed this
-    // copy is modified w/ an isPending status to change the icon.
-    this.state = {contents: this.props.hydratedContent};
-  }
+  static propTypes = {
+    userProfile     : React.PropTypes.object,
+    coursesInMap    : React.PropTypes.array,
+    hydratedContent : React.PropTypes.array,
+    config          : React.PropTypes.object,
+    currentStructure: React.PropTypes.object
+  };
 
-  componentDidMount () {
-    this._connectToLRS();
-    console.log('Total content items: ' + this.state.contents.length);
-  }
+  // Content is copied to the state. When a link is clicked/completed this
+  // copy is modified w/ an isPending status to change the icon.
+  state = {
+    contents              : this.props.hydratedContent, // TODO use app state
+    allComplete           : areRequiredActivitiesCompleted(this.props.hydratedContent),
+    completionNotification: false
+  };
 
-  _connectToLRS () {
-    if (!useLRS()) {
-      return;
+  _getStateContentObjById(id) {
+    let res = this.state.contents.filter(idMatchObjId(id))[0];
+    if (!res) {
+      console.error('Content with ID ' + id + ' not found!');
+      return {};
     }
-
-    let {config} = this.props;
-
-    setStatementDefaults({
-      result : {
-        completion: true
-      },
-      context: {
-        platform         : config.webservice.lrs.contextID,
-        revision         : this.props.currentStructure.version,
-        contextActivities: {
-          grouping: [{id: config.webservice.lrs.contextGroup}],
-          parent  : [{
-            id        : config.webservice.lrs.contextParent,
-            objectType: 'Activity'
-          }],
-          category: [{
-            id        : config.webservice.lrs.contextCategory,
-            definition: {type: 'http://id.tincanapi.com/activitytype/source'}
-          }]
-        }
-      }
-    });
-
-    // Send user x loggedin statement, disable for dev and testing to avoid spamming the LRS
-    //this._sendLoggedInStatement();
+    return res;
   }
 
-  _sendLoggedInStatement () {
-    let {config} = this.props;
-    this._sendXAPIStatement({
-      verbDisplay: 'loggedin',
-      objectName : config.setup.title,
-      objectType : 'page',
-      objectID   : config.webservice.lrs.contextID // URL
-    });
+  _getStateContentObjIndexById(id) {
+    return this.state.contents.findIndex(cnt => cnt.id == id); // eslint-disable-line eqeqeq
   }
 
-  // When a link is clicked
-  _sendLinkStatement (name, link) {
-    console.log('send link statement', name, link);
-    this._sendStatementForLink('clicked', name, link);
-  }
-
-  // When the complete button is toggled on
-  _sendCompletedStatement (name, link) {
-    console.log('send link statement', name, link);
-    this._sendStatementForLink('completed', name, link);
-  }
-
-  _sendStatementForLink (verb, name, link) {
-    // some links may not have URL, just default to the context ID
-    link = link || this.props.config.webservice.lrs.contextID;
-    this._sendXAPIStatement({
-      verbDisplay: verb,
-      objectName : name,
-      objectType : 'link',
-      objectID   : link
-    });
-  }
-
-  _sendXAPIStatement (fragment) {
-    if (!useLRS()) {
-      return;
-    }
-    let {userProfile} = this.props;
-
-    console.log('profile',userProfile);
-
-    fragment.subjectName = userProfile.fullname;
-    fragment.subjectID   = userProfile.email;
-    fragment.subjectAccount   = 'https://learning.redhat.com';
-    fragment.subjectAccountID   = userProfile.id; //userProfile.idnumber is the Oracle Party id
-
-    sendFragment(configSelector().webservice.lrs)(fragment)
-      .fork(e => {
-          console.error('Error sending statement: ', e);
-          AppStore.dispatch(setLRSStatus(false));
-        },
-        r => {
-          console.log('Statement sent!', r);
-          AppStore.dispatch(setLRSStatus(true));
-        });
+  componentDidMount() {
+    connectToLRS(this.props);
   }
 
   // Will be passed the <a> element
-  _onLinkClick (el) {
+  _onLinkClick(el) {
     if (el.target) {
+      // TODO this isn't working
       let title = el.target.dataset.contentname,
           link  = el.target.dataset.contenturl,
           cid   = el.target.dataset.contentid;
@@ -127,14 +61,14 @@ class LearningMap extends React.Component {
       // Make it unique
       link = contentLinkWithId(link, cid);
 
-      this._sendLinkStatement(title, link);
+      sendLinkStatement(title, link);
       this._updateStateContentStatus(title, link, cid, true);
     }
   }
 
   // Will be passed the checkbox element from the react-toggle component
   // Name (innerHTML) and link (url) are added as data-* attributes on the element
-  _onCompletedClick (el) {
+  _onCompletedClick(el) {
     if (el.target) {
       let title = el.target.dataset.contentname,
           link  = el.target.dataset.contenturl,
@@ -147,12 +81,12 @@ class LearningMap extends React.Component {
         link = contentLinkWithId(link, cid);
       }
       console.log('Toggled', title, link);
-      this._sendCompletedStatement(title, link);
-      this._updateStateContentStatus(title, el.target.dataset.contenturl, cid, true);
+      sendCompletedStatement(title, link);
+      this._updateStateContentStatus(title, el.target.dataset.contenturl, cid, true, true);
     }
   }
 
-  _updateStateContentStatus (title, link, id, isPending, isCompleted) {
+  _updateStateContentStatus(title, link, id, isPending = true, isCompleted = false) {
     let idx      = this._getStateContentObjIndexById(id),
         newState = this.state.contents;
 
@@ -161,40 +95,49 @@ class LearningMap extends React.Component {
       return;
     }
 
-    newState[idx].isPending = true && !newState[idx].isComplete;
+    // TODO do this in the app state
+    newState[idx].isPending  = true && !newState[idx].isComplete;
+    newState[idx].isComplete = isCompleted;
 
-    this.setState({contents: newState});
+    this.setState({
+      contents   : newState,
+      allComplete: areRequiredActivitiesCompleted(newState)
+    });
   }
 
-  _getStateContentObjById (id) {
-    let res = this.state.contents.filter(idMatchObjId(id))[0];
-    if (!res) {
-      console.error('Content with ID ' + id + ' not found!');
-      return {};
+  render() {
+    const {allComplete} = this.state;
+    const {data}        = this.props.currentStructure;
+
+    return <div>
+      {allComplete ? this._renderCompletionMessage() : null}
+      {data.map(period => this._renderPeriod(period))}
+    </div>;
+  }
+
+  _renderCompletionMessage() {
+    let showNotification = !this.state.completionNotification && this.props.config.setup.completeMessage.length;
+
+    if (showNotification) {
+      return <ModalMessage
+        message={{
+          title        : 'Complete',
+          icon         : 'check-circle-o',
+          buttonLabel  : 'Continue',
+          buttonOnClick: this._dismissCompletionMessage.bind(this)
+        }}>
+        <div
+          dangerouslySetInnerHTML={{__html: this.props.config.setup.completeMessage}}></div>
+      </ModalMessage>;
     }
-    return res;
+    return null;
   }
 
-  // These are unused
-  //_getStateContentObjIndexByLink(link) {
-  //  return this.state.contents.findIndex(cnt => cnt.contentLink === link);
-  //}
-  //
-  //_getStateContentObjIndexByTitle(title) {
-  //  return this.state.contents.findIndex(cnt => cnt.title === title);
-  //}
-
-  _getStateContentObjIndexById (id) {
-    return this.state.contents.findIndex(cnt => cnt.id == id); // eslint-disable-line eqeqeq
+  _dismissCompletionMessage() {
+    this.setState({completionNotification: true});
   }
 
-  render () {
-    return (<div>
-      {this.props.currentStructure.data.map(period => this._renderPeriod(period))}
-    </div>);
-  }
-
-  _renderPeriod (period) {
+  _renderPeriod(period) {
     let periodContentCount = getNumActivitiesForPeriod(period),
         timePeriod         = getDateRelationship(period.startdate, period.enddate),
         startDate          = period.startdate ? period.startdate.format('l') : '', //'dddd, MMMM Do YYYY'
@@ -211,18 +154,19 @@ class LearningMap extends React.Component {
     </PeriodCard>);
   }
 
-  _renderPeriodTopic (topic) {
+  _renderPeriodTopic(topic) {
     return (<PeriodTopicCard {...topic}>
       {topic.content.map((contentID, index) => this._renderContentRow(contentID))}
     </PeriodTopicCard>);
   }
 
-  _renderContentRow (contentID) {
-    let {config}   = this.props,
-        contentObj = this._getStateContentObjById(contentID),
-        isComplete = contentObj.isComplete,
-        modNote    = '',
-        status     = 1;
+  _renderContentRow(contentID) {
+    const {config}   = this.props,
+          contentObj = this._getStateContentObjById(contentID),
+          isComplete = contentObj.isComplete;
+
+    let modNote = '',
+        status  = 1;
 
     if (contentObj.lmsDetails) {
       // It's a course tracked on the LMS
@@ -255,29 +199,7 @@ class LearningMap extends React.Component {
                        onCompletedClick={this._onCompletedClick.bind(this)}
     />;
   }
-
 }
 
-LearningMap.propTypes = {
-  userProfile     : React.PropTypes.object,
-  coursesInMap    : React.PropTypes.array,
-  hydratedContent : React.PropTypes.array,
-  config          : React.PropTypes.object,
-  currentStructure: React.PropTypes.object
-};
 
-const mapStateToProps = state => {
-  return {
-    config          : state.config,
-    userProfile     : state.userProfile,
-    coursesInMap    : state.coursesInMap,
-    hydratedContent : state.hydratedContent,
-    currentStructure: state.currentStructure
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(LearningMap);
+export default LearningMap;

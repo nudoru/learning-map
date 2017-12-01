@@ -1,12 +1,13 @@
 import Either from 'data.either';
-import { curry } from 'ramda';
+import {curry} from 'ramda';
 import moment from 'moment';
+import {get} from 'lodash';
 import {
   formatSecondsToDate2,
   removeArrDupes,
   removeWhiteSpace
 } from '../utils/Toolbox';
-import { hasLength, idMatchObjId, noOp, stripHTML } from '../utils/AppUtils';
+import {hasLength, idMatchObjId, noOp, stripHTML} from '../utils/AppUtils';
 import AppStore from './AppStore';
 
 let STATEMENTS_FOR_CONTEXT_CACHE;
@@ -196,11 +197,20 @@ export const getStatusStatementForContentID = id => getCompletionStatementForID(
 
 export const isTopicComplete = obj =>
   obj.content.reduce((res, contentId) =>
-  getContentObjById(contentId).isComplete && res, true);
+    getContentObjById(contentId).isComplete && res, true);
 
 export const isPeriodComplete = obj =>
   obj.topics.reduce((res, topic) =>
-  isTopicComplete(topic) && res, true);
+    isTopicComplete(topic) && res, true);
+
+// content should be a hydrated content collection
+export const areRequiredActivitiesCompleted = content =>
+  content.reduce((acc, c) => {
+    if (c.isRequired) {
+      acc = acc && c.isComplete;
+    }
+    return acc;
+  }, true);
 
 export const getAllegoStatement = (idArr, verb) =>
   allegoStatementsSelector()
@@ -210,12 +220,20 @@ export const getAllegoStatement = (idArr, verb) =>
 export const filterStatementVerb = curry((verb, el) => el.verb.display['en-US'] === verb);
 
 export const filterStatementAllegoID = curry((idArr, el) => {
-  let statementid = el.object.id.split('_')[1]; // "https://my.allego.com#scored_174014"
+  // Old version that looks at the ID of the recorded video which is INCORRECT!
+  // let statementid = el.object.id.split('_')[1]; // "https://my.allego.com#scored_174014"
+  // statement.context.contextActivities.parent[0].definition.name['en-US']
+
+  let contextParent = get(el, 'context.contextActivities.parent[0].definition.name[\'en-US\']');
+
+  if (contextParent) {
+    console.log('Got contextparent', contextParent, 'is match', (idArr.indexOf(contextParent) >= 0))
+    return idArr.indexOf(contextParent) >= 0
+  }
+
+  let statementid = el.object.definition.name['en-US'];
   return idArr.indexOf(statementid) >= 0;
 });
-
-//  "allegoVerb":"scored",
-//  "allegoID":["174014"],
 
 export const getHydratedContent = () => {
   let coursesInMap    = coursesInMapSelector(),
@@ -233,13 +251,15 @@ export const getHydratedContent = () => {
     o.isNew            = isDateWithinNewRange(today, newIfWithinDays, o.dateAdded);
     o.isUpdated        = isDateWithinNewRange(today, newIfWithinDays, o.dateUpdated);
     o.isPending        = false;
+    o.isComplete       = false;
     o.lmsStatus        = 0;
     o.lmsStatusDate    = null;
     o.lrsStatus        = null;
     o.lrsStatusDate    = null;
-    o.allegoStatus     = null;
+    o.allegoStatus     = '';
     o.allegoStatusDate = null;
     o.lmsDetails       = null;
+
 
     if (o.lmsID || o.hasOwnProperty('allegoID') && o.allegoID.length) {
       //if (o.lmsID) {
@@ -247,6 +267,7 @@ export const getHydratedContent = () => {
     }
 
     if (o.contentLink) {
+      //console.log('getting content links for',o);
       statement = getStatusStatementForContentID(contentLinkWithId(o.contentLink, o.id));
     } else {
       statement = getStatusStatementForContentID(contentTitleToLink(o.title, o.id));
@@ -255,6 +276,9 @@ export const getHydratedContent = () => {
     if (statement) {
       o.lrsStatus     = statement.verb.display['en-US'];
       o.lrsStatusDate = moment(statement.timestamp);
+
+      // Complete if clicked and NOT require confirmation OR completed AND required confirmed
+      o.isComplete = (o.lrsStatus === 'clicked' && !o.requireConfirm) || (o.lrsStatus === 'completed' && o.requireConfirm);
     }
 
     if (o.hasOwnProperty('allegoID')) {
@@ -264,6 +288,9 @@ export const getHydratedContent = () => {
         o.allegoStatus     = allegoStatement[0].verb.display['en-US'];
         o.allegoStatusDate = moment(allegoStatement[0].timestamp);
       }
+      console.log(`allego status = "${o.allegoStatus}" and date is = "${o.allegoStatusDate}"`);
+
+      o.isComplete = o.allegoStatus.length > 0;
     }
 
     if (lmsEnrollment) {
@@ -277,16 +304,20 @@ export const getHydratedContent = () => {
       if (o.lmsStatus === 2) {
         // Totara dates are seconds since 1/1/70 12:00am
         o.lmsStatusDate = moment(new Date(parseInt(statusKey.completions[0].timecompleted * 1000)));
+        o.isComplete = true;
       }
     }
 
     if (o.lmsID) {
       o.lmsDetails  = coursesInMap.filter(c => c.id === o.lmsID)[0];
-      o.contentLink = o.lmsDetails.deeplink;
+      o.contentLink = o.lmsDetails ? o.lmsDetails.deeplink : '';
       o.summary     = o.summary || stripHTML(o.lmsDetails.summary);
     }
 
-    o.isComplete = o.lmsStatus === 2 || (o.lrsStatus === 'clicked' && !o.requireConfirm || o.lrsStatus === 'completed' && o.requireConfirm) || o.allegoStatus !== null;
+    // Broken up on 11/02 due to false positive bug detecting Allego completions when there is no data present
+    // o.isComplete = o.lmsStatus === 2 || (o.lrsStatus === 'clicked' && !o.requireConfirm || o.lrsStatus === 'completed' && o.requireConfirm) || o.allegoStatus.length > 0;
+
+    // console.log('is it complete?', o.isComplete);
 
     acc.push(o);
     return acc;

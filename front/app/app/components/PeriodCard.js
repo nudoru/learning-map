@@ -1,9 +1,12 @@
 import React from 'react';
 import Toggle from 'react-toggle';
-import { isPeriodComplete } from '../store/selectors';
-import { Tag, TagHGroup } from '../rh-components/rh-Tag';
-import { StatusIcon, StatusIconTiny } from '../rh-components/rh-StatusIcon';
+import {isPeriodComplete} from '../store/selectors';
+import {Tag, TagHGroup} from '../rh-components/rh-Tag';
+import {StatusIcon, StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
+import {TextArea} from "../rh-components/rh-Form";
+import {Col, Grid, Row} from "../rh-components/rh-Grid";
+import {Button} from "../rh-components/rh-Button";
 
 //------------------------------------------------------------------------------
 // Card showing the week information, overall completion icon, and courses
@@ -58,9 +61,9 @@ export const PeriodCard = (periodObj) => {
           </div>
           <h1>{title}{isPeriodComplete(periodObj) ?
             <StatusIconTiny type="success"/> : ''}</h1>
-          {/*<div className="margin-bottom-triple">*/}
-            {/*{tagRow}*/}
-          {/*</div>*/}
+          <div className="margin-bottom">
+            {tagRow}
+          </div>
           <div className="text-summary"
                dangerouslySetInnerHTML={{__html: summary}}></div>
           <div className="instructions"
@@ -102,40 +105,44 @@ export const PeriodTopicCard = (topicObj) => {
 
 export const ContentRow = (props) => {
 
-  let {contentObj} = props,
-      rowClass     = [];
+  const {isRequired, summary, reflection, reflectionPrompt} = props.contentObj;
+  let rowClass                                              = [];
 
-  if (contentObj.isRequired) {
+  if (isRequired) {
     rowClass.push('details-required-row');
   }
 
-  return (
-    <tr className={rowClass.join(' ')}>
-      <StatusCell {...props} />
-      <NameCell {...props} />
-      <ToggleCell {...props} />
-      <DescriptionCell summary={contentObj.summary}/>
-    </tr>
-  );
+  return <tr className={rowClass.join(' ')}>
+    <StatusCell {...props} />
+    <NameCell {...props} />
+    <ToggleCell {...props} />
+    <DescriptionCell summary={summary} reflection={reflection}
+                     reflectionPrompt={reflectionPrompt}/>
+  </tr>;
 };
 
 const StatusCell = ({status}) => {
-  return (<td className='details-course-status'>
+  return <td className='details-course-status'>
     <StatusIcon type={status}/>
-  </td>);
+  </td>;
 };
 
 const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
-  let nameElement, required, newOrUpdated,
-      tagModType  = modType ?
-        <Tag><i className={'fa fa-' + modIcon}/>{modType}</Tag> : null,
-      tagDuration = contentObj.duration ?
-        <Tag>{contentObj.duration}</Tag> : null,
-      tagStatus   = modNote ? <Tag>{modNote}</Tag> : null;
+  let nameElement;
+
+  const tagModType  = modType ?
+    <Tag><i className={'fa fa-' + modIcon}/>{modType}</Tag> : null;
+  const tagDuration = contentObj.duration ?
+    <Tag>{contentObj.duration}</Tag> : null;
+  const tagStatus   = modNote ? <Tag>{modNote}</Tag> : null;
+
+  const required = contentObj.isRequired ?
+    <i className="details-course-name-required fa fa-asterisk"/> : null;
+
+  const newOrUpdated = <span
+    className="details-course-name-newOrUpdated">{contentObj.isNew ? ' (New) ' : (contentObj.isUpdated ? ' (Updated) ' : null)}</span>;
 
   if (contentObj.contentLink) {
-    // TODO should it send a statement anyway?
-    //contentObj.requireConfirm ? null :
     nameElement = <a href={contentObj.contentLink} target="_blank"
                      data-contenturl={contentObj.contentLink}
                      data-contentname={contentObj.title}
@@ -147,17 +154,11 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
                      dangerouslySetInnerHTML={{__html: contentObj.title}}></p>;
   }
 
-  if (contentObj.isRequired) {
-    required = <i className="details-course-name-required fa fa-asterisk"/>;
-  }
-
-  newOrUpdated = <span
-    className="details-course-name-newOrUpdated">{contentObj.isNew ? ' (New) ' : (contentObj.isUpdated ? ' (Updated) ' : null)}</span>;
-
-  return (<td className="details-course-name">
+  return <td className="details-course-name">
     {nameElement}{newOrUpdated}{required}
-    <TagHGroup className="margin-top">{tagModType}{tagDuration}{tagStatus}</TagHGroup>
-  </td>);
+    <TagHGroup
+      className="margin-top">{tagModType}{tagDuration}{tagStatus}</TagHGroup>
+  </td>;
 };
 
 const ToggleCell = ({onCompletedClick, contentObj}) => {
@@ -190,9 +191,25 @@ const ToggleCell = ({onCompletedClick, contentObj}) => {
   </td>);
 };
 
-const DescriptionCell = ({summary}) => {
-  return (<td className="details-course-description">
+const DescriptionCell = ({summary, reflection, reflectionPrompt}) => {
+  const reflectionInput = reflection ? <ReflectionInput disabled={false}
+                                                        reflectionPrompt={reflectionPrompt}/> : null;
+
+  return <td className="details-course-description">
     <p dangerouslySetInnerHTML={{__html: summary}}></p>
-  </td>);
+    {reflectionInput}
+  </td>;
 };
+
+const ReflectionInput = ({reflectionPrompt, disabled}) => {
+  return <Grid className='reflection-group padding-top'><Row>
+    <Col>
+      <p className='reflection-prompt'>{reflectionPrompt}</p>
+      <TextArea className='reflection-text-area'/>
+    </Col>
+  </Row>
+    <Row><Col
+      className='text-right padding-top'><Button>Save</Button></Col></Row>
+  </Grid>
+}
 
