@@ -20,6 +20,7 @@ export class XAPIToggle extends React.PureComponent {
 
   state = {toggled: false};
 
+  // Remove the curry and params, we can get this from props now
   _handleClick = curry((title, id, onClick, evt) => {
     if (this.state.toggled) {
       // Shouldn't read this point

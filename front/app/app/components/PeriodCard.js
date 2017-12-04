@@ -11,6 +11,7 @@ import {Col, Grid, Row} from "../rh-components/rh-Grid";
 import {Button} from "../rh-components/rh-Button";
 import {XAPILink} from "./xAPILink";
 import {XAPIToggle} from "./xAPIToggle";
+import {XAPITextArea} from "./xAPITextArea";
 
 //------------------------------------------------------------------------------
 // Card showing the week information, overall completion icon, and courses
@@ -109,7 +110,7 @@ export const PeriodTopicCard = (topicObj) => {
 
 export const ContentRow = (props) => {
 
-  const {isRequired, summary, reflection, reflectionPrompt} = props.contentObj;
+  const {isRequired} = props.contentObj;
   let rowClass                                              = [];
 
   if (isRequired) {
@@ -120,8 +121,7 @@ export const ContentRow = (props) => {
     <StatusCell {...props} />
     <NameCell {...props} />
     <ToggleCell {...props} />
-    <DescriptionCell summary={summary} reflection={reflection}
-                     reflectionPrompt={reflectionPrompt}/>
+    <DescriptionCell {...props}/>
   </tr>;
 };
 
@@ -201,25 +201,28 @@ const ToggleCell = ({onCompletedClick, contentObj}) => {
   </td>);
 };
 
-const DescriptionCell = ({summary, reflection, reflectionPrompt}) => {
-  const reflectionInput = reflection ? <ReflectionInput disabled={false}
-                                                        reflectionPrompt={reflectionPrompt}/> : null;
+const DescriptionCell = ({contentObj}) => {
+  let reflection = null;
 
+  if(contentObj.reflection) {
+    let refId;
+    if (!contentObj.contentLink) {
+      // Use the "linkified" title for the link
+      refId = contentTitleToLink(contentObj.title, contentObj.id);
+    } else {
+      // Make it unique
+      refId = contentLinkWithId(contentObj.contentLink, contentObj.id);
+    }
+
+    //previousResponse={}
+    reflection = <XAPITextArea prompt={contentObj.reflectionPrompt} disabled={false} id={refId} onSave={onReflectionSaved}/>;
+  }
+
+  //
   return <td className="details-course-description">
-    <p dangerouslySetInnerHTML={{__html: summary}}></p>
-    {reflectionInput}
+    <p dangerouslySetInnerHTML={{__html: contentObj.summary}}></p>
+    {reflection}
   </td>;
 };
 
-const ReflectionInput = ({reflectionPrompt, disabled}) => {
-  return <Grid className='reflection-group padding-top'><Row>
-    <Col>
-      <p className='reflection-prompt'>{reflectionPrompt}</p>
-      <TextArea className='reflection-text-area'/>
-    </Col>
-  </Row>
-    <Row><Col
-      className='text-right padding-top'><Button>Save</Button></Col></Row>
-  </Grid>
-};
-
+const onReflectionSaved = ({id, response}) => console.log('Reflection saved',id,response);
