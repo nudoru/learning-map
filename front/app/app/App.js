@@ -35,13 +35,10 @@ import {XAPIProvider} from "./components/LRSProvider";
 const LoadingMessage = () => <PleaseWaitModal><h1>Loading your profile ...</h1>
 </PleaseWaitModal>;
 
-class App extends React.Component {
+class App extends React.PureComponent {
 
-  constructor() {
-    super();
-    this.state = {ready: false, systemError: false, errorMessage: null};
-    this.storeListener;
-  }
+  state = {ready: false, systemError: false, errorMessage: null};
+  storeListener = null;
 
   componentDidMount() {
     this.storeListener = AppStore.subscribe(this.onStateUpdated.bind(this));
@@ -120,11 +117,11 @@ class App extends React.Component {
   render() {
     const state = AppStore.getState();
 
-    // TODO remove redux in header
-
     if (this.state.ready) {
       return <div>
-        <Header/>
+        <Header title={state.config.setup.title}
+                secondaryNav={state.config.setup.secondaryNav}
+                username={state.userProfile.fullname}/>
         <div className="header-overlap">
           <Introduction text={state.currentStructure.introduction}
                         newOrUpdated={getNewOrUpdatedContentTitles()}/>
