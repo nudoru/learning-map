@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Introduction = ({text, newOrUpdated}) => {
+const Introduction = ({text, instructions, newOrUpdated}) => {
   const neworupdatedList = newOrUpdated.length ? (
       <div><h2>What's new and updated</h2><ul className="introduction-list-newcontent">
         {
@@ -15,6 +15,8 @@ const Introduction = ({text, newOrUpdated}) => {
         <div className="introduction">
           <div className="text-summary"
                dangerouslySetInnerHTML={{__html: text}}></div>
+          <div className="text-summary"
+               dangerouslySetInnerHTML={{__html: instructions}}></div>
           {neworupdatedList}
         </div>
       </div>

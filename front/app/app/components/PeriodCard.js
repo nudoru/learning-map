@@ -10,6 +10,7 @@ import IconCircleText from '../rh-components/rh-IconCircleText';
 import {XAPILink} from "./xAPILink";
 import {XAPIToggle} from "./xAPIToggle";
 import {XAPITextArea} from "./xAPITextArea";
+import {Row, Col} from "../rh-components/rh-Grid";
 
 //------------------------------------------------------------------------------
 // Card showing the week information, overall completion icon, and courses
@@ -18,8 +19,6 @@ import {XAPITextArea} from "./xAPITextArea";
 export const PeriodCard = periodObj => {
   let {
         config,
-        currentStructure,
-        title,
         category,
         period,
         summary,
@@ -56,21 +55,19 @@ export const PeriodCard = periodObj => {
   return (
     <div className="content-region">
       <div className="page-container">
-
         <div className={cardStyle.join(' ')} id={'period' + period}>
-          <div className="period-indicator">
-            <IconCircleText label={period}/>
-            <span className="period-indicator-label">{category}</span>
-          </div>
-          <h1>{title}{isPeriodComplete(periodObj) ?
-            <StatusIconTiny type="success"/> : ''}</h1>
-          <div className="margin-bottom">
-            {tagRow}
-          </div>
-          <div className="text-summary"
-               dangerouslySetInnerHTML={{__html: summary}}></div>
-          <div className="instructions"
-               dangerouslySetInnerHTML={{__html: currentStructure.instructions}}></div>
+          <Row className='margin-bottom'>
+            <Col width={1}><IconCircleText label={period}/></Col>
+            <Col>
+              <span className="period-indicator-label">{category}{isPeriodComplete(periodObj) ?
+                <StatusIconTiny type="success"/> : null}</span>
+              <div className="margin-bottom">
+                {tagRow}
+              </div>
+              <div className="text-summary"
+                   dangerouslySetInnerHTML={{__html: summary}}></div>
+            </Col>
+          </Row>
           {children}
         </div>
       </div>
@@ -89,7 +86,13 @@ export const PeriodTopicCard = topicObj => {
     <div className="text-summary"
          dangerouslySetInnerHTML={{__html: summary}}></div>
     <table className="rh-custom-table">
-      <thead>
+      {children}
+    </table>
+  </div>);
+};
+
+/*
+<thead>
       <tr>
         <td>Progress</td>
         <td>Activity</td>
@@ -97,10 +100,7 @@ export const PeriodTopicCard = topicObj => {
         <td>Description</td>
       </tr>
       </thead>
-      {children}
-    </table>
-  </div>);
-};
+ */
 
 //------------------------------------------------------------------------------
 // Row in the content table
@@ -117,10 +117,10 @@ export const ContentRow = props => {
   }
 
   return <tr className={rowClass.join(' ')}>
-    <StatusCell {...props} />
     <NameCell {...props} />
-    <ToggleCell {...props} />
+    <StatusCell {...props} />
     <DescriptionCell {...props}/>
+    <ToggleCell {...props} />
   </tr>;
 };
 

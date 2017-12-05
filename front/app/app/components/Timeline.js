@@ -30,10 +30,12 @@ class Timeline extends React.PureComponent {
 
     return <ScrollWatch render={(x, y) => {
 
-      let newYPosition;
+      let newYPosition,
+      cls = ['content-region','rh-timeline-container'];
 
       if (y > this.repositionAfterYScroll) {
         newYPosition = y - this.repositionAfterYScroll + this.initialYPosition;
+        cls.push('rh-timeline-floating');
       } else {
         newYPosition = this.initialYPosition;
       }
@@ -41,7 +43,7 @@ class Timeline extends React.PureComponent {
       const tlStyle = {top: newYPosition};
 
       return <div style={tlStyle}
-                  className="content-region rh-timeline-container">
+                  className={cls.join(' ')}>
         <div className="page-container">
           <div className="rh-timeline">
             <ul>

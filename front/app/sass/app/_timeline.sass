@@ -9,7 +9,8 @@
 // Added to the el when it starts to move w/ scroll
 .rh-timeline-floating
   .rh-timeline
-    box-shadow: 3px 3px 10px rgba(0,0,0,.25)
+    //box-shadow: 3px 3px 10px rgba(0,0,0,.25)
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05), 4px 8px 15px -7px rgba(0,0,0,0.1), 4px 8px 20px rgba(0,0,0,0.10)
 
 .rh-timeline
   +transition-all()
@@ -18,8 +19,9 @@
   width: 100%
   margin: 0
   overflow: hidden
-  box-shadow: 1px 1px 3px rgba(0,0,0,.05)
+  box-shadow: 0 1px 2px rgba(0,0,0,0.075)
   background-color: #fff
+  border-radius: $border-radius
   ul
     display: table
     position: relative
@@ -38,11 +40,11 @@
         vertical-align: bottom
         font-size: 1rem
         font-weight: 600
-        color: $teal-5
+        color: $blue-8
         padding: 0 $base-line-height-half
         background-color: rgb(245,245,245)
       .block
-        +transition-all()
+        +transition-all(250ms)
         background: #fff
         width: 100%
         text-align: center
@@ -50,13 +52,13 @@
         padding: $base-line-height
         position: relative
         &:hover
-          background-color: $teal-1
+          background-color: $blue-1
           transform: scale(1.05)
         a
           font-size: 1.2rem
           line-height: 1.4rem
           text-decoration: none
-          color: $teal
+          color: $grey-8
           cursor: pointer
           position: relative
           span
@@ -65,8 +67,11 @@
             overflow: hidden
             text-overflow: ellipsis
             white-space: nowrap
+            text-transform: uppercase
+            font-weight: 600
           .rh-icon-circle-text-inverse-small
             box-shadow: 0 0 15px rgba(0,0,0,.15)
+            background-color: $blue
     .past
       .block-label
         color: #999

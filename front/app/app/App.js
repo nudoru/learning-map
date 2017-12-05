@@ -124,6 +124,7 @@ class App extends React.PureComponent {
                 username={state.userProfile.fullname}/>
         <div className="header-overlap">
           <Introduction text={state.currentStructure.introduction}
+                        instructions={state.currentStructure.instructions}
                         newOrUpdated={getNewOrUpdatedContentTitles()}/>
           <Timeline currentStructure={state.currentStructure}/>
           <XAPIProvider connection={state.config.webservice.lrs}
