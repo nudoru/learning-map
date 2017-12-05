@@ -30,6 +30,7 @@ import PleaseWaitModal from './rh-components/rh-PleaseWaitModal';
 import ModalMessage from './rh-components/rh-ModalMessage';
 import Timeline from './components/Timeline';
 import Introduction from './components/Introduction';
+import {XAPIProvider} from "./components/LRSProvider";
 
 const LoadingMessage = () => <PleaseWaitModal><h1>Loading your profile ...</h1>
 </PleaseWaitModal>;
@@ -119,6 +120,8 @@ class App extends React.Component {
   render() {
     const state = AppStore.getState();
 
+    // TODO remove redux in header
+
     if (this.state.ready) {
       return <div>
         <Header/>
@@ -126,10 +129,17 @@ class App extends React.Component {
           <Introduction text={state.currentStructure.introduction}
                         newOrUpdated={getNewOrUpdatedContentTitles()}/>
           <Timeline currentStructure={state.currentStructure}/>
-          <LearningMap config={state.config} userProfile={state.userProfile}
-                       coursesInMap={state.coursesInMap}
-                       hydratedContent={state.hydratedContent}
-                       currentStructure={state.currentStructure}/>
+          <XAPIProvider connection={state.config.webservice.lrs}
+                        user={state.userProfile}
+                        login
+                        appTitle={state.config.setup.title}
+                        appVersion={state.currentStructure.version}
+          >
+            <LearningMap config={state.config} userProfile={state.userProfile}
+                         coursesInMap={state.coursesInMap}
+                         hydratedContent={state.hydratedContent}
+                         currentStructure={state.currentStructure}/>
+          </XAPIProvider>
         </div>
         {this.state.systemError ? this.errorMessage() : null}
       </div>;

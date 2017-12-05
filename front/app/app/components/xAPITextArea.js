@@ -8,7 +8,7 @@ import {TextArea} from "../rh-components/rh-Form";
 export class XAPITextArea extends React.PureComponent {
   static propTypes = {
     id              : PropTypes.string,
-    onSave         : PropTypes.func,
+    onSave          : PropTypes.func,
     prompt          : PropTypes.string,
     disabled        : PropTypes.bool,
     previousResponse: PropTypes.string
@@ -89,13 +89,14 @@ export class XAPITextArea extends React.PureComponent {
       </Row>
       <Row className='margin-top margin-bottom'>
         <Col>
-          <p className='reflection-prompt'>You entered ...</p>
+          <p>You responded ...</p>
           <p className='reflection-saved-text'>{this.state.responseText}</p>
         </Col>
       </Row>
       <Row>
         <Col className='text-right padding-top'>
-          <SecondaryButton onClick={this._handleCancelClick} className='margin-right'>Go back</SecondaryButton>
+          <SecondaryButton onClick={this._handleCancelClick}
+                           className='margin-right'>Go back</SecondaryButton>
           <Button onClick={this._handleSubmitClick}>I'm sure</Button>
         </Col>
       </Row>
@@ -106,7 +107,8 @@ export class XAPITextArea extends React.PureComponent {
     return <div>
       <Row>
         <Col>
-          <p className='reflection-saved-header'>Your response was ...</p>
+          <p className='reflection-prompt margin-none'>{this.props.prompt}</p>
+          <p><strong>You responded ...</strong></p>
         </Col>
       </Row>
       <Row>

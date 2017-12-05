@@ -34,9 +34,16 @@
   ul, ol
     margin: $base-line-height 0
   a
+    +transition-all()
+    padding: 3px
+    margin: -3px
+    border-radius: $border-radius-small
+    line-height: 2.7rem
     text-decoration: none
-  a:hover
-    text-decoration: underline
+    &:hover
+      text-decoration: underline
+      background-color: rgba(0,0,0,.05)
+      color: $blue-8
   +max-width(800px)
     p, li, a
       font-size: 1.4rem

@@ -7,7 +7,6 @@ import {
 } from '../store/selectors';
 import {idMatchObjId} from '../utils/AppUtils';
 import {ContentRow, PeriodCard, PeriodTopicCard} from './PeriodCard';
-import {connectToLRS} from './LRSProvider';
 
 class LearningMap extends React.PureComponent {
 
@@ -39,12 +38,6 @@ class LearningMap extends React.PureComponent {
   _getStateContentObjIndexById(id) {
     return this.state.contents.findIndex(cnt => cnt.id == id); // eslint-disable-line eqeqeq
   }
-
-  componentDidMount() {
-    connectToLRS(this.props);
-  }
-
-
 
   // TODO this need to be move to the app state?
   // on link click

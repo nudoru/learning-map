@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {curry} from 'ramda';
 import Toggle from 'react-toggle';
-import {sendCompletedStatement} from "./LRSProvider";
 
 const completedLabel  = 'Completed';
 const incompleteLabel = 'Mark complete';
@@ -18,33 +16,38 @@ export class XAPIToggle extends React.PureComponent {
 
   static defaultProps = {};
 
+  static contextTypes = {
+    connection           : PropTypes.object,
+    user                 : PropTypes.object,
+    sendLinkStatement    : PropTypes.func,
+    sendLoggedInStatement: PropTypes.func,
+    sendFragment         : PropTypes.func
+  };
+
   state = {toggled: false};
 
-  // Remove the curry and params, we can get this from props now
-  _handleClick = curry((title, id, onClick, evt) => {
+  _handleClick = _ => {
     if (this.state.toggled) {
-      // Shouldn't read this point
+      // Shouldn't reach this point
       console.warn(`Ignoring additional toggle clicks on ${id}`);
       return;
     }
 
+    const {title, id, onClick} = this.props;
     this.setState({toggled: true});
-
-    sendCompletedStatement(title, id);
-
+    this.context.sendLinkStatement('completed', title, id);
     if (onClick) {
       onClick({title, id});
     }
-  });
+  };
 
   render() {
-    const {id, onClick, title, disabled, complete} = this.props;
-
+    const {disabled, complete} = this.props;
     return <label>
       <Toggle
         defaultChecked={complete}
         disabled={disabled || complete || this.state.toggled}
-        onChange={this._handleClick(title, id, onClick)}/>
+        onChange={this._handleClick}/>
       <span
         className="toggle-label">{complete || this.state.toggled ? completedLabel : incompleteLabel}</span>
     </label>;
