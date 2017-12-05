@@ -1,19 +1,17 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import ModalMessage from './rh-components/rh-ModalMessage';
 import PleaseWaitModal from './rh-components/rh-PleaseWaitModal';
 import App from './App';
 import AppStore from './store/AppStore';
-import { userProfileSelector } from './store/selectors';
-import { setConfig } from './store/actions/Actions';
-import { fetchConfigData } from './services/fetchConfig';
+import {setConfig} from './store/actions/Actions';
+import {fetchConfigData} from './services/fetchConfig';
 import LMSKerberosIDRequest from './components/LMSKerberosIDRequest';
 
-const LoadingMessage = () =>
+const LoadingMessage = _ =>
   <PleaseWaitModal><h1>Please wait ...</h1>
   </PleaseWaitModal>;
 
-const ErrorMessage = () =>
+const ErrorMessage = _ =>
   <ModalMessage message={{
     title: 'There was a problem loading the configuration.',
     icon : 'exclamation',
@@ -21,30 +19,23 @@ const ErrorMessage = () =>
   }}>
   </ModalMessage>;
 
-const Application = (props) => <Provider store={AppStore}>
-  <App/>
-</Provider>;
+class ApplicationContainer extends React.PureComponent {
 
-class ApplicationContainer extends React.Component {
+  storeListener = null;
 
-  constructor () {
-    super();
-    this.storeListener;
-    this.state = {
-      loading: true,  // Loading the config.json file
-      isError: false, // Error loading the file?
-      hasUser: false
-    };
-  }
+  state = {
+    loading: true,  // Loading the config.json file
+    isError: false, // Error loading the file?
+    hasUser: false
+  };
 
-  // On initial mounting of the component, load config or start app
-  componentDidMount () {
-    this.storeListener = AppStore.subscribe(this.onStateUpdated.bind(this));
-    this.fetchConfig();
+  componentDidMount() {
+    this.storeListener = AppStore.subscribe(this._onStateUpdated.bind(this));
+    this._fetchConfig();
   }
 
   // Start the app or load the configuration file
-  fetchConfig () {
+  _fetchConfig() {
     fetchConfigData().fork(console.error,
       res => {
         AppStore.dispatch(setConfig(res));
@@ -52,17 +43,14 @@ class ApplicationContainer extends React.Component {
       });
   }
 
-  onStateUpdated () {
-    // Keys will only be present once the user account has been successfully
-    // fetched from the LMS
+  _onStateUpdated() {
     if (AppStore.getState().currentUser.length) {
-    //if (Object.keys(userProfileSelector()).length) {
       this.storeListener();
       this.setState({hasUser: true});
     }
   }
 
-  render () {
+  render() {
     if (this.state.loading) {
       return <LoadingMessage/>;
     } else if (this.state.isError) {
@@ -70,7 +58,7 @@ class ApplicationContainer extends React.Component {
     } else if (!this.state.hasUser) {
       return <LMSKerberosIDRequest/>;
     } else {
-      return <Application/>;
+      return <App/>;
     }
   }
 }
