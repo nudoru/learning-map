@@ -41,18 +41,18 @@ class App extends React.PureComponent {
   storeListener = null;
 
   componentDidMount() {
-    this.storeListener = AppStore.subscribe(this.onStateUpdated.bind(this));
-    this.fetchProfiles();
+    this.storeListener = AppStore.subscribe(this._onStateUpdated.bind(this));
+    this._fetchProfiles();
   }
 
-  onStateUpdated() {
+  _onStateUpdated() {
     if (!(isConnectionSuccessful())) {
       this.setState({systemError: true});
       console.error('Connection to one or more back end systems is down!');
     }
   }
 
-  fetchProfiles() {
+  _fetchProfiles() {
     let state = AppStore.getState(),
         user  = state.config.defaultuser;
 
@@ -76,40 +76,40 @@ class App extends React.PureComponent {
 
       fetchAllegoLRSStatements().fork(console.warn, s => {
         AppStore.dispatch(setAllegoStatements(s));
-        this.externalLearningActivityLoaded();
+        this._externalLearningActivityLoaded();
       });
 
     });
   }
 
-  externalLearningActivityLoaded() {
+  _externalLearningActivityLoaded() {
     AppStore.dispatch(setHydratedContent(getHydratedContent()));
     if (useShadowDB() && startEventSelector().length) {
-      this.fetchShadowDBDataEnrollmentData();
+      this._fetchShadowDBDataEnrollmentData();
     } else {
       console.log('no start event, skipping');
-      this.finalizeContent();
+      this._finalizeContent();
     }
   }
 
-  fetchShadowDBDataEnrollmentData() {
+  _fetchShadowDBDataEnrollmentData() {
     getSBUserEnrolledCourseDetails().fork(e => {
       console.error('ShadowDB Error: ', e);
       this.setState({errorMessage: e});
       AppStore.dispatch(setSDBStatus(false));
-      this.shadowDBEnrollmentsLoaded();
+      this._shadowDBEnrollmentsLoaded();
     }, res => {
       console.log('got the shadow data!', res);
       AppStore.dispatch(setShadowEnrollments(res));
-      this.shadowDBEnrollmentsLoaded();
+      this._shadowDBEnrollmentsLoaded();
     });
   }
 
-  shadowDBEnrollmentsLoaded() {
-    this.finalizeContent();
+  _shadowDBEnrollmentsLoaded() {
+    this._finalizeContent();
   }
 
-  finalizeContent() {
+  _finalizeContent() {
     AppStore.dispatch(setCurrentStructure(getCurrentStructure()));
     this.setState({ready: true});
   }
@@ -138,27 +138,27 @@ class App extends React.PureComponent {
                          currentStructure={state.currentStructure}/>
           </XAPIProvider>
         </div>
-        {this.state.systemError ? this.errorMessage() : null}
+        {this.state.systemError ? this._renderErrorMessage() : null}
       </div>;
     } else {
       return <div>
         <LoadingMessage/>
-        {this.state.systemError ? this.errorMessage() : null}
+        {this.state.systemError ? this._renderErrorMessage() : null}
       </div>;
     }
   }
 
-  closeErrorMessage() {
+  _closeErrorMessage() {
     this.setState({systemError: false});
   }
 
-  errorMessage() {
+  _renderErrorMessage() {
     return <ModalMessage
       message={{
         title        : 'Connection Problem',
         icon         : 'exclamation',
         error        : true,
-        buttonOnClick: this.closeErrorMessage.bind(this),
+        buttonOnClick: this._closeErrorMessage.bind(this),
         buttonLabel  : "Continue anyway"
       }}>
       <p>The connection to one or more back end systems has
