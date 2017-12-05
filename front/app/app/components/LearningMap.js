@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ModalMessage from '../rh-components/rh-ModalMessage';
 import {
   areRequiredActivitiesCompleted,
@@ -11,11 +12,11 @@ import {ContentRow, PeriodCard, PeriodTopicCard} from './PeriodCard';
 class LearningMap extends React.PureComponent {
 
   static propTypes = {
-    userProfile     : React.PropTypes.object,
-    coursesInMap    : React.PropTypes.array,
-    hydratedContent : React.PropTypes.array,
-    config          : React.PropTypes.object,
-    currentStructure: React.PropTypes.object
+    userProfile     : PropTypes.object,
+    coursesInMap    : PropTypes.array,
+    hydratedContent : PropTypes.array,
+    config          : PropTypes.object,
+    currentStructure: PropTypes.object
   };
 
   // Content is copied to the state. When a link is clicked/completed this

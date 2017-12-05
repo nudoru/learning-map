@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Link} from 'react-scroll';
 import {getDateRelationship, isPeriodComplete} from '../store/selectors';
 import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
@@ -10,7 +11,7 @@ class Timeline extends React.PureComponent {
 
   static defaultProps = {};
   static propTypes    = {
-    currentStructure: React.PropTypes.object
+    currentStructure: PropTypes.object
   };
 
   isWaiting              = false;

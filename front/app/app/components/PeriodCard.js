@@ -109,7 +109,7 @@ export const PeriodTopicCard = topicObj => {
 export const ContentRow = props => {
 
   const {isRequired} = props.contentObj;
-  
+
   let rowClass = [];
 
   if (isRequired) {

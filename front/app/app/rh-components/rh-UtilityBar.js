@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class UtilityBar extends React.Component {
   static defaultProps = {
@@ -6,10 +7,10 @@ class UtilityBar extends React.Component {
   };
 
   static propTypes = {
-    label   : React.PropTypes.string,
-    links   : React.PropTypes.array,
-    username: React.PropTypes.string,
-    welcome : React.PropTypes.bool
+    label   : PropTypes.string,
+    links   : PropTypes.array,
+    username: PropTypes.string,
+    welcome : PropTypes.bool
   };
 
   render() {
