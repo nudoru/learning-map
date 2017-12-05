@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-  contentLinkWithId, contentTitleToLink,
+  contentLinkWithId,
+  contentTitleToLink,
   isPeriodComplete
 } from '../store/selectors';
 import {Tag, TagHGroup} from '../rh-components/rh-Tag';
 import {StatusIcon, StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
-import {TextArea} from "../rh-components/rh-Form";
-import {Col, Grid, Row} from "../rh-components/rh-Grid";
-import {Button} from "../rh-components/rh-Button";
 import {XAPILink} from "./xAPILink";
 import {XAPIToggle} from "./xAPIToggle";
 import {XAPITextArea} from "./xAPITextArea";
@@ -17,7 +15,7 @@ import {XAPITextArea} from "./xAPITextArea";
 // Card showing the week information, overall completion icon, and courses
 //------------------------------------------------------------------------------
 
-export const PeriodCard = (periodObj) => {
+export const PeriodCard = periodObj => {
   let {
         config,
         currentStructure,
@@ -83,7 +81,7 @@ export const PeriodCard = (periodObj) => {
 // Topic area on the card
 //------------------------------------------------------------------------------
 
-export const PeriodTopicCard = (topicObj) => {
+export const PeriodTopicCard = topicObj => {
   let {title, summary, children} = topicObj;
 
   return (<div className="period-topic">
@@ -108,10 +106,11 @@ export const PeriodTopicCard = (topicObj) => {
 // Row in the content table
 //------------------------------------------------------------------------------
 
-export const ContentRow = (props) => {
+export const ContentRow = props => {
 
   const {isRequired} = props.contentObj;
-  let rowClass                                              = [];
+  
+  let rowClass = [];
 
   if (isRequired) {
     rowClass.push('details-required-row');
@@ -204,7 +203,7 @@ const ToggleCell = ({onCompletedClick, contentObj}) => {
 const DescriptionCell = ({contentObj}) => {
   let reflection = null;
 
-  if(contentObj.reflection) {
+  if (contentObj.reflection) {
     let refId;
     if (!contentObj.contentLink) {
       // Use the "linkified" title for the link
@@ -215,7 +214,9 @@ const DescriptionCell = ({contentObj}) => {
     }
 
     //previousResponse={}
-    reflection = <XAPITextArea prompt={contentObj.reflectionPrompt} disabled={false} id={refId} onSave={onReflectionSaved}/>;
+    reflection =
+      <XAPITextArea prompt={contentObj.reflectionPrompt} disabled={false}
+                    id={refId} onSave={onReflectionSaved}/>;
   }
 
   //
@@ -225,4 +226,4 @@ const DescriptionCell = ({contentObj}) => {
   </td>;
 };
 
-const onReflectionSaved = ({id, response}) => console.log('Reflection saved',id,response);
+const onReflectionSaved = ({id, response}) => console.log('Reflection saved', id, response);
