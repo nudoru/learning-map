@@ -1,19 +1,24 @@
 .rh-timeline-container
-  top: 0px
   z-index: 9
   padding-bottom: $base-line-height-double
   position: -webkit-sticky
   position: sticky
   top: -1px
+  padding-bottom: 70px
+  margin-bottom: -50px
   .page-container
     overflow: visible
+    //padding-top: 10px
+    margin-top: 10px
+    //padding-bottom: 50px
+    margin-bottom: 10px
 
 
 // Added to the el when it starts to move w/ scroll
 .rh-timeline-floating
   background: linear-gradient(180deg, #fff, rgba(255,255,255,0) 50%)
   .rh-timeline
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05), 4px 8px 15px -7px rgba(0,0,0,0.1), 4px 8px 20px rgba(0,0,0,0.10)
+    //box-shadow: 0 2px 4px rgba(0,0,0,0.05), 4px 8px 15px -7px rgba(0,0,0,0.1), 4px 8px 20px rgba(0,0,0,0.10)
 
 .rh-timeline
   +transition-all()
@@ -21,11 +26,10 @@
   position: relative
   width: 100%
   margin: 0
-  box-shadow: 0 1px 2px rgba(0,0,0,0.075)
-  background-color: #fff
-  border: 1px solid rgba(0,0,0,.1)
-  border-radius: $border-radius
-  overflow: hidden
+  //box-shadow: 0 1px 2px rgba(0,0,0,0.075)
+  //border: 1px solid rgba(0,0,0,.1)
+  //border-radius: $border-radius
+  //overflow: hidden
   ul
     display: flex
     flex-wrap: nowrap
@@ -37,10 +41,15 @@
     padding: 0
     list-style: none
     li
-      //display: table-cell
       position: relative
       margin: 0
       flex: 1
+      background-color: #fff
+      box-shadow: 0 1px 10px rgba(0,0,0,0.075)
+      &:first-of-type
+        border-radius: $border-radius 0 0 $border-radius
+      &:last-of-type
+        border-radius: 0 $border-radius $border-radius 0
       .block-label
         width: 100%
         text-align: center
@@ -57,10 +66,16 @@
         vertical-align: middle
         padding: $base-line-height
         position: relative
+        border: 1px solid transparent
+        border-radius: 0
         &:hover
-          background-color: $blue-1
-          transform: scale(1.05)
+          //background-color: $blue-1
+          border: 1px solid $blue
+          border-radius: $border-radius
+          background-color: $grey-0
+          transform: scale(1.15)
           z-index: 2
+          box-shadow: 0 1px  6px  rgba(0, 0, 0, .1), 0 8px  8px  rgba(0, 0, 0, .05), 4px 23px 40px -15px rgba(0,0,0,0.15), 8px 30px 64px rgba(0, 0, 0, .1)
         a
           font-size: 1.2rem
           line-height: 1.4rem
