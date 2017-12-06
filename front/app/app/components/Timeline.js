@@ -14,15 +14,12 @@ class Timeline extends React.PureComponent {
     currentStructure: PropTypes.object
   };
 
-  isWaiting              = false;
   initialYPosition       = 0;
-  repositionAfterYScroll = 0;
   timelineEl             = null;
 
   componentDidMount() {
     this.timelineEl = document.querySelector('.rh-timeline-container');
-    this.initialYPosition = pxToInt(getElStyleProp(this.timelineEl, 'top'));
-    this.repositionAfterYScroll = position(this.timelineEl).top;
+    this.initialYPosition = this.timelineEl.getBoundingClientRect().top;
   }
 
   render() {
@@ -30,20 +27,13 @@ class Timeline extends React.PureComponent {
 
     return <ScrollWatch render={(x, y) => {
 
-      let newYPosition,
-      cls = ['content-region','rh-timeline-container'];
+      let cls = ['content-region','rh-timeline-container'];
 
-      if (y > this.repositionAfterYScroll) {
-        newYPosition = y - this.repositionAfterYScroll + this.initialYPosition;
+      if (y > this.initialYPosition) {
         cls.push('rh-timeline-floating');
-      } else {
-        newYPosition = this.initialYPosition;
       }
 
-      const tlStyle = {top: newYPosition};
-
-      return <div style={tlStyle}
-                  className={cls.join(' ')}>
+      return <div className={cls.join(' ')}>
         <div className="page-container">
           <div className="rh-timeline">
             <ul>
@@ -80,7 +70,6 @@ class Timeline extends React.PureComponent {
               })}
             </ul>
           </div>
-
         </div>
       </div>
     }}/>;

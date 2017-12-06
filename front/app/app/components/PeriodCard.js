@@ -10,7 +10,7 @@ import IconCircleText from '../rh-components/rh-IconCircleText';
 import {XAPILink} from "./xAPILink";
 import {XAPIToggle} from "./xAPIToggle";
 import {XAPITextArea} from "./xAPITextArea";
-import {Row, Col} from "../rh-components/rh-Grid";
+import {Col, Row} from "../rh-components/rh-Grid";
 
 //------------------------------------------------------------------------------
 // Card showing the week information, overall completion icon, and courses
@@ -28,7 +28,7 @@ export const PeriodCard = periodObj => {
         children,
         timePeriod
       }               = periodObj,
-      cardStyle       = ['period'],
+      periodCls       = ['period'],
       activitiesLabel = activities === 1 ? 'Activity' : 'Activities',
       tagRow          = null,
       activitiesEl    = activities ? (
@@ -38,37 +38,44 @@ export const PeriodCard = periodObj => {
       endEl           = endDateDisplay ? (
         <Tag>Ends <em>{endDateDisplay}</em></Tag>) : null;
 
-  if (timePeriod === -1) {
-    cardStyle.push('period-past');
-  } else if (timePeriod === 0) {
-    cardStyle.push('period-current');
-  } else if (timePeriod === 1) {
-    cardStyle.push('period-future');
-  }
+  // Disabled pending new styles MBP 12/6/17
+  // if (timePeriod === -1) {
+  //   periodCls.push('period-past');
+  // } else if (timePeriod === 0) {
+  //   periodCls.push('period-current');
+  // } else if (timePeriod === 1) {
+  //   periodCls.push('period-future');
+  // }
 
+  //{activitiesEl}
   if (config.setup.interface.showDateOnPeriod) {
-    tagRow = <TagHGroup>{startEl}{endEl}{activitiesEl}</TagHGroup>;
-  } else {
-    tagRow = <TagHGroup>{activitiesEl}</TagHGroup>;
+    tagRow = <TagHGroup>{startEl}{endEl}</TagHGroup>;
   }
 
   return (
     <div className="content-region">
       <div className="page-container">
-        <div className={cardStyle.join(' ')} id={'period' + period}>
-          <Row className='margin-bottom'>
-            <Col width={1}><IconCircleText label={period}/></Col>
-            <Col>
-              <span className="period-indicator-label">{category}{isPeriodComplete(periodObj) ?
-                <StatusIconTiny type="success"/> : null}</span>
-              <div className="margin-bottom">
-                {tagRow}
-              </div>
-              <div className="text-summary"
-                   dangerouslySetInnerHTML={{__html: summary}}></div>
-            </Col>
-          </Row>
-          {children}
+        <div className={periodCls.join(' ')} id={'period' + period}>
+          <div className='period-header'>
+            <Row className='period-title'
+                 style={{justifyContent: 'flex-start', alignItems: 'center'}}>
+              <Col style={{flex: 0, paddingRight: '22px'}}><IconCircleText
+                label={period}/>{isPeriodComplete(periodObj) ?
+                <div className='complete'><StatusIconTiny type="success"/>
+                </div> : null}</Col>
+              <Col style={{flex: 1}}>
+                <h1>{category}</h1>
+                <div>
+                  {tagRow}
+                </div>
+                {summary ? <div className="text-summary margin-top"
+                                dangerouslySetInnerHTML={{__html: summary}}></div> : null}
+              </Col>
+            </Row>
+          </div>
+          <div className='period-content'>
+            {children}
+          </div>
         </div>
       </div>
     </div>);
@@ -78,13 +85,11 @@ export const PeriodCard = periodObj => {
 // Topic area on the card
 //------------------------------------------------------------------------------
 
-export const PeriodTopicCard = topicObj => {
-  let {title, summary, children} = topicObj;
-
+export const PeriodTopicCard = ({title, summary, children}) => {
   return (<div className="period-topic">
-    <h1>{title}</h1>
-    <div className="text-summary"
-         dangerouslySetInnerHTML={{__html: summary}}></div>
+    {title ? <h1>{title}</h1> : null}
+    {summary ? <div className="text-summary"
+                    dangerouslySetInnerHTML={{__html: summary}}></div> : null}
     <table className="rh-custom-table">
       {children}
     </table>
@@ -118,16 +123,9 @@ export const ContentRow = props => {
 
   return <tr className={rowClass.join(' ')}>
     <NameCell {...props} />
-    <StatusCell {...props} />
     <DescriptionCell {...props}/>
-    <ToggleCell {...props} />
+    <StatusCell {...props} />
   </tr>;
-};
-
-const StatusCell = ({status}) => {
-  return <td className='details-course-status'>
-    <StatusIcon type={status}/>
-  </td>;
 };
 
 const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
@@ -155,48 +153,55 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
       {contentObj.title}
     </XAPILink>
   } else {
-    nameElement = <p data-contentid={contentObj.id}
-                     dangerouslySetInnerHTML={{__html: contentObj.title}}></p>;
+    nameElement = <span
+      dangerouslySetInnerHTML={{__html: contentObj.title}}></span>;
   }
 
   return <td className="details-course-name">
-    {nameElement}{newOrUpdated}{required}
+    {required}{nameElement}{newOrUpdated}
     <TagHGroup
       className="margin-top">{tagModType}{tagDuration}{tagStatus}</TagHGroup>
   </td>;
 };
 
-const ToggleCell = ({onCompletedClick, contentObj}) => {
-  let completionToggle, toggleId;
 
-  if (contentObj.requireConfirm) {
-    if (!contentObj.contentLink) {
-      // Use the "linkified" title for the link
-      toggleId = contentTitleToLink(contentObj.title, contentObj.id);
-    } else {
-      // Make it unique
-      toggleId = contentLinkWithId(contentObj.contentLink, contentObj.id);
+const StatusCell = ({onCompletedClick, contentObj, status}) => {
+  let statusMarker, toggleId;
+
+  if (status === 3) {
+    statusMarker = <div className='status-group'><StatusIcon type={status}/><span className='status-label'>Completed</span></div>;
+  } else {
+    if (contentObj.requireConfirm) {
+      if (!contentObj.contentLink) {
+        // Use the "linkified" title for the link
+        toggleId = contentTitleToLink(contentObj.title, contentObj.id);
+      } else {
+        // Make it unique
+        toggleId = contentLinkWithId(contentObj.contentLink, contentObj.id);
+      }
+      statusMarker = (<div>
+        <XAPIToggle
+          id={toggleId}
+          title={contentObj.title}
+          disabled={contentObj.isComplete}
+          complete={contentObj.isComplete}
+          onClick={onCompletedClick}
+        />
+      </div>);
+    } else if (contentObj.lmsID) {
+      if(status === 1) {
+        statusMarker = <div className='status-group'><StatusIcon type={status}/><span className='status-label'>Inprogress</span></div>;
+      } else {
+        statusMarker = <div className='status-group'><StatusIcon type={status}/><span className='status-label'>Not enrolled</span></div>;
+      }
+    } else if (contentObj.hasOwnProperty('allegoID')) {
+      statusMarker = <div className='status-group'><StatusIcon type={status}/><span className='status-label'>Complete activity on Allego</span></div>;
     }
-
-    completionToggle = (<div>
-      <XAPIToggle
-        id={toggleId}
-        title={contentObj.title}
-        disabled={contentObj.isComplete}
-        complete={contentObj.isComplete}
-        onClick={onCompletedClick}
-      />
-    </div>);
-  } else if (contentObj.lmsID) {
-    completionToggle =
-      <p className="small">Completion determined on the LMS.</p>;
-  } else if (contentObj.hasOwnProperty('allegoID')) {
-    completionToggle =
-      <p className="small">Completion determined on Allego.</p>;
   }
 
+
   return (<td className="details-completion">
-    {completionToggle}
+    {statusMarker}
   </td>);
 };
 

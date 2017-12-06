@@ -45,6 +45,7 @@ export class XAPIToggle extends React.PureComponent {
     const {disabled, complete} = this.props;
     return <label>
       <Toggle
+        icons={{unchecked: null}}
         defaultChecked={complete}
         disabled={disabled || complete || this.state.toggled}
         onChange={this._handleClick}/>

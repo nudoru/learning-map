@@ -1,3 +1,6 @@
+.rh-utilitybar
+  border-radius: 0 0 $border-radius-small $border-radius-small
+
 %card-base
   position: relative
   margin: 0
@@ -39,10 +42,11 @@
     border-radius: $border-radius-small
     line-height: 2.7rem
     text-decoration: none
+    color: $blue-8
     &:hover
       text-decoration: underline
       background-color: rgba(0,0,0,.05)
-      color: $blue-8
+      color: $blue-dark
   +max-width(800px)
     p, li, a
       font-size: 1.4rem
@@ -79,9 +83,9 @@
   background: #fff
   //background: linear-gradient(-45deg,#fff 0%,#eee 22%,#f6f6f6 22.01%,#fff 85%,#fafafa 85.01%,#fff 100%)
   box-shadow: 0 1px 2px rgba(0,0,0,0.075)
-  padding: $base-line-height-triple
-  margin-bottom: $base-line-height-triple
-  border-radius: $border-radius-small
+  padding: $base-line-height-double
+  margin-bottom: $base-line-height-double
+  border-radius: $border-radius
   .user
     color: $red-dark-1
   h1
@@ -109,13 +113,11 @@
 
 
 .period
-  @extend %card-base
-  padding: $base-line-height-double
-  margin-top: $base-line-height-triple*2
-  margin-bottom: $base-line-height-triple*2
   background-color: #fff
-  border-radius: $border-radius-small
+  border-radius: $border-radius
   box-shadow: 0 1px 2px rgba(0,0,0,0.075)
+  margin-bottom: $base-line-height-triple
+  overflow: hidden
   h1
     padding-bottom: $base-line-height
     position: relative
@@ -132,89 +134,88 @@
     font-style: italic
     text-shadow: 1px 1px 0 rgb(255,255,255)
 
-.period-indicator
-  position: relative
-  display: block
-  width: 100%
-  padding: 0
+.period-header
+  +background-greybars
+  border-bottom: 1px solid $grey-1
+
+.period-title
+  padding: $base-line-height-double
   .rh-icon-circle-text
     box-shadow: 0 0 15px rgba(0,0,0,.2)
     margin: 0 auto
-    background-color: $blue-8
-  .period-indicator-label
-    display: block
-    text-align: center
-    font-weight: 600
-    font-size: 1.8rem
-    text-transform: uppercase
-    color: $blue
-    padding-top: $base-line-height
-
-
-.period-past
-  border-top: 1px solid $grey-8
-  box-shadow: none
+    background-color: $blue
+    font-size: $ms-4
+  .complete
+    position: absolute
+    top: -0.25rem
+    right: 2rem
   h1
-    color: $grey-8
-  .period-indicator
-    .rh-icon-circle-text
-      color: $grey-8
-      background: $grey-1
-      text-shadow: 1px 1px 0 rgba(255,255,255,.25)
-    .period-indicator-label
-      color: $grey-8
+    color: $blue-8
+    font-weight: 400
+    margin: 0
+    padding: 0
+    font-size: $ms-5
 
-.period-current
-  border-top: 1px solid $red-dark-1
-  h1
-    color: $red
-  .period-indicator
-    .rh-icon-circle-text
-      background: $red
-      color: #fff
-      text-shadow: 1px 1px 0 rgba(0,0,0,.25)
-    .period-indicator-label
-      color: $red
+.period-content
+  padding: $base-line-height-double
 
-.period-future
-  border-top: 1px solid $teal
-  .period-indicator
-    .rh-icon-circle-text
-      color: #fff
-      background-color: $teal
-      text-shadow: 1px 1px 0 rgba(0,0,0,.25)
-    .period-indicator-label
-      color: $teal
-
-
-
-//------------------------------------------------------------------------------
-// Topic
-//------------------------------------------------------------------------------
-
-
+//.period-past
+//  border-top: 1px solid $grey-8
+//  box-shadow: none
+//  h1
+//    color: $grey-8
+//  .period-indicator
+//    .rh-icon-circle-text
+//      color: $grey-8
+//      background: $grey-1
+//      text-shadow: 1px 1px 0 rgba(255,255,255,.25)
+//    .period-indicator-label
+//      color: $grey-8
+//
+//.period-current
+//  border-top: 1px solid $red-dark-1
+//  h1
+//    color: $red
+//  .period-indicator
+//    .rh-icon-circle-text
+//      background: $red
+//      color: #fff
+//      text-shadow: 1px 1px 0 rgba(0,0,0,.25)
+//    .period-indicator-label
+//      color: $red
+//
+//.period-future
+//  border-top: 1px solid $teal
+//  .period-indicator
+//    .rh-icon-circle-text
+//      color: #fff
+//      background-color: $teal
+//      text-shadow: 1px 1px 0 rgba(0,0,0,.25)
+//    .period-indicator-label
+//      color: $teal
 
 .period-topic
-  @extend %card-base
-  margin: 0
-  padding-left: 0
-  padding-right: 0
-  margin-bottom: $base-line-height
-  background: #fff
-  border-radius: $border-radius-small
-  overflow: hidden
   h1
-    font-size: 2.4rem
-    font-weight: 600
-    color: $blue-dark
+    font-size: $ms-4
+    color: $blue-8
     text-transform: uppercase
-    padding-bottom: $base-line-height-half
-    margin-bottom: $base-line-height-half
-    position: relative
+    font-weight: 400
+    margin: 0
+    padding: 0
     .rh-statusicon
       position: relative
       top: -5px
       margin-right: $base-line-height
+  .text-summary
+    margin-top: $base-line-height-half
+    margin-bottom: $base-line-height-double
+  table.rh-custom-table
+    margin: 0
+    border-radius: $border-radius / 2
+    overflow: hidden
+    margin-bottom: $base-line-height-double
+  //table.rh-custom-table:last-of-type
+  //  margin-bottom: 0
 
 
 
@@ -225,8 +226,8 @@
 
 // Additions to the custom-table
 
-tr.details-required-row
-  border-left: 1px solid $red-dark-1
+//tr.details-required-row
+//  border-left: 1px solid $red-dark-1
 
 td.details-course-status
   width: 4rem
@@ -234,19 +235,23 @@ td.details-course-status
   .rh-statusicon
     margin: 0 auto
 
+.status-label
+  @extend .small
+  font-weight: 400
+  display: block
+  text-transform: uppercase
 
-td.details-completion
-  width: 10rem
-  text-align: center
-  .toggle-label
-    @extend .small
-    font-weight: 400
-    display: block
+//.status-group
+
 
 td.details-course-name
   @extend .text-summary
   width: 40rem
   font-weight: 400
+  span
+    font-weight: 600
+  .details-course-name-required
+    margin-right: 5px
   +max-width(900px)
     width: 30rem
   +max-width(500px)
@@ -255,13 +260,32 @@ td.details-course-name
 td.details-course-description
   @extend .text-summary
 
+td.details-completion
+  width: 10rem
+  text-align: center
+  border-left: 1px solid rgba(0,0,0,.1)
+  background-color: rgba(0,0,0,.02)
+  //.react-toggle-thumb
+  //  background-color: #fff
+  //  border: 2px solid $blue
+  .react-toggle-track
+    background-color: $grey-3
+  .react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track
+      background-color: $blue
+  .toggle-label
+    @extend .status-label
+
 // asterisk after name
 .details-course-name-required
   position: relative
   font-weight: 400
   font-size: 1rem
-  padding-left: 5px
-  color: $red-dark-1
+  padding: 3px 3px
+  border-radius: $border-radius-small
+  top: -0.25rem
+  color: #fff
+  background-color: $red
+  text-shadow: 1px 1px $red-dark-1 !important
 
 // (New) or (Updated) text after name
 .details-course-name-newOrUpdated

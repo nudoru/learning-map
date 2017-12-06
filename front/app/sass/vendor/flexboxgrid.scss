@@ -36,6 +36,7 @@ $fxgrid-padding: 0;
   display: -ms-flexbox;
   display: flex;
   width: 100%;
+  position: relative;
   -webkit-box-flex: 0;
   -ms-flex: 0 1 auto;
   flex: 0 1 auto;
@@ -97,6 +98,7 @@ $fxgrid-padding: 0;
   flex: 0 0 auto;
   padding-right: $fxgrid-padding;
   padding-left: $fxgrid-padding;
+  position: relative;
 }
 
 .col-xs {
@@ -327,6 +329,7 @@ $fxgrid-padding: 0;
     flex: 0 0 auto;
     padding-right: $fxgrid-padding;
     padding-left: $fxgrid-padding;
+    position: relative;
   }
 
   .col-sm {
