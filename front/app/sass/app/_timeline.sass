@@ -4,13 +4,12 @@
   position: -webkit-sticky
   position: sticky
   top: -1px
+  // So the shadows don't get clipped
   padding-bottom: 70px
   margin-bottom: -50px
   .page-container
     overflow: visible
-    //padding-top: 10px
     margin-top: 10px
-    //padding-bottom: 50px
     margin-bottom: 10px
 
 
@@ -18,7 +17,8 @@
 .rh-timeline-floating
   background: linear-gradient(180deg, #fff, rgba(255,255,255,0) 50%)
   .rh-timeline
-    //box-shadow: 0 2px 4px rgba(0,0,0,0.05), 4px 8px 15px -7px rgba(0,0,0,0.1), 4px 8px 20px rgba(0,0,0,0.10)
+    ul
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05), 4px 8px 15px -7px rgba(0,0,0,0.1), 4px 8px 20px rgba(0,0,0,0.10)
 
 .rh-timeline
   +transition-all()
@@ -26,10 +26,6 @@
   position: relative
   width: 100%
   margin: 0
-  //box-shadow: 0 1px 2px rgba(0,0,0,0.075)
-  //border: 1px solid rgba(0,0,0,.1)
-  //border-radius: $border-radius
-  //overflow: hidden
   ul
     display: flex
     flex-wrap: nowrap
@@ -40,12 +36,14 @@
     margin: 0
     padding: 0
     list-style: none
+    border-radius: $border-radius
+    background-color: #fff
+    background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.02))
+    box-shadow: 0 1px 10px rgba(0,0,0,0.075)
     li
       position: relative
       margin: 0
       flex: 1
-      background-color: #fff
-      box-shadow: 0 1px 10px rgba(0,0,0,0.075)
       &:first-of-type
         border-radius: $border-radius 0 0 $border-radius
       &:last-of-type
@@ -56,7 +54,7 @@
         vertical-align: bottom
         font-size: 1rem
         font-weight: 600
-        color: $blue-8
+        color: $period-color-dark
         padding: 0 $base-line-height-half
         background-color: rgb(245,245,245)
       .block
@@ -64,23 +62,30 @@
         width: 100%
         text-align: center
         vertical-align: middle
-        padding: $base-line-height
+        padding: $base-line-height $base-line-height-half
         position: relative
         border: 1px solid transparent
         border-radius: 0
         &:hover
-          //background-color: $blue-1
-          border: 1px solid $blue
+          border: 1px solid $period-color
           border-radius: $border-radius
-          background-color: $grey-0
+          background-color: $period-color-dark
+          background-image: $light-gradient
           transform: scale(1.15)
           z-index: 2
           box-shadow: 0 1px  6px  rgba(0, 0, 0, .1), 0 8px  8px  rgba(0, 0, 0, .05), 4px 23px 40px -15px rgba(0,0,0,0.15), 8px 30px 64px rgba(0, 0, 0, .1)
+          a
+            color: #fff
+            text-shadow: $text-shadow-dark
+            .rh-icon-circle-text-inverse-small
+              color: $period-color
+              background-color: #fff
+              text-shadow: none
         a
           font-size: 1.2rem
           line-height: 1.4rem
           text-decoration: none
-          color: $blue-8
+          color: $period-color-dark
           cursor: pointer
           position: relative
           span
@@ -93,43 +98,46 @@
             font-weight: 600
           .rh-icon-circle-text-inverse-small
             box-shadow: 0 0 15px rgba(0,0,0,.15)
-            background-color: $blue
-    .past
-      .block-label
-        color: #999
-      .block
-        background-color: #fafafa
-        &:hover
-          background-color: #eee
-        a
-          color: #999
-          .rh-icon-circle-text-inverse-small
-            box-shadow: none
-            background-color: $grey-1
-            color: $grey-10
-            text-shadow: 1px 1px 0 rgba(255,255,255,.25)
-    .current
-      .block-label
-        color: #fff
-        background: $red
-        text-shadow: 1px 1px 0 rgba(0,0,0,.2)
-      .block
-        background: $red linear-gradient(transparent, rgba(255,255,255,.25))
-        box-shadow: 0 0 15px rgba(0,0,0,.2)
-        &:hover
-          background-color: rgb(212, 16, 28)
-        a
-          color: #fff
-          font-weight: 600
-          span
-            text-shadow: 1px 1px 0 rgba(0,0,0,.2)
-          .rh-icon-circle-text-inverse-small
-            background-color: #fff
-            color: $red
-            box-shadow: 0 0 15px rgba(0,0,0,.3)
-            text-shadow: none
+            background-color: $period-color
+            background-image: $dark-gradient
+  //  .past
+  //    .block-label
+  //      color: #999
+  //    .block
+  //      background-color: #fafafa
+  //      &:hover
+  //        background-color: #eee
+  //      a
+  //        color: #999
+  //        .rh-icon-circle-text-inverse-small
+  //          box-shadow: none
+  //          background-color: $grey-1
+  //          color: $grey-10
+  //          text-shadow: 1px 1px 0 rgba(255,255,255,.25)
+  //  .current
+  //    .block-label
+  //      color: #fff
+  //      background: $red
+  //      text-shadow: 1px 1px 0 rgba(0,0,0,.2)
+  //    .block
+  //      background: $red linear-gradient(transparent, rgba(255,255,255,.25))
+  //      box-shadow: 0 0 15px rgba(0,0,0,.2)
+  //      &:hover
+  //        background-color: rgb(212, 16, 28)
+  //      a
+  //        color: #fff
+  //        font-weight: 600
+  //        span
+  //          text-shadow: 1px 1px 0 rgba(0,0,0,.2)
+  //        .rh-icon-circle-text-inverse-small
+  //          background-color: #fff
+  //          color: $red
+  //          box-shadow: 0 0 15px rgba(0,0,0,.3)
+  //          text-shadow: none
   .complete
     position: absolute
-    bottom: 3.5rem
+    bottom: 3.25rem
     width: 100%
-    margin-left: .5rem
+    margin-left: 1.5rem
+    .rh-statusicon-tiny
+      border: 1px solid #fff

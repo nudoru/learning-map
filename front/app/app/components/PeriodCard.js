@@ -134,8 +134,8 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
   const tagModType  = modType ?
     <Tag><i className={'fa fa-' + modIcon}/>{modType}</Tag> : null;
   const tagDuration = contentObj.duration ?
-    <Tag>{contentObj.duration}</Tag> : null;
-  const tagStatus   = modNote ? <Tag>{modNote}</Tag> : null;
+    <Tag><i className='fa fa-clock-o'/>{contentObj.duration}</Tag> : null;
+  //const tagStatus   = modNote ? <Tag>{modNote}</Tag> : null;
 
   const required = contentObj.isRequired ?
     <i className="details-course-name-required fa fa-asterisk"/> : null;
@@ -160,7 +160,7 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
   return <td className="details-course-name">
     {required}{nameElement}{newOrUpdated}
     <TagHGroup
-      className="margin-top">{tagModType}{tagDuration}{tagStatus}</TagHGroup>
+      className="margin-top">{tagModType}{tagDuration}</TagHGroup>
   </td>;
 };
 

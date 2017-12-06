@@ -43,16 +43,17 @@ class Timeline extends React.PureComponent {
                       <div className="complete"><StatusIconTiny type="success"/>
                       </div> : null;
 
-                if (period.startdate && period.enddate) {
-                  timePeriod = getDateRelationship(period.startdate, period.enddate);
-                  if (timePeriod === -1) {
-                    clsName.push('past');
-                  } else if (timePeriod === 1) {
-                    clsName.push('future');
-                  } else {
-                    clsName.push('current');
-                  }
-                }
+                // Disabled pending updated styles MBP 12/6/17
+                // if (period.startdate && period.enddate) {
+                //   timePeriod = getDateRelationship(period.startdate, period.enddate);
+                //   if (timePeriod === -1) {
+                //     clsName.push('past');
+                //   } else if (timePeriod === 1) {
+                //     clsName.push('future');
+                //   } else {
+                //     clsName.push('current');
+                //   }
+                // }
 
                 return <li key={i} className={clsName.join(' ')}>
                   <div className="block"><Link

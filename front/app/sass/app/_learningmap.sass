@@ -1,6 +1,3 @@
-.rh-utilitybar
-  border-radius: 0 0 $border-radius-small $border-radius-small
-
 %card-base
   position: relative
   margin: 0
@@ -37,16 +34,18 @@
     margin: $base-line-height 0
   a
     +transition-all()
-    padding: 3px
-    margin: -3px
+    padding: 5px
+    margin: -5px
     border-radius: $border-radius-small
     line-height: 2.7rem
     text-decoration: none
-    color: $blue-8
+    color: $branding-color
+    //border: 1px solid transparent
     &:hover
       text-decoration: underline
-      background-color: rgba(0,0,0,.05)
-      color: $blue-dark
+      background-color: $grey-1
+      color: $branding-color-dark
+      //border: 1px solid $period-color-light
   +max-width(800px)
     p, li, a
       font-size: 1.4rem
@@ -86,11 +85,10 @@
   padding: $base-line-height-double
   margin-bottom: $base-line-height-double
   border-radius: $border-radius
-  .user
-    color: $red-dark-1
+  h1,h2,h3,h4,h5,h6
+    color: $branding-color
   h1
     margin-bottom: $base-line-height-triple
-    color: $red
   h2
     font-weight: 600
     margin-top: $base-line-height-triple
@@ -143,14 +141,16 @@
   .rh-icon-circle-text
     box-shadow: 0 0 15px rgba(0,0,0,.2)
     margin: 0 auto
-    background-color: $blue
+    background-color: $period-color
     font-size: $ms-4
   .complete
     position: absolute
     top: -0.25rem
     right: 2rem
+    .rh-statusicon-tiny
+      border: 1px solid #fff
   h1
-    color: $blue-8
+    color: $period-color-dark
     font-weight: 400
     margin: 0
     padding: 0
@@ -197,7 +197,7 @@
 .period-topic
   h1
     font-size: $ms-4
-    color: $blue-8
+    color: $period-color-dark
     text-transform: uppercase
     font-weight: 400
     margin: 0
@@ -243,11 +243,11 @@ td.details-course-status
 
 //.status-group
 
-
 td.details-course-name
   @extend .text-summary
   width: 40rem
   font-weight: 400
+  vertical-align: top
   span
     font-weight: 600
   .details-course-name-required
@@ -259,19 +259,20 @@ td.details-course-name
 
 td.details-course-description
   @extend .text-summary
+  vertical-align: top
 
 td.details-completion
   width: 10rem
   text-align: center
   border-left: 1px solid rgba(0,0,0,.1)
   background-color: rgba(0,0,0,.02)
-  //.react-toggle-thumb
-  //  background-color: #fff
-  //  border: 2px solid $blue
+  .react-toggle-thumb
+    background-color: #fff
+    border: 2px solid $branding-color-dark
   .react-toggle-track
     background-color: $grey-3
   .react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track
-      background-color: $blue
+      background-color: $branding-color-light
   .toggle-label
     @extend .status-label
 
