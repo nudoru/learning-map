@@ -1,12 +1,13 @@
 .rh-timeline-container
+  +transition-all()
   z-index: 9
   padding-bottom: $base-line-height-double
   position: -webkit-sticky
   position: sticky
   top: -1px
   // So the shadows don't get clipped
-  padding-bottom: 70px
-  margin-bottom: -50px
+  padding-bottom: 90px
+  margin-bottom: -70px
   .page-container
     overflow: visible
     margin-top: 10px
@@ -27,6 +28,7 @@
   width: 100%
   margin: 0
   ul
+    +transition-all()
     display: flex
     flex-wrap: nowrap
     justify-content: center
@@ -39,7 +41,7 @@
     border-radius: $border-radius
     background-color: #fff
     background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.02))
-    box-shadow: 0 1px 10px rgba(0,0,0,0.075)
+    box-shadow: 0 1px 2px rgba(0,0,0,0.075)
     li
       position: relative
       margin: 0
