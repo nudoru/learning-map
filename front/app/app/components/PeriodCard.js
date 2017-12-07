@@ -51,6 +51,9 @@ export const PeriodCard = periodObj => {
   if (config.setup.interface.showDateOnPeriod) {
     tagRow = <TagHGroup>{startEl}{endEl}</TagHGroup>;
   }
+  //<div>
+    //{tagRow}
+  //</div>
 
   return (
     <div className="content-region">
@@ -65,9 +68,6 @@ export const PeriodCard = periodObj => {
                 </div> : null}</Col>
               <Col style={{flex: 1}}>
                 <h1>{category}</h1>
-                <div>
-                  {tagRow}
-                </div>
                 {summary ? <div className="text-summary margin-top"
                                 dangerouslySetInnerHTML={{__html: summary}}></div> : null}
               </Col>
@@ -113,20 +113,16 @@ export const PeriodTopicCard = ({title, summary, children}) => {
 
 export const ContentRow = props => {
 
-  const {isRequired} = props.contentObj;
-
-  let rowClass = [];
-
-  if (isRequired) {
-    rowClass.push('details-required-row');
-  }
-
-  return <tr className={rowClass.join(' ')}>
+  return <tr>
+    <RequiredCell required={props.contentObj.isRequired} />
     <NameCell {...props} />
     <DescriptionCell {...props}/>
     <StatusCell {...props} />
   </tr>;
 };
+
+const RequiredCell = ({required}) => <td className="details-course-required">{ required ?
+  <i className="details-course-name-required fa fa-asterisk"/> : null}</td>;
 
 const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
   let nameElement;
@@ -136,9 +132,6 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
   const tagDuration = contentObj.duration ?
     <Tag><i className='fa fa-clock-o'/>{contentObj.duration}</Tag> : null;
   //const tagStatus   = modNote ? <Tag>{modNote}</Tag> : null;
-
-  const required = contentObj.isRequired ?
-    <i className="details-course-name-required fa fa-asterisk"/> : null;
 
   const newOrUpdated = <span
     className="details-course-name-newOrUpdated">{contentObj.isNew ? ' (New) ' : (contentObj.isUpdated ? ' (Updated) ' : null)}</span>;
@@ -158,9 +151,8 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
   }
 
   return <td className="details-course-name">
-    {required}{nameElement}{newOrUpdated}
-    <TagHGroup
-      className="margin-top">{tagModType}{tagDuration}</TagHGroup>
+    {nameElement}{newOrUpdated}
+    <TagHGroup>{tagModType}{tagDuration}</TagHGroup>
   </td>;
 };
 

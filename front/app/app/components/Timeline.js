@@ -59,13 +59,13 @@ class Timeline extends React.PureComponent {
                   <div className="block"><Link
                     to={'period' + period.period}
                     smooth={true}
-                    offset={-150}
+                    offset={-120}
                     duration={500}>
                     <span>{period.category}</span>
                     <IconCircleText label={period.period}
                                     style='inverse-small'/>
-                  </Link>
                     {complete}
+                  </Link>
                   </div>
                 </li>;
               })}

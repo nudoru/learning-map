@@ -39,11 +39,11 @@
     border-radius: $border-radius-small
     line-height: 2.7rem
     text-decoration: none
-    color: $branding-color
+    color: $branding-color-dark
     //border: 1px solid transparent
     &:hover
       text-decoration: underline
-      background-color: $grey-1
+      background-color: $branding-color-light
       color: $branding-color-dark
       //border: 1px solid $period-color-light
   +max-width(800px)
@@ -80,10 +80,9 @@
 .introduction
   @extend %card-base
   background: #fff
-  //background: linear-gradient(-45deg,#fff 0%,#eee 22%,#f6f6f6 22.01%,#fff 85%,#fafafa 85.01%,#fff 100%)
-  box-shadow: 0 1px 2px rgba(0,0,0,0.075)
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 0 100px rgba(0,0,0,.08)
   padding: $base-line-height-double
-  margin-bottom: $base-line-height-double
+  margin-bottom: $base-line-height
   border-radius: $border-radius
   h1,h2,h3,h4,h5,h6
     color: $branding-color
@@ -113,9 +112,8 @@
 .period
   background-color: #fff
   border-radius: $border-radius
-  box-shadow: 0 1px 2px rgba(0,0,0,0.075)
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 0 100px rgba(57, 149, 157,.2)
   margin-bottom: $base-line-height-triple
-  overflow: hidden
   h1
     padding-bottom: $base-line-height
     position: relative
@@ -133,8 +131,9 @@
     text-shadow: 1px 1px 0 rgb(255,255,255)
 
 .period-header
+  overflow: hidden
   +background-greybars
-  border-bottom: 1px solid $grey-1
+  border-bottom: 1px solid $period-color-light
 
 .period-title
   padding: $base-line-height-double
@@ -155,6 +154,8 @@
     margin: 0
     padding: 0
     font-size: $ms-5
+  .text-summary
+    color: $period-color-dark
 
 .period-content
   padding: $base-line-height-double
@@ -196,12 +197,16 @@
 
 .period-topic
   h1
-    font-size: $ms-4
+    font-size: $ms-5
     color: $period-color-dark
     text-transform: uppercase
     font-weight: 400
     margin: 0
+    margin-top: $base-line-height-double
     padding: 0
+    padding-bottom: $base-line-height-half
+    margin-bottom: $base-line-height-half
+    border-bottom: 1px solid $period-color-light
     .rh-statusicon
       position: relative
       top: -5px
@@ -213,7 +218,7 @@
     margin: 0
     border-radius: $border-radius / 2
     overflow: hidden
-    margin-bottom: $base-line-height-double
+    //margin-bottom: $base-line-height-double
   //table.rh-custom-table:last-of-type
   //  margin-bottom: 0
 
@@ -230,9 +235,26 @@
 //  border-left: 1px solid $red-dark-1
 
 .rh-custom-table
-  border-radius: $border-radius
+  border-radius: $border-radius*2
+  overflow: visible !important
+  tr
+    background-image: linear-gradient(-45deg, transparent 50%, $period-color-light 50.01%, #fff 100%)
+    background-size: 250%
+    background-position: 99% 99%
+    transition: transform 240ms ease-out
+  tr:hover
+    background-position: 0 0
+    transform: scale(1.01)
+    z-index: 1
+    box-shadow: 2px 4px 20px $period-color-light
   td
     padding: $base-line-height-double
+
+td.details-course-required
+  width: 1rem
+  vertical-align: top
+  padding-right: 0
+  padding-top: $base-line-height-double + .25rem
 
 td.details-course-status
   width: 4rem
@@ -253,6 +275,9 @@ td.details-course-name
   width: 40rem
   font-weight: 400
   vertical-align: top
+  padding-left: $base-line-height-half
+  a, span
+    font-size: 1.8rem
   span
     font-weight: 600
   .details-course-name-required
@@ -276,8 +301,10 @@ td.details-completion
     border: 2px solid $branding-color-dark
   .react-toggle-track
     background-color: $grey-3
+  .react-toggle:hover:not(.react-toggle--disabled) .react-toggle-thumb
+    border: 4px solid $branding-color
   .react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track
-      background-color: $branding-color-light
+      background-color: rgba(0,0,0,.1)
   .toggle-label
     @extend .status-label
 
