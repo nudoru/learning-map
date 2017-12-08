@@ -1,26 +1,3 @@
-%card-base
-  position: relative
-  margin: 0
-  margin-bottom: $base-line-height-double
-  padding: $base-line-height $base-line-height-double $base-line-height-double $base-line-height-double
-  h1, h2, h3
-    margin: 0
-    padding: 0
-    text-transform: none
-    font-weight: 400
-  h1, h3
-    padding-bottom: $base-line-height
-  h1
-    font-size: 3.8rem
-  h2
-    font-size: 1.8rem
-    text-transform: uppercase
-    color: $blue
-  h3
-    font-size: 1.6rem
-    color: $grey-8
-
-
 .text-summary
   text-align: left
   p, li, a
@@ -32,6 +9,8 @@
       margin-bottom: 0
   ul, ol
     margin: $base-line-height 0
+  li
+    margin-bottom: $base-line-height-half
   a
     +transition-all()
     padding: 5px
@@ -54,47 +33,48 @@
       font-size: 1.4rem
       line-height: $base-line-height
 
+// extended
 %text-summary-big
   p, li, a
-    font-size: 1.8rem
+    font-size: 1.6rem
     line-height: $base-line-height-triple
   p
     margin-bottom: $base-line-height-triple
   p:last-of-type
     margin-bottom: $base-line-height
-//+max-width(800px)
-//  p, li, a
-//    font-size: 1.6rem
-//    line-height: $base-line-height-double
-//  p
-//    margin-bottom: $base-line-height-double
-
-
-
 
 //------------------------------------------------------------------------------
 // Misc
 //------------------------------------------------------------------------------
 
-
 .introduction
-  @extend %card-base
+  position: relative
+  margin: 0
   background: #fff
   box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 0 100px rgba(0,0,0,.08)
   padding: $base-line-height-double
   margin-bottom: $base-line-height
   border-radius: $border-radius
   h1,h2,h3,h4,h5,h6
-    color: $branding-color
+    color: $branding-color-dark
+    font-weight: 400
+    margin: 0
+    padding: 0
+    margin-bottom: $base-line-height
+    text-transform: none
   h1
-    margin-bottom: $base-line-height-triple
+    font-size: $ms-5
   h2
-    font-weight: 600
-    margin-top: $base-line-height-triple
-    margin-bottom: $base-line-height-triple
-  .text-summary
-    @extend %text-summary-big
-    text-shadow: 1px 1px 0 #fff
+    font-size: $ms-4
+  .introduction-text
+    @extend .text-summary
+    p
+      font-size: 2rem
+      line-height: $base-line-height-double + $base-line-height-half
+      color: $branding-color-dark
+  .instructions-text
+    @extend .text-summary
+    margin-top: $base-line-height-double
   .introduction-list-newcontent
     li
       margin-bottom: $base-line-height-half
@@ -214,29 +194,14 @@
   .text-summary
     margin-top: $base-line-height-half
     margin-bottom: $base-line-height-double
-  table.rh-custom-table
-    margin: 0
-    border-radius: $border-radius / 2
-    overflow: hidden
-    //margin-bottom: $base-line-height-double
-  //table.rh-custom-table:last-of-type
-  //  margin-bottom: 0
-
-
-
 
 //------------------------------------------------------------------------------
 // Table
 //------------------------------------------------------------------------------
 
-// Additions to the custom-table
-
-//tr.details-required-row
-//  border-left: 1px solid $red-dark-1
-
 .rh-custom-table
-  border-radius: $border-radius*2
-  overflow: visible !important
+  margin: 0
+  overflow: visible
   tr
     background-image: linear-gradient(-45deg, transparent 50%, $period-color-light 50.01%, #fff 100%)
     background-size: 250%
@@ -268,8 +233,6 @@ td.details-course-status
   display: block
   text-transform: uppercase
 
-//.status-group
-
 td.details-course-name
   @extend .text-summary
   width: 40rem
@@ -284,8 +247,12 @@ td.details-course-name
     margin-right: 5px
   +max-width(900px)
     width: 30rem
+    a, span
+      font-size: 1.6rem
   +max-width(500px)
     width: 15rem
+    a, span
+      font-size: 1.4rem
 
 td.details-course-description
   @extend .text-summary
