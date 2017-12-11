@@ -1,47 +1,36 @@
 .text-summary
   text-align: left
-  p, li, a
+  p, li, a, td
     font-size: 1.6rem
+    line-height: $base-line-height-double
   p
     margin-bottom: $base-line-height
-    line-height: $base-line-height-double
     &:last-of-type
       margin-bottom: 0
   ul, ol
     margin: $base-line-height 0
   li
-    margin-bottom: $base-line-height-half
+    margin-bottom: $base-line-height
+    &:last-of-type
+      margin-bottom: 0
   a
     +transition-all()
     padding: 5px
     margin: -5px
     border-radius: $border-radius-small
-    line-height: 2.7rem
-    text-decoration: none
+    text-decoration: underline
     color: $branding-color-dark
-    //border: 1px solid transparent
     &:hover
       text-decoration: underline
       background-color: $branding-color-light
       color: $branding-color-dark
-      //border: 1px solid $period-color-light
-  +max-width(800px)
-    p, li, a
-      font-size: 1.4rem
-  +max-width(500px)
-    p, li, a
-      font-size: 1.4rem
-      line-height: $base-line-height
-
-// extended
-%text-summary-big
-  p, li, a
-    font-size: 1.6rem
-    line-height: $base-line-height-triple
-  p
-    margin-bottom: $base-line-height-triple
-  p:last-of-type
-    margin-bottom: $base-line-height
+  //+max-width(800px)
+  //  p, li, a
+  //    font-size: 1.4rem
+  //+max-width(500px)
+  //  p, li, a
+  //    font-size: 1.4rem
+  //    line-height: $base-line-height
 
 //------------------------------------------------------------------------------
 // Misc
@@ -52,7 +41,7 @@
   margin: 0
   background: #fff
   box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 0 100px rgba(0,0,0,.08)
-  padding: $base-line-height-double
+  padding: $base-line-height-triple
   margin-bottom: $base-line-height
   border-radius: $border-radius
   h1,h2,h3,h4,h5,h6
@@ -69,9 +58,10 @@
   .introduction-text
     @extend .text-summary
     p
-      font-size: 2rem
+      font-size: 1.8rem
+      font-weight: 400
       line-height: $base-line-height-double + $base-line-height-half
-      color: $branding-color-dark
+      color: $grey-10
   .instructions-text
     @extend .text-summary
     margin-top: $base-line-height-double
@@ -239,20 +229,20 @@ td.details-course-name
   font-weight: 400
   vertical-align: top
   padding-left: $base-line-height-half
-  a, span
-    font-size: 1.8rem
+  //a, span
+  //  font-size: 1.8rem
   span
     font-weight: 600
   .details-course-name-required
-    margin-right: 5px
-  +max-width(900px)
-    width: 30rem
-    a, span
-      font-size: 1.6rem
-  +max-width(500px)
-    width: 15rem
-    a, span
-      font-size: 1.4rem
+  //  margin-right: 5px
+  //+max-width(900px)
+  //  width: 30rem
+  //  a, span
+  //    font-size: 1.6rem
+  //+max-width(500px)
+  //  width: 15rem
+  //  a, span
+  //    font-size: 1.4rem
 
 td.details-course-description
   @extend .text-summary
@@ -261,7 +251,7 @@ td.details-course-description
 td.details-completion
   width: 10rem
   text-align: center
-  border-left: 1px solid rgba(0,0,0,.1)
+  border-left: 1px solid rgba(0,0,0,.03)
   background-color: rgba(0,0,0,.02)
   .react-toggle-thumb
     background-color: #fff
