@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-scroll';
-import {getDateRelationship, isPeriodComplete} from '../store/selectors';
+import {isPeriodComplete} from '../store/selectors';
 import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
-import {getElStyleProp, position, pxToInt} from '../utils/DOMToolbox';
 import {ScrollWatch} from "./ScrollWatch";
 
 class Timeline extends React.PureComponent {
@@ -14,11 +13,11 @@ class Timeline extends React.PureComponent {
     currentStructure: PropTypes.object
   };
 
-  initialYPosition       = 0;
-  timelineEl             = null;
+  initialYPosition = 0;
+  timelineEl       = null;
 
   componentDidMount() {
-    this.timelineEl = document.querySelector('.rh-timeline-container');
+    this.timelineEl       = document.querySelector('.rh-timeline-container');
     this.initialYPosition = this.timelineEl.getBoundingClientRect().top;
   }
 
@@ -27,7 +26,7 @@ class Timeline extends React.PureComponent {
 
     return <ScrollWatch render={(scrollx, scrolly) => {
 
-      let cls = ['content-region','rh-timeline-container'];
+      let cls = ['content-region', 'rh-timeline-container'];
 
       if (scrolly > this.initialYPosition) {
         cls.push('rh-timeline-floating');
@@ -37,38 +36,8 @@ class Timeline extends React.PureComponent {
         <div className="page-container">
           <nav className="rh-timeline">
             <ul>
-              {currentStructure.data.map((period, i) => {
-                let timePeriod, clsName = [],
-                    complete            = isPeriodComplete(period) ?
-                      <div className="complete"><StatusIconTiny type="success"/>
-                      </div> : null;
-
-                // Disabled pending updated styles MBP 12/6/17
-                // if (period.startdate && period.enddate) {
-                //   timePeriod = getDateRelationship(period.startdate, period.enddate);
-                //   if (timePeriod === -1) {
-                //     clsName.push('past');
-                //   } else if (timePeriod === 1) {
-                //     clsName.push('future');
-                //   } else {
-                //     clsName.push('current');
-                //   }
-                // }
-
-                return <li key={i} className={clsName.join(' ')}>
-                  <div className="block"><Link
-                    to={'period' + period.period}
-                    smooth={true}
-                    offset={-120}
-                    duration={500}>
-                    <span>{period.category}</span>
-                    <IconCircleText label={period.period}
-                                    style='inverse-small'/>
-                    {complete}
-                  </Link>
-                  </div>
-                </li>;
-              })}
+              {currentStructure.data.map((period, i) => <TimeLineItem
+                period={period} key={i}/>)}
             </ul>
           </nav>
         </div>
@@ -76,5 +45,38 @@ class Timeline extends React.PureComponent {
     }}/>;
   }
 }
+
+const TimeLineItem = ({period, key}) => {
+  let timePeriod,
+      clsName  = ['rh-timeline-item'],
+      complete = isPeriodComplete(period) ?
+        <div className="complete"><StatusIconTiny type="success"/>
+        </div> : null;
+
+  // Disabled pending updated styles MBP 12/6/17
+  // if (period.startdate && period.enddate) {
+  //   timePeriod = getDateRelationship(period.startdate, period.enddate);
+  //   if (timePeriod === -1) {
+  //     clsName.push('past');
+  //   } else if (timePeriod === 1) {
+  //     clsName.push('future');
+  //   } else {
+  //     clsName.push('current');
+  //   }
+  // }
+
+  return <li key={key} className={clsName.join(' ')}>
+    <Link
+      to={'period' + period.period}
+      smooth={true}
+      offset={-120}
+      duration={500}>
+      <span>{period.category}</span>
+      <IconCircleText label={period.period}
+                      style='inverse-small'/>
+      {complete}
+    </Link>
+  </li>;
+};
 
 export default Timeline;
