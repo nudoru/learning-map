@@ -282,25 +282,60 @@ td.details-completion
   color: $blue
   font-style: italic
 
+
+
+
 .reflection-group
-  background-color: rgba(0,0,0,.025)
-  border: 1px solid rgba(0,0,0,.1)
+  border-top: 1px solid $period-color-light
   border-radius: $border-radius-small
-  margin-top: $base-line-height-double
-  padding: $base-line-height
+  margin-top: $base-line-height
+  padding-top: $base-line-height
+  h1
+    font-size: 2rem
+    line-height: $base-line-height-double
+    text-align: left
+    text-transform: none
+    border: none
 
 .reflection-text-area
-  margin-right: $base-line-height-double
-  border: 1px solid rgba(0,0,0,.1)
+  border: 1px solid $period-color-light
+  margin-top: $base-line-height-half
   border-radius: $border-radius-small
   box-shadow: none
 
 .reflection-prompt
   font-weight: 600
-  color: $blue
-  padding-bottom: $base-line-height
+  color: $period-color-dark
 
 .reflection-saved-header
   @extend .reflection-prompt
 
-.reflection-saved-header
+.reflection-saved-text
+  margin: 0
+  margin-top: $base-line-height
+  //padding: $base-line-height
+  border-radius: $border-radius
+  //background-color: rgba(0,0,0,.01)
+  //border: 1px solid $period-color-light
+  text-shadow: $text-shadow-light
+  font-style: italic
+  font-size: 1.6rem
+  color: $period-color-dark
+  quotes: "\201C""\201D""\2018""\2019"
+  // https://css-tricks.com/snippets/css/simple-and-nice-blockquote-styling/
+  &:before
+    color: $period-color-light
+    content: open-quote
+    font-size: 4em
+    line-height: 0.1em
+    margin-left: -0.25em
+    margin-right: 0.25em
+    vertical-align: -0.4em
+  &:after
+    color: $period-color-light
+    content: close-quote
+    font-size: 4em
+    line-height: .1em
+    margin-left: .1em
+    vertical-align: -.6em
+

@@ -54,7 +54,7 @@ export class XAPITextArea extends React.PureComponent {
   };
 
   render() {
-    return <Grid className='reflection-group padding-top'>
+    return <Grid className='reflection-group'>
       {this.state.isPrompting ? this._renderInputForm() : (this.state.isConfirming ? this._renderConfirmResponse() : this._renderFinalResponse())}
     </Grid>;
   }
@@ -72,7 +72,7 @@ export class XAPITextArea extends React.PureComponent {
       </Row>
       <Row>
         <Col className='text-right padding-top'>
-          <Button onClick={this._handleSaveClick}
+          <Button hollow onClick={this._handleSaveClick}
                   disabled={!this.state.hasEnteredText}>Save</Button>
         </Col>
       </Row>
@@ -80,17 +80,19 @@ export class XAPITextArea extends React.PureComponent {
   }
 
   _renderConfirmResponse() {
+    const {prompt} = this.props;
+
     return <div>
       <Row>
-        <Col className='text-center'>
-          <h2>You cannot change your response once it's saved. Are you
-            sure?</h2>
+        <Col>
+          <h1>You cannot change your response once it's saved. Are you
+            sure?</h1>
         </Col>
       </Row>
       <Row className='margin-top margin-bottom'>
         <Col>
-          <p>You responded ...</p>
-          <p className='reflection-saved-text'>{this.state.responseText}</p>
+          <p className='reflection-prompt'>{prompt}</p>
+          <blockquote className='reflection-saved-text'>{this.state.responseText}</blockquote>
         </Col>
       </Row>
       <Row>
@@ -107,13 +109,8 @@ export class XAPITextArea extends React.PureComponent {
     return <div>
       <Row>
         <Col>
-          <p className='reflection-prompt margin-none'>{this.props.prompt}</p>
-          <p><strong>You responded ...</strong></p>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <p className='reflection-saved-text'>{this.state.responseText}</p>
+          <p className='reflection-prompt'>{this.props.prompt}</p>
+          <blockquote className='reflection-saved-text'>{this.state.responseText}</blockquote>
         </Col>
       </Row>
     </div>;
