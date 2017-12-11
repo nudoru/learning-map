@@ -58,8 +58,8 @@ export const PeriodCard = periodObj => {
   return (
     <div className="content-region">
       <div className="page-container">
-        <div className={periodCls.join(' ')} id={'period' + period}>
-          <div className='period-header'>
+        <section className={periodCls.join(' ')} id={'period' + period}>
+          <header className='period-header'>
             <Row className='period-title'
                  style={{justifyContent: 'flex-start', alignItems: 'center'}}>
               <Col style={{flex: 0, paddingRight: '22px'}}><IconCircleText
@@ -72,11 +72,11 @@ export const PeriodCard = periodObj => {
                                 dangerouslySetInnerHTML={{__html: summary}}></div> : null}
               </Col>
             </Row>
-          </div>
+          </header>
           <div className='period-content'>
             {children}
           </div>
-        </div>
+        </section>
       </div>
     </div>);
 };

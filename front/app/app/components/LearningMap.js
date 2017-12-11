@@ -68,10 +68,10 @@ class LearningMap extends React.PureComponent {
     const {allComplete} = this.state;
     const {data}        = this.props.currentStructure;
 
-    return <div>
+    return <section>
       {allComplete ? this._renderCompletionMessage() : null}
       {data.map(period => this._renderPeriod(period))}
-    </div>;
+    </section>;
   }
 
   _renderCompletionMessage() {

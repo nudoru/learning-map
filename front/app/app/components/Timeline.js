@@ -25,17 +25,17 @@ class Timeline extends React.PureComponent {
   render() {
     const {currentStructure} = this.props;
 
-    return <ScrollWatch render={(x, y) => {
+    return <ScrollWatch render={(scrollx, scrolly) => {
 
       let cls = ['content-region','rh-timeline-container'];
 
-      if (y > this.initialYPosition) {
+      if (scrolly > this.initialYPosition) {
         cls.push('rh-timeline-floating');
       }
 
       return <div className={cls.join(' ')}>
         <div className="page-container">
-          <div className="rh-timeline">
+          <nav className="rh-timeline">
             <ul>
               {currentStructure.data.map((period, i) => {
                 let timePeriod, clsName = [],
@@ -70,7 +70,7 @@ class Timeline extends React.PureComponent {
                 </li>;
               })}
             </ul>
-          </div>
+          </nav>
         </div>
       </div>
     }}/>;

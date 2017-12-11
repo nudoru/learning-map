@@ -4,12 +4,12 @@ import UtilityBar from '../rh-components/rh-UtilityBar';
 
 const Header = ({title, secondaryNav, username}) => {
   return (
-    <div className="header-region-minor">
+    <header className="header-region-minor">
       <div className="page-container">
         <UtilityBar welcome links={secondaryNav} username={username}/>
         <div className="header-title"><h1>{title}</h1></div>
       </div>
-    </div>
+    </header>
   );
 };
 

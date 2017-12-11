@@ -118,11 +118,11 @@ class App extends React.PureComponent {
     const state = AppStore.getState();
 
     if (this.state.ready) {
-      return <div>
+      return <main>
         <Header title={state.config.setup.title}
                 secondaryNav={state.config.setup.secondaryNav}
                 username={state.userProfile.fullname}/>
-        <div className="header-overlap">
+        <article className="header-overlap">
           <Introduction text={state.currentStructure.introduction}
                         instructions={state.currentStructure.instructions}
                         newOrUpdated={getNewOrUpdatedContentTitles()}/>
@@ -138,9 +138,9 @@ class App extends React.PureComponent {
                          hydratedContent={state.hydratedContent}
                          currentStructure={state.currentStructure}/>
           </XAPIProvider>
-        </div>
+        </article>
         {this.state.systemError ? this._renderErrorMessage() : null}
-      </div>;
+      </main>;
     } else {
       return <div>
         <LoadingMessage/>

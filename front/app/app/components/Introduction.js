@@ -12,13 +12,13 @@ const Introduction = ({text, instructions, newOrUpdated}) => {
   return (
     <div className="content-region">
       <div className="page-container">
-        <div className="introduction">
+        <section className="introduction">
           {text ? <div className="introduction-text"
                        dangerouslySetInnerHTML={{__html: text}}></div> : null}
           {instructions ? <div className="instructions-text"
                                dangerouslySetInnerHTML={{__html: instructions}}></div> : null}
           {neworupdatedList}
-        </div>
+        </section>
       </div>
     </div>
   )
