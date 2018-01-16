@@ -6,6 +6,7 @@ import {
 } from '../store/selectors';
 import {Tag, TagHGroup} from '../rh-components/rh-Tag';
 import {StatusIcon, StatusIconTiny} from '../rh-components/rh-StatusIcon';
+import {StatusRibbonTop, StatusRibbonLeft} from "./StatusRibbon";
 import IconCircleText from '../rh-components/rh-IconCircleText';
 import {XAPILink} from "./xAPILink";
 import {XAPIToggle} from "./xAPIToggle";
@@ -114,12 +115,14 @@ export const PeriodTopicCard = ({title, summary, children}) => {
 export const ContentRow = props => {
 
   return <tr>
+    <RibbonCell {...props} />
     <RequiredCell required={props.contentObj.isRequired} />
     <NameCell {...props} />
     <DescriptionCell {...props}/>
     <StatusCell {...props} />
   </tr>;
 };
+
 
 const RequiredCell = ({required}) => <td className="details-course-required">{ required ?
   <i className="details-course-name-required fa fa-asterisk"/> : null}</td>;
@@ -157,11 +160,22 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
 };
 
 
+
+const RibbonCell = ({onCompletedClick, contentObj, status}) => {
+
+  return (<td className="details-ribbon">
+    <StatusRibbonLeft type={status}/>
+  </td>);
+};
+
+
+
 const StatusCell = ({onCompletedClick, contentObj, status}) => {
   let statusMarker, toggleId;
 
+  //<StatusIcon type={status}/>
   if (status === 3) {
-    statusMarker = <div className='status-group'><StatusIcon type={status}/><span className='status-label'>Completed</span></div>;
+    statusMarker = <div className='status-group'><span className='status-label'>Completed</span></div>;
   } else {
     if (contentObj.requireConfirm) {
       if (!contentObj.contentLink) {
@@ -182,12 +196,12 @@ const StatusCell = ({onCompletedClick, contentObj, status}) => {
       </div>);
     } else if (contentObj.lmsID) {
       if(status === 1) {
-        statusMarker = <div className='status-group'><StatusIcon type={status}/><span className='status-label'>Inprogress</span></div>;
+        statusMarker = <div className='status-group'><span className='status-label'>Inprogress</span></div>;
       } else {
-        statusMarker = <div className='status-group'><StatusIcon type={status}/><span className='status-label'>Not enrolled</span></div>;
+        statusMarker = <div className='status-group'><span className='status-label'>Not enrolled</span></div>;
       }
     } else if (contentObj.hasOwnProperty('allegoID')) {
-      statusMarker = <div className='status-group'><StatusIcon type={status}/><span className='status-label'>Complete activity on Allego</span></div>;
+      statusMarker = <div className='status-group'><span className='status-label'>Complete activity on Allego</span></div>;
     }
   }
 

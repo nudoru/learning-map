@@ -1,0 +1,98 @@
+@import "ribbon"
+
+$status-ribbon-top-width: 30px
+$status-ribbon-top-height: 40px
+$status-ribbon-top-tail-height: 5px
+
+%status-ribbon-top-base
+  position: relative
+  width: $status-ribbon-top-width
+  height: $status-ribbon-top-width
+  top: -6px
+  text-align: center !important
+  span
+    position: relative
+    top: .3rem
+    font-size: 1.2rem
+    color: #fff
+    text-align: center !important
+    text-shadow: $text-shadow-dark
+  &:before
+    content: ""
+    position: absolute
+    right: -6px
+  &:after
+    content: ""
+    position: absolute
+    bottom: -$status-ribbon-top-tail-height
+    left: 0
+
+=status-ribbon-top-maker($color)
+  @extend %status-ribbon-top-base
+  background: $color
+  &:before
+    +triangle(6px, darken($color, 15%), down-left)
+  &:after
+    +triangle($status-ribbon-top-width $status-ribbon-top-tail-height, transparent $color, up)
+    bottom: -$status-ribbon-top-tail-height
+
+.status-ribbon-top-none
+  +status-ribbon-top-maker($grey-4)
+
+.status-ribbon-top-inprogress
+  +status-ribbon-top-maker($branding-color)
+
+.status-ribbon-top-danger
+  +status-ribbon-top-maker($control-warning-color)
+
+.status-ribbon-top-success
+  +status-ribbon-top-maker($control-success-color)
+
+.status-ribbon-top-pending
+  +status-ribbon-top-maker($branding-color)
+
+$status-ribbon-left-height: 40px
+$status-ribbon-left-tail-width: 15px
+
+%status-ribbon-left-base
+  position: relative
+  height: $status-ribbon-left-height
+  left: -8px
+  line-height: $status-ribbon-left-height
+  span
+    position: relative
+    font-size: 1.2rem
+    color: #fff
+    text-shadow: $text-shadow-dark
+  &:before
+    top: -8px
+    left: 0px
+    content: ""
+    position: absolute
+  &:after
+    right: -$status-ribbon-left-tail-width
+    content: ""
+    position: absolute
+
+=status-ribbon-left-maker($color)
+  @extend %status-ribbon-left-base
+  background: $color
+  &:before
+    +triangle(8px, darken($color, 15%), down-right)
+  &:after
+    +triangle($status-ribbon-left-height $status-ribbon-left-tail-width, $color, right)
+
+.status-ribbon-left-none
+  +status-ribbon-left-maker($grey-4)
+
+.status-ribbon-left-inprogress
+  +status-ribbon-left-maker($branding-color)
+
+.status-ribbon-left-danger
+  +status-ribbon-left-maker($control-warning-color)
+
+.status-ribbon-left-success
+  +status-ribbon-left-maker($control-success-color)
+
+.status-ribbon-left-pending
+  +status-ribbon-left-maker($branding-color)

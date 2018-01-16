@@ -5,6 +5,8 @@ import {isPeriodComplete} from '../store/selectors';
 import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
 import {ScrollWatch} from "./ScrollWatch";
+import {StatusRibbonTop} from "./StatusRibbon";
+import {Row, Col} from "../rh-components/rh-Grid";
 
 class Timeline extends React.PureComponent {
 
@@ -49,9 +51,11 @@ class Timeline extends React.PureComponent {
 const TimeLineItem = ({period, key}) => {
   let timePeriod,
       clsName  = ['rh-timeline-item'],
-      complete = isPeriodComplete(period) ?
-        <div className="complete"><StatusIconTiny type="success"/>
-        </div> : null;
+      statusMarker = isPeriodComplete(period) ?
+        <StatusRibbonTop type={3}/> : <StatusRibbonTop type={0}/>;
+      // complete = isPeriodComplete(period) ?
+      //   <div className="complete"><StatusIconTiny type="success"/>
+      //   </div> : null;
 
   // Disabled pending updated styles MBP 12/6/17
   // if (period.startdate && period.enddate) {
@@ -64,17 +68,18 @@ const TimeLineItem = ({period, key}) => {
   //     clsName.push('current');
   //   }
   // }
+  //<IconCircleText label={period.period} style='inverse-small'/>
 
   return <li key={key} className={clsName.join(' ')}>
+    <div className='complete'>
+    {statusMarker}
+    </div>
     <Link
       to={'period' + period.period}
       smooth={true}
       offset={-120}
       duration={500}>
       <span>{period.category}</span>
-      <IconCircleText label={period.period}
-                      style='inverse-small'/>
-      {complete}
     </Link>
   </li>;
 };

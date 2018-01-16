@@ -1,7 +1,7 @@
 node_modules
 .idea
 .sass-cache
-front/app/config.json
+front/app/*.json
 front/www
 
 .DS_Store

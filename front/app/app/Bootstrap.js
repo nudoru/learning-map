@@ -19,6 +19,8 @@ const ErrorMessage = _ =>
   }}>
   </ModalMessage>;
 
+let configFile = 'config.json';
+
 class ApplicationContainer extends React.PureComponent {
 
   storeListener = null;
@@ -30,16 +32,50 @@ class ApplicationContainer extends React.PureComponent {
   };
 
   componentDidMount() {
+    const mapConfig = this.getParameterByName('map');
+    if (mapConfig) {
+      configFile = mapConfig;
+    }
+
+    // Email from URL is for DEBUG ONLY
+    const email = this.getParameterByName('e');
+    if (email) {
+      // Needs to be set in the Redux store, not a global var
+      window.userEmail = email;
+    }
+
+    console.log(`From the URL: map ${mapConfig}, user ${email}`);
+
     this.storeListener = AppStore.subscribe(this._onStateUpdated.bind(this));
     this._fetchConfig();
   }
 
+  //https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+  getParameterByName(name, url) {
+    if (!url) {
+      url = window.location.href;
+    }
+    name        = name.replace(/[\[\]]/g, "\\$&");
+    let regex   = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) {
+      return null;
+    }
+    if (!results[2]) {
+      return '';
+    }
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
   // Start the app or load the configuration file
   _fetchConfig() {
-    fetchConfigData().fork(console.error,
+    fetchConfigData(configFile).fork(console.error,
       res => {
         AppStore.dispatch(setConfig(res));
-        this.setState({loading: false, hasUser: (res.defaultuser.length)});
+        this.setState({
+          loading: false,
+          hasUser: (res.defaultuser.length || window.userEmail.length)
+        });
       });
   }
 

@@ -10,7 +10,7 @@
   ul, ol
     margin: $base-line-height 0
   li
-    margin-bottom: $base-line-height
+    margin-bottom: $base-line-height-half
     &:last-of-type
       margin-bottom: 0
   a
@@ -43,7 +43,6 @@
   box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 0 100px rgba(0,0,0,.08)
   padding: $base-line-height-triple
   margin-bottom: $base-line-height
-  border-radius: $border-radius
   h1,h2,h3,h4,h5,h6
     color: $branding-color-dark
     font-weight: 400
@@ -57,18 +56,12 @@
     font-size: $ms-4
   .introduction-text
     @extend .text-summary
-    p
-      font-size: 1.8rem
-      font-weight: 400
-      line-height: $base-line-height-double + $base-line-height-half
-      color: $grey-10
   .instructions-text
     @extend .text-summary
     margin-top: $base-line-height-double
   .introduction-list-newcontent
     li
-      margin-bottom: $base-line-height-half
-      font-size: 1.8rem
+      //margin-bottom: $base-line-height-half
 
 
 
@@ -81,7 +74,7 @@
 
 .period
   background-color: #fff
-  border-radius: $border-radius
+  //border-radius: $border-radius
   box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 0 100px rgba(0,0,0,.1)
   margin-bottom: $base-line-height-triple
   h1
@@ -95,7 +88,7 @@
     @extend .text-summary
     margin: $base-line-height 0
     padding: $base-line-height
-    border-radius: $border-radius-small
+    //border-radius: $border-radius-small
     background-color: #fafafa
     font-style: italic
     text-shadow: 1px 1px 0 rgb(255,255,255)
@@ -196,10 +189,10 @@
     background-image: linear-gradient(-45deg, transparent 50%, $period-color-light 50.01%, #fff 100%)
     background-size: 250%
     background-position: 99% 99%
-    transition: transform 240ms ease-out
+    transition: background-position 240ms ease-out, box-shadow 240ms ease-out, transform 240ms ease-out
   tr:hover
     background-position: 0 0
-    transform: scale(1.01)
+    //transform: scale(1.005)
     z-index: 1
     box-shadow: 2px 4px 20px $period-color-light
   td
@@ -209,6 +202,7 @@ td.details-course-required
   width: 1rem
   vertical-align: top
   padding-right: 0
+  padding-left: 0
   padding-top: $base-line-height-double + .25rem
 
 td.details-course-status
@@ -248,6 +242,11 @@ td.details-course-description
   @extend .text-summary
   vertical-align: top
 
+td.details-ribbon
+  width: 8rem
+  text-align: center
+  padding-left: 0
+
 td.details-completion
   width: 10rem
   text-align: center
@@ -281,9 +280,6 @@ td.details-completion
 .details-course-name-newOrUpdated
   color: $blue
   font-style: italic
-
-
-
 
 .reflection-group
   border-top: 1px solid $period-color-light

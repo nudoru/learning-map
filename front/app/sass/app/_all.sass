@@ -3,8 +3,8 @@ $branding-color: $blue
 $branding-color-dark: $blue-8
 
 $period-color-light: $teal-1
-$period-color: $teal-6
-$period-color-dark: $teal
+$period-color: $red
+$period-color-dark: $red-dark-5
 
 .content-region
   overflow: visible !important
@@ -15,11 +15,12 @@ $period-color-dark: $teal
 @import "base"
 @import "header"
 @import "mobile"
+@import "statusribbon"
 @import "learningmap"
 @import "timeline"
 
 .rh-utilitybar
-  border-radius: 0 0 $border-radius-small $border-radius-small
+  //border-radius: 0 0 $border-radius-small $border-radius-small
   .user
     color: $branding-color-dark
 
@@ -28,17 +29,17 @@ $period-color-dark: $teal
     text-shadow: 1px 1px 3px rgba(0,0,0,.5)
 
 .header-region-minor
-  background: $period-color-dark $barsgradient
+  background: $branding-color $barsgradient
 
 .rh-tag-hgroup
   margin-top: $base-line-height-double
   .rh-tag
-    color: $period-color-dark
-    background-color: $period-color-light
+    color: $grey-8
+    background-color: $grey-1
     box-shadow: none
     padding: 2px 11px
     margin-right: $base-line-height
     border-radius: 50px
     i.fa
-      color: $period-color
+      color: $grey-8
 

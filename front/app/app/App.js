@@ -60,6 +60,11 @@ class App extends React.PureComponent {
       user = state.currentUser;
     }
 
+    if(window.userEmail) {
+      console.log('setting user from url');
+      user = window.userEmail;
+    }
+
     chainTasks([fetchUserProfile(user), fetchCoursesInMap()]).fork(e => {
       console.error('Could not get initial app data!', e);
       this.setState({errorMessage: e});
