@@ -74,7 +74,7 @@ class ApplicationContainer extends React.PureComponent {
         AppStore.dispatch(setConfig(res));
         this.setState({
           loading: false,
-          hasUser: (res.defaultuser.length || window.userEmail.length)
+          hasUser: (res.defaultuser.length || window.userEmail)
         });
       });
   }

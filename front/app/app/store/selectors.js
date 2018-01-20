@@ -1,10 +1,21 @@
+/*
+NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE
+NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE
+NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE
+
+This all needs to be refactored, but I since this app is working well with the current
+code and should be sunset at the end of 2018, I've decided to leave it as is.
+
+MBP 1/17/18
+ */
+
+
 import Either from 'data.either';
 import {curry} from 'ramda';
 import moment from 'moment';
 import {get} from 'lodash';
 import {
-  formatSecondsToDate2,
-  removeArrDupes,
+  formatSecondsToDate2, removeArrDupes,
   removeWhiteSpace
 } from '../utils/Toolbox';
 import {hasLength, idMatchObjId, noOp, stripHTML} from '../utils/AppUtils';
@@ -173,7 +184,7 @@ const getContentIDsInStructure = () =>
 export const getNewOrUpdatedContentTitles = () => getContentIDsInStructure().reduce((acc, cntId) => {
   let cnt = getContentObjById(cntId);
   if (cnt.isNew || cnt.isUpdated) {
-    acc.push(cnt.title + ' (' + (cnt.isNew ? 'New' : (cnt.isUpdated ? 'Updated' : '') ) + ')');
+    acc.push(cnt.title + ' (' + (cnt.isNew ? 'New' : (cnt.isUpdated ? 'Updated' : '')) + ')');
   }
   return acc;
 }, []);
@@ -183,6 +194,19 @@ export const getNumActivitiesForPeriod = period =>
   period.topics
     .filter(t => hasLength(t.content))
     .reduce((acc, topic) => acc += topic.content.length, 0);
+
+export const getNumCompletedActivitiesForTopic = topic =>
+  topic.content.reduce((acc, contentid) => {
+    if (getContentObjById(contentid).isComplete) {
+      acc++;
+    }
+    return acc;
+  }, 0);
+
+export const getNumCompletedActivitiesForPeriod = period =>
+  period.topics
+    .filter(t => hasLength(t.content))
+    .reduce((acc, topic) => acc += getNumCompletedActivitiesForTopic(topic), 0);
 
 export const getEnrollmentRecordLMSCourse = (userEnrolledCourses, courseLMSId) =>
   userEnrolledCourses
@@ -304,7 +328,7 @@ export const getHydratedContent = () => {
       if (o.lmsStatus === 2) {
         // Totara dates are seconds since 1/1/70 12:00am
         o.lmsStatusDate = moment(new Date(parseInt(statusKey.completions[0].timecompleted * 1000)));
-        o.isComplete = true;
+        o.isComplete    = true;
       }
     }
 

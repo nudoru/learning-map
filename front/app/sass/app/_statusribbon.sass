@@ -37,7 +37,10 @@ $status-ribbon-top-tail-height: 5px
     bottom: -$status-ribbon-top-tail-height
 
 .status-ribbon-top-none
-  +status-ribbon-top-maker($grey-4)
+  +status-ribbon-top-maker($grey-2)
+  span
+    color: $grey-6
+    text-shadow: $text-shadow-light
 
 .status-ribbon-top-inprogress
   +status-ribbon-top-maker($branding-color)
@@ -83,7 +86,10 @@ $status-ribbon-left-tail-width: 15px
     +triangle($status-ribbon-left-height $status-ribbon-left-tail-width, $color, right)
 
 .status-ribbon-left-none
-  +status-ribbon-left-maker($grey-4)
+  +status-ribbon-left-maker($grey-2)
+  span
+    color: $grey-6
+    text-shadow: $text-shadow-light
 
 .status-ribbon-left-inprogress
   +status-ribbon-left-maker($branding-color)

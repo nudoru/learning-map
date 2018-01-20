@@ -11,7 +11,8 @@
     overflow: visible
     margin-top: 10px // allow the gradient to show above the timeline
     margin-bottom: 10px
-
+  +max-width($mqbp-small)
+    position: relative
 
 // Added to the el when it starts to move w/ scroll
 .rh-timeline-floating
@@ -26,10 +27,10 @@
   width: 100%
   margin: 0
   padding-top: $base-line-height
+  border-bottom: 2px solid $branding-color-dark
   ul
     +transition-all()
     display: flex
-    //flex-wrap: wrap
     justify-content: center
     align-items: stretch
     position: relative
@@ -41,12 +42,12 @@
     background-color: #fff
     background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.02))
     box-shadow: 0 1px 2px rgba(0,0,0,0.075)
-    //border-bottom: 1px solid $period-color
-    //li
-    //  &:first-of-type
-    //    border-radius: $border-radius 0 0 $border-radius
-    //  &:last-of-type
-    //    border-radius: 0 $border-radius $border-radius 0
+    +max-width($mqbp-small)
+      flex-wrap: wrap
+  li
+    border-right: 1px solid $grey-1
+    &:last-of-type
+      border-right: none
 
 .rh-timeline-item
   margin: 0
@@ -55,11 +56,15 @@
   vertical-align: middle
   position: relative
   padding: $base-line-height-half
-  border-right: 1px solid $grey-1
   background-image: linear-gradient(-45deg, #fff 50%, $branding-color-light 50.01%, $branding-color-dark 100%)
   background-size: 250%
   background-position: 99% 99%
   transition: background-position 120ms ease-out, transform 240ms ease-out
+  +max-width($mqbp-medium)
+    .status-ribbon-top-success
+      display: none
+  +max-width($mqbp-small)
+    flex-basis: 100%
   a
     font-size: 1.2rem
     line-height: 1.4rem
@@ -69,6 +74,7 @@
     position: relative
     overflow: hidden
     width: 100%
+    height: 100%
     display: block
     span
       display: block
@@ -78,7 +84,17 @@
       //white-space: nowrap
       text-transform: uppercase
       font-weight: 600
-      padding: 0 0 0 $base-line-height-triple
+      padding: $base-line-height-half 0 $base-line-height-half $base-line-height-triple
+      +max-width($mqbp-medium)
+        padding: $base-line-height-half
+    span.timeline-item-meta
+      color: $grey-6
+      font-weight: 400
+      padding-top: 0
+      text-transform: none
+      em
+        font-weight: 600
+        font-style: normal
     //.rh-icon-circle-text-inverse-small
     //  box-shadow: 0 0 15px rgba(0,0,0,.15)
     //  background-color: $period-color
@@ -86,13 +102,15 @@
   &:hover
     border-right: 1px solid transparent
     background-position: 0 0
-    transform: scale(1.1)
+    transform: scale(1.05)
     z-index: 2
     box-shadow: 0 1px  6px  rgba(0, 0, 0, .1), 0 8px  8px  rgba(0, 0, 0, .05), 4px 23px 40px -15px rgba(0,0,0,0.15), 8px 30px 64px rgba(0, 0, 0, .1)
     transition: background-position 320ms ease-out, transform 120ms ease-out
     a
       color: #fff
       text-shadow: $text-shadow-dark
+      span.timeline-item-meta
+        color: #fff
       .rh-icon-circle-text-inverse-small
         color: $period-color
         background-color: #fff

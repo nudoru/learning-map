@@ -4,13 +4,7 @@ $branding-color-dark: $blue-8
 
 $period-color-light: $teal-1
 $period-color: $red
-$period-color-dark: $red-dark-5
-
-.content-region
-  overflow: visible !important
-
-.page-container
-  overflow: visible !important
+$period-color-dark: $red-dark-2
 
 @import "base"
 @import "header"
@@ -19,27 +13,50 @@ $period-color-dark: $red-dark-5
 @import "learningmap"
 @import "timeline"
 
+.content-region
+  overflow: visible !important
+
+.page-container
+  overflow: visible !important
+  +max-width($mqbp-medium)
+    padding: 5px
+
+
+
+.utilitybar-container
+  background-color: $red
+
 .rh-utilitybar
   //border-radius: 0 0 $border-radius-small $border-radius-small
-  .user
-    color: $branding-color-dark
+  background: none
+  padding: $base-line-height-half 0
+  p
+    left: 0
+  li, a, .user
+    color: #fff !important
 
 .header-title
   h1
+    font-weight: 600
+    font-size: $ms-5
     text-shadow: 1px 1px 3px rgba(0,0,0,.5)
+    +max-width($mqbp-medium)
+      text-align: center
+      font-size: $ms-4
 
 .header-region-minor
-  background: $branding-color $barsgradient
+  background: $branding-color-dark $barsgradient
 
 .rh-tag-hgroup
-  margin-top: $base-line-height-double
+  margin-top: $base-line-height
   .rh-tag
-    color: $grey-8
-    background-color: $grey-1
-    box-shadow: none
+    color: $grey-9
+    background-color: rgba(0,0,0,.05)
     padding: 2px 11px
-    margin-right: $base-line-height
+    margin-right: $base-line-height-half
     border-radius: 50px
+    box-shadow: none
+    //text-shadow: $text-shadow-light
     i.fa
       color: $grey-8
 

@@ -75,7 +75,7 @@
 .period
   background-color: $grey-0
   //border-radius: $border-radius
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 0 100px rgba(0,0,0,.15)
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 0 100px rgba(0,0,0,.1)
   margin-bottom: $base-line-height-triple
   h1
     padding-bottom: $base-line-height
@@ -92,8 +92,6 @@
     background-color: #fafafa
     font-style: italic
     text-shadow: 1px 1px 0 rgb(255,255,255)
-  +max-width($mqbp-medium)
-    margin-bottom: $base-line-height
 
 .period-status
   position: absolute
@@ -186,12 +184,77 @@
 // Table
 //------------------------------------------------------------------------------
 
+.rh-custom-table
+  margin: 0
+  overflow: visible
+  tr
+    border: 1px solid $grey-1
+    border-radius: $base-line-height-half
+
+    //background-image: linear-gradient(-45deg, transparent 50%, $period-color-light 50.01%, #fff 100%)
+    //background-size: 250%
+    //background-position: 99% 99%
+    //transition: background-position 240ms ease-out, box-shadow 240ms ease-out, transform 240ms ease-out
+  //tr:hover
+  //  background-position: 0 0
+  //  //transform: scale(1.005)
+  //  z-index: 1
+  //  box-shadow: 2px 4px 20px $period-color-light
+  td
+    padding: $base-line-height-double
+
+td.details-ribbon
+  width: 8rem
+  text-align: center
+  padding-left: 0
+
+td.details-course-required
+  width: 1rem
+  vertical-align: top
+  padding-right: 0
+  padding-left: 0
+  padding-top: $base-line-height-double + .25rem
+
 .status-label
   @extend .small
   font-weight: 600
   display: block
   text-transform: none
 
+.details-course-name
+  @extend .text-summary
+  width: 40rem
+  font-weight: 400
+  vertical-align: top
+  padding-left: $base-line-height-half
+  //a, span
+  //  font-size: 1.8rem
+  span
+    font-weight: 600
+  .details-course-name-required
+
+.details-course-description
+  @extend .text-summary
+  vertical-align: top
+
+.details-completion
+  width: 10rem
+  text-align: center
+  border-left: 1px solid rgba(0,0,0,.03)
+  background-color: rgba(0,0,0,.02)
+  .react-toggle-thumb
+    background-color: #fff
+    border: 2px solid $branding-color-dark
+  .react-toggle-track
+    background-color: $grey-3
+  .react-toggle:hover:not(.react-toggle--disabled) .react-toggle-thumb
+    border: 4px solid $branding-color
+  .react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track
+      background-color: rgba(0,0,0,.1)
+  .toggle-label
+    @extend .status-label
+
+// asterisk after name
 .details-course-name-required
   position: relative
   font-weight: 400
@@ -203,93 +266,10 @@
   background-color: $red
   text-shadow: 1px 1px $red-dark-1 !important
 
+// (New) or (Updated) text after name
 .details-course-name-newOrUpdated
   color: $blue
   font-style: italic
-
-.react-toggle-thumb
-  background-color: #fff
-  border: 2px solid $branding-color-dark
-
-.react-toggle-track
-  background-color: $grey-3
-
-.react-toggle:hover:not(.react-toggle--disabled) .react-toggle-thumb
-  border: 4px solid $branding-color
-
-.react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track
-  background-color: rgba(0,0,0,.1)
-
-.toggle-label
-  @extend .status-label
-
-
-.learning-map-row
-  position: relative
-  justify-content: center
-  align-items: stretch
-  margin-bottom: $base-line-height-half
-  padding: $base-line-height
-  border-radius: 2px
-  background-color: #fff
-  +max-width($mqbp-medium)
-    padding: 2px
-    flex-wrap: wrap
-  .learning-map-col
-    vertical-align: top
-    padding: $base-line-height
-    +max-width($mqbp-medium)
-      padding: $base-line-height-half
-  .details-ribbon
-    position: relative
-    left: -$base-line-height
-    flex: none
-    align-self: center
-    width: 7rem
-    text-align: center
-    padding-left: 0
-    +max-width($mqbp-medium)
-      display: none
-  .details-course-required
-    flex: none
-    width: 1.5rem
-    vertical-align: top
-    padding-right: 0
-    padding-left: 0
-    padding-top: $base-line-height + .1rem
-    +max-width($mqbp-medium)
-      padding-top: $base-line-height-half+.1rem
-  .details-course-name
-    @extend .text-summary
-    flex: 2
-    font-weight: 400
-    padding-left: $base-line-height-half
-    span
-      font-weight: 600
-    +max-width($mqbp-medium)
-      flex: 3
-    +max-width($mqbp-small)
-      flex: 2
-  .details-course-description
-    @extend .text-summary
-    flex: 3
-    +max-width($mqbp-small)
-      order: 5
-      flex: 2
-      flex-basis: 100%
-  .details-completion
-    flex: 1
-    //width: 10rem
-    text-align: center
-    border-left: 1px solid $grey-1
-    display: flex
-    align-items: center
-    justify-content: center
-    +max-width($mqbp-small)
-      flex: 1
-
-
-
 
 .reflection-group
   border-top: 1px solid $period-color-light

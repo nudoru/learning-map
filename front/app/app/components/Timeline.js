@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-scroll';
-import {isPeriodComplete} from '../store/selectors';
+import {isPeriodComplete, getNumActivitiesForPeriod, getNumCompletedActivitiesForPeriod} from '../store/selectors';
 import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
 import IconCircleText from '../rh-components/rh-IconCircleText';
 import {ScrollWatch} from "./ScrollWatch";
 import {StatusRibbonTop} from "./StatusRibbon";
 import {Row, Col} from "../rh-components/rh-Grid";
+import {Tag, TagHGroup} from "../rh-components/rh-Tag";
 
 class Timeline extends React.PureComponent {
 
@@ -38,8 +39,13 @@ class Timeline extends React.PureComponent {
         <div className="page-container">
           <nav className="rh-timeline">
             <ul>
-              {currentStructure.data.map((period, i) => <TimeLineItem
-                period={period} key={i}/>)}
+              {currentStructure.data.map((period, i) =>
+                <TimeLineItem
+                period={period}
+                key={i}
+                activities={getNumActivitiesForPeriod(period)}
+                completed={getNumCompletedActivitiesForPeriod(period)}
+                />)}
             </ul>
           </nav>
         </div>
@@ -48,11 +54,11 @@ class Timeline extends React.PureComponent {
   }
 }
 
-const TimeLineItem = ({period, key}) => {
+const TimeLineItem = ({period, key, activities,completed}) => {
   let timePeriod,
       clsName  = ['rh-timeline-item'],
       statusMarker = isPeriodComplete(period) ?
-        <StatusRibbonTop type={3}/> : <StatusRibbonTop type={0}/>;
+        <StatusRibbonTop type={3}/> : null;
       // complete = isPeriodComplete(period) ?
       //   <div className="complete"><StatusIconTiny type="success"/>
       //   </div> : null;
@@ -80,6 +86,7 @@ const TimeLineItem = ({period, key}) => {
       offset={-120}
       duration={500}>
       <span>{period.category}</span>
+      <span className='timeline-item-meta'><i className='fa fa-check'/> <em>{completed}</em> of <em>{activities}</em></span>
     </Link>
   </li>;
 };

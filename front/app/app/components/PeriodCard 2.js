@@ -11,7 +11,7 @@ import IconCircleText from '../rh-components/rh-IconCircleText';
 import {XAPILink} from "./xAPILink";
 import {XAPIToggle} from "./xAPIToggle";
 import {XAPITextArea} from "./xAPITextArea";
-import {Grid, Col, Row} from "../rh-components/rh-Grid";
+import {Col, Row} from "../rh-components/rh-Grid";
 
 //------------------------------------------------------------------------------
 // Card showing the week information, overall completion icon, and courses
@@ -107,9 +107,9 @@ export const PeriodTopicCard = ({title, summary, children}) => {
     {title ? <h1>{title}</h1> : null}
     {summary ? <div className="text-summary"
                     dangerouslySetInnerHTML={{__html: summary}}></div> : null}
-    <Grid>
+    <table className="rh-custom-table">
       {children}
-    </Grid>
+    </table>
   </div>);
 };
 
@@ -130,18 +130,18 @@ export const PeriodTopicCard = ({title, summary, children}) => {
 
 export const ContentRow = props => {
 
-  return <Row className='learning-map-row'>
+  return <tr>
     <RibbonCell {...props} />
     <RequiredCell required={props.contentObj.isRequired} />
     <NameCell {...props} />
     <DescriptionCell {...props}/>
     <StatusCell {...props} />
-  </Row>;
+  </tr>;
 };
 
 
-const RequiredCell = ({required}) => <Col className="learning-map-col details-course-required">{ required ?
-  <i className="details-course-name-required fa fa-asterisk"/> : null}</Col>;
+const RequiredCell = ({required}) => <td className="details-course-required">{ required ?
+  <i className="details-course-name-required fa fa-asterisk"/> : null}</td>;
 
 const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
   let nameElement;
@@ -169,17 +169,20 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
       dangerouslySetInnerHTML={{__html: contentObj.title}}></span>;
   }
 
-  return <Col className="learning-map-col details-course-name">
+  return <td className="details-course-name">
     {nameElement}{newOrUpdated}
     <TagHGroup>{tagModType}{tagDuration}</TagHGroup>
-  </Col>;
+  </td>;
 };
 
 
 
-const RibbonCell = ({onCompletedClick, contentObj, status}) => <Col className="learning-map-col details-ribbon">
+const RibbonCell = ({onCompletedClick, contentObj, status}) => {
+
+  return (<td className="details-ribbon">
     <StatusRibbonLeft type={status}/>
-  </Col>;
+  </td>);
+};
 
 
 
@@ -219,11 +222,9 @@ const StatusCell = ({onCompletedClick, contentObj, status}) => {
   }
 
 
-  return (<Col className="learning-map-col details-completion">
-    <div className='details-completion-marker'>
+  return (<td className="details-completion">
     {statusMarker}
-    </div>
-  </Col>);
+  </td>);
 };
 
 const DescriptionCell = ({contentObj}) => {
@@ -246,10 +247,10 @@ const DescriptionCell = ({contentObj}) => {
   }
 
   //
-  return <Col className="learning-map-col details-course-description">
+  return <td className="details-course-description">
     <p dangerouslySetInnerHTML={{__html: contentObj.summary}}></p>
     {reflection}
-  </Col>;
+  </td>;
 };
 
 const onReflectionSaved = ({id, response}) => console.log('Reflection saved', id, response);
