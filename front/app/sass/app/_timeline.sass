@@ -1,3 +1,6 @@
+$timeline-responsive: 800px
+$timeline-to-block: 650px
+
 .rh-timeline-container
   +transition-all()
   z-index: 9
@@ -11,8 +14,10 @@
     overflow: visible
     margin-top: 10px // allow the gradient to show above the timeline
     margin-bottom: 10px
-  +max-width($mqbp-small)
+  +max-width($timeline-to-block)
     position: relative
+    .page-container
+      padding: 0 $base-line-height
 
 // Added to the el when it starts to move w/ scroll
 .rh-timeline-floating
@@ -42,7 +47,7 @@
     background-color: #fff
     background-image: linear-gradient(to bottom, transparent, rgba(0,0,0,.02))
     box-shadow: 0 1px 2px rgba(0,0,0,0.075)
-    +max-width($mqbp-small)
+    +max-width($timeline-responsive)
       flex-wrap: wrap
   li
     border-right: 1px solid $grey-1
@@ -60,10 +65,10 @@
   background-size: 250%
   background-position: 99% 99%
   transition: background-position 120ms ease-out, transform 240ms ease-out
-  +max-width($mqbp-medium)
+  +max-width($timeline-responsive)
     .status-ribbon-top-success
       display: none
-  +max-width($mqbp-small)
+  +max-width($timeline-to-block)
     flex-basis: 100%
   a
     font-size: 1.2rem
@@ -85,7 +90,7 @@
       text-transform: uppercase
       font-weight: 600
       padding: $base-line-height-half 0 $base-line-height-half $base-line-height-triple
-      +max-width($mqbp-medium)
+      +max-width($timeline-responsive)
         padding: $base-line-height-half
     span.timeline-item-meta
       color: $grey-6

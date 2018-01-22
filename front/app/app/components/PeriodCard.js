@@ -1,17 +1,14 @@
 import React from 'react';
 import {
-  contentLinkWithId,
-  contentTitleToLink,
+  contentLinkWithId, contentTitleToLink,
   isPeriodComplete
 } from '../store/selectors';
 import {Tag, TagHGroup} from '../rh-components/rh-Tag';
-import {StatusIcon, StatusIconTiny} from '../rh-components/rh-StatusIcon';
-import {StatusRibbonTop, StatusRibbonLeft} from "./StatusRibbon";
-import IconCircleText from '../rh-components/rh-IconCircleText';
+import {StatusRibbonLeft, StatusRibbonTop} from "./StatusRibbon";
 import {XAPILink} from "./xAPILink";
 import {XAPIToggle} from "./xAPIToggle";
 import {XAPITextArea} from "./xAPITextArea";
-import {Grid, Col, Row} from "../rh-components/rh-Grid";
+import {Col, Grid, Row} from "../rh-components/rh-Grid";
 
 //------------------------------------------------------------------------------
 // Card showing the week information, overall completion icon, and courses
@@ -113,38 +110,30 @@ export const PeriodTopicCard = ({title, summary, children}) => {
   </div>);
 };
 
-/*
-<thead>
-      <tr>
-        <td>Progress</td>
-        <td>Activity</td>
-        <td>Completion</td>
-        <td>Description</td>
-      </tr>
-      </thead>
- */
-
 //------------------------------------------------------------------------------
 // Row in the content table
 //------------------------------------------------------------------------------
 
 export const ContentRow = props => {
+//    <RequiredCell required={props.contentObj.isRequired} />
 
   return <Row className='learning-map-row'>
     <RibbonCell {...props} />
-    <RequiredCell required={props.contentObj.isRequired} />
     <NameCell {...props} />
     <DescriptionCell {...props}/>
     <StatusCell {...props} />
   </Row>;
 };
 
-
-const RequiredCell = ({required}) => <Col className="learning-map-col details-course-required">{ required ?
-  <i className="details-course-name-required fa fa-asterisk"/> : null}</Col>;
+const RibbonCell = ({onCompletedClick, contentObj, status}) => <Col className="learning-map-col details-ribbon">
+  <StatusRibbonLeft className='details-ribbon-left' type={status}/>
+  <StatusRibbonTop className='details-ribbon-top' type={status}/>
+</Col>;
 
 const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
   let nameElement;
+
+  const requiredMark = contentObj.isRequired ?  <i className="details-course-name-required fa fa-asterisk"/> : null;
 
   const tagModType  = modType ?
     <Tag><i className={'fa fa-' + modIcon}/>{modType}</Tag> : null;
@@ -170,18 +159,17 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
   }
 
   return <Col className="learning-map-col details-course-name">
-    {nameElement}{newOrUpdated}
-    <TagHGroup>{tagModType}{tagDuration}</TagHGroup>
+    <Row>
+      <Col className='details-course-name-mark'>{requiredMark}</Col>
+      <Col className='details-course-name-label'>{nameElement}{newOrUpdated}</Col>
+    </Row>
+    <Row>
+      <Col>
+        <TagHGroup>{tagModType}{tagDuration}</TagHGroup>
+      </Col>
+    </Row>
   </Col>;
 };
-
-
-
-const RibbonCell = ({onCompletedClick, contentObj, status}) => <Col className="learning-map-col details-ribbon">
-    <StatusRibbonLeft type={status}/>
-  </Col>;
-
-
 
 const StatusCell = ({onCompletedClick, contentObj, status}) => {
   let statusMarker, toggleId;

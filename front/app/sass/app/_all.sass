@@ -20,11 +20,16 @@ $period-color-dark: $red-dark-2
   overflow: visible !important
   +max-width($mqbp-medium)
     padding: 5px
+  +max-width($mqbp-small)
+    padding: 0
 
 
 
 .utilitybar-container
   background-color: $red
+  +max-width($mqbp-small)
+    .page-container
+      padding: 0 $base-line-height
 
 .rh-utilitybar
   //border-radius: 0 0 $border-radius-small $border-radius-small
