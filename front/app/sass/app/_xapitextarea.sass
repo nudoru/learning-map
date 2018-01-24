@@ -1,0 +1,50 @@
+.xapitextarea-group
+  border-radius: $border-radius-small
+  h1
+    font-size: 2rem
+    line-height: $base-line-height-double
+    text-align: left
+    text-transform: none
+    border: none
+
+.xapitextarea-text-area
+  border: 1px solid $period-color-light
+  margin-top: $base-line-height-half
+  border-radius: $border-radius-small
+  box-shadow: none
+
+.xapitextarea-prompt
+  font-weight: 400
+  color: $period-color-dark
+
+.xapitextarea-saved-header
+  @extend .xapitextarea-prompt
+
+.xapitextarea-saved-text
+  margin: 0
+  margin-top: $base-line-height
+  //padding: $base-line-height
+  border-radius: $border-radius
+  //background-color: rgba(0,0,0,.01)
+  //border: 1px solid $period-color-light
+  text-shadow: $text-shadow-light
+  font-style: italic
+  font-size: 1.6rem
+  color: $period-color-dark
+  quotes: "\201C""\201D""\2018""\2019"
+  // https://css-tricks.com/snippets/css/simple-and-nice-blockquote-styling/
+  &:before
+    color: $period-color-light
+    content: open-quote
+    font-size: 4em
+    line-height: 0.1em
+    margin-left: -0.25em
+    margin-right: 0.25em
+    vertical-align: -0.4em
+  &:after
+    color: $period-color-light
+    content: close-quote
+    font-size: 4em
+    line-height: .1em
+    margin-left: .1em
+    vertical-align: -.6em

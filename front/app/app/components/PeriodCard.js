@@ -27,16 +27,21 @@ export const PeriodCard = periodObj => {
         timePeriod
       }               = periodObj,
       periodCls       = ['period'],
-      activitiesLabel = activities === 1 ? 'Activity' : 'Activities',
-      tagRow          = null,
-      activitiesEl    = activities ? (
-        <Tag><em>{activities}</em> {activitiesLabel}</Tag>) : null,
-      startEl         = startDateDisplay ? (
-        <Tag>Begins <em>{startDateDisplay}</em></Tag>) : null,
-      endEl           = endDateDisplay ? (
-        <Tag>Ends <em>{endDateDisplay}</em></Tag>) : null,
-      statusMarker = isPeriodComplete(periodObj) ?
+      tagRow          = null;
+
+
+      // Disabled
+      //const activitiesLabel = activities === 1 ? 'Activity' : 'Activities';
+      //const activitiesEl    = activities ? (<Tag><em>{activities}</em> {activitiesLabel}</Tag>) : null;
+
+      const startEl         = startDateDisplay ? (
+        <Tag>Begins <em>{startDateDisplay}</em></Tag>) : null;
+      const endEl           = endDateDisplay ? (
+        <Tag>Ends <em>{endDateDisplay}</em></Tag>) : null;
+      const statusMarker = isPeriodComplete(periodObj) ?
         <StatusRibbonTop type={3}/> : <StatusRibbonTop type={0}/>;
+      const summaryEl = summary ? <div className="text-summary margin-top"
+                                       dangerouslySetInnerHTML={{__html: summary}}></div> : null;
 
   // Disabled pending new styles MBP 12/6/17
   // if (timePeriod === -1) {
@@ -47,28 +52,16 @@ export const PeriodCard = periodObj => {
   //   periodCls.push('period-future');
   // }
 
-  //{activitiesEl}
-  if (config.setup.interface.showDateOnPeriod) {
-    tagRow = <TagHGroup>{startEl}{endEl}</TagHGroup>;
-  }
-  //<div>
-    //{tagRow}
-  //</div>
+  // Disabled
+  // if (config.setup.interface.showDateOnPeriod) {
+  //   tagRow = <TagHGroup>{startEl}{endEl}</TagHGroup>;
+  // }
 
-  /*
-  <Row className='period-title'
-                 style={{justifyContent: 'flex-start', alignItems: 'center'}}>
-              <Col style={{flex: 0, paddingRight: '22px'}}><IconCircleText
-                label={period}/>{isPeriodComplete(periodObj) ?
-                <div className='complete'><StatusIconTiny type="success"/>
-                </div> : null}</Col>
-              <Col style={{flex: 1}}>
-                <h1>{category}</h1>
-                {summary ? <div className="text-summary margin-top"
-                                dangerouslySetInnerHTML={{__html: summary}}></div> : null}
-              </Col>
-            </Row>
-   */
+  if(isPeriodComplete(periodObj)) {
+    periodCls.push('period-complete');
+  } else {
+    periodCls.push('period-incomplete');
+  }
 
   return (
     <div className="content-region">
@@ -82,8 +75,7 @@ export const PeriodCard = periodObj => {
                  style={{justifyContent: 'flex-start', alignItems: 'center'}}>
               <Col style={{flex: 1}}>
                 <h1>{category}</h1>
-                {summary ? <div className="text-summary margin-top"
-                                dangerouslySetInnerHTML={{__html: summary}}></div> : null}
+                {summaryEl}
               </Col>
             </Row>
           </header>
@@ -100,10 +92,13 @@ export const PeriodCard = periodObj => {
 //------------------------------------------------------------------------------
 
 export const PeriodTopicCard = ({title, summary, children}) => {
+  const titleEl = title ? <h1>{title}</h1> : null;
+  const summaryEl = summary ? <div className="text-summary"
+                                   dangerouslySetInnerHTML={{__html: summary}}></div> : null
+
   return (<div className="period-topic">
-    {title ? <h1>{title}</h1> : null}
-    {summary ? <div className="text-summary"
-                    dangerouslySetInnerHTML={{__html: summary}}></div> : null}
+    {titleEl}
+    {summaryEl}
     <Grid>
       {children}
     </Grid>
@@ -115,9 +110,15 @@ export const PeriodTopicCard = ({title, summary, children}) => {
 //------------------------------------------------------------------------------
 
 export const ContentRow = props => {
-//    <RequiredCell required={props.contentObj.isRequired} />
+  let rowCls = ['learning-map-row'];
 
-  return <Row className='learning-map-row'>
+  if(props.status === 3) {
+    rowCls.push('learning-map-row-complete')
+  } else {
+    rowCls.push('learning-map-row-incomplete')
+  }
+
+  return <Row className={rowCls.join(' ')}>
     <RibbonCell {...props} />
     <NameCell {...props} />
     <DescriptionCell {...props}/>
@@ -125,12 +126,12 @@ export const ContentRow = props => {
   </Row>;
 };
 
-const RibbonCell = ({onCompletedClick, contentObj, status}) => <Col className="learning-map-col details-ribbon">
+const RibbonCell = ({status}) => <Col className="learning-map-col details-ribbon">
   <StatusRibbonLeft className='details-ribbon-left' type={status}/>
   <StatusRibbonTop className='details-ribbon-top' type={status}/>
 </Col>;
 
-const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
+const NameCell = ({modType, modIcon, onLinkClick, contentObj}) => {
   let nameElement;
 
   const requiredMark = contentObj.isRequired ?  <i className="details-course-name-required fa fa-asterisk"/> : null;
@@ -139,7 +140,6 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
     <Tag><i className={'fa fa-' + modIcon}/>{modType}</Tag> : null;
   const tagDuration = contentObj.duration ?
     <Tag><i className='fa fa-clock-o'/>{contentObj.duration}</Tag> : null;
-  //const tagStatus   = modNote ? <Tag>{modNote}</Tag> : null;
 
   const newOrUpdated = <span
     className="details-course-name-newOrUpdated">{contentObj.isNew ? ' (New) ' : (contentObj.isUpdated ? ' (Updated) ' : null)}</span>;
@@ -174,13 +174,12 @@ const NameCell = ({modType, modIcon, modNote, onLinkClick, contentObj}) => {
 const StatusCell = ({onCompletedClick, contentObj, status}) => {
   let statusMarker, toggleId;
 
-  //<StatusIcon type={status}/>
   if (status === 3) {
     statusMarker = <div className='status-group'><span className='status-label'>Completed</span></div>;
   } else {
     if (contentObj.requireConfirm) {
       if (!contentObj.contentLink) {
-        // Use the "linkified" title for the link
+        // Use the "slugified" title for the link
         toggleId = contentTitleToLink(contentObj.title, contentObj.id);
       } else {
         // Make it unique
@@ -197,7 +196,7 @@ const StatusCell = ({onCompletedClick, contentObj, status}) => {
       </div>);
     } else if (contentObj.lmsID) {
       if(status === 1) {
-        statusMarker = <div className='status-group'><span className='status-label'>Inprogress</span></div>;
+        statusMarker = <div className='status-group'><span className='status-label'>In progress</span></div>;
       } else {
         statusMarker = <div className='status-group'><span className='status-label'>Not enrolled</span></div>;
       }
@@ -206,21 +205,20 @@ const StatusCell = ({onCompletedClick, contentObj, status}) => {
     }
   }
 
-
-  return (<Col className="learning-map-col details-completion">
+  return <Col className="learning-map-col details-completion">
     <div className='details-completion-marker'>
     {statusMarker}
     </div>
-  </Col>);
+  </Col>;
 };
 
 const DescriptionCell = ({contentObj}) => {
-  let reflection = null;
+  let xapiInteraction = null;
 
   if (contentObj.reflection) {
     let refId;
     if (!contentObj.contentLink) {
-      // Use the "linkified" title for the link
+      // Use the "slugified" title for the link
       refId = contentTitleToLink(contentObj.title, contentObj.id);
     } else {
       // Make it unique
@@ -228,16 +226,16 @@ const DescriptionCell = ({contentObj}) => {
     }
 
     //previousResponse={}
-    reflection =
+    xapiInteraction =
       <XAPITextArea prompt={contentObj.reflectionPrompt} disabled={false}
-                    id={refId} onSave={onReflectionSaved}/>;
+                    id={refId} onSave={onXapiInteractionComplete}/>;
   }
 
   //
   return <Col className="learning-map-col details-course-description">
     <p dangerouslySetInnerHTML={{__html: contentObj.summary}}></p>
-    {reflection}
+    {xapiInteraction}
   </Col>;
 };
 
-const onReflectionSaved = ({id, response}) => console.log('Reflection saved', id, response);
+const onXapiInteractionComplete = ({id, response}) => console.log('xAPI interaction completed', id, response);

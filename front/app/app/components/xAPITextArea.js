@@ -54,7 +54,7 @@ export class XAPITextArea extends React.PureComponent {
   };
 
   render() {
-    return <Grid className='reflection-group'>
+    return <Grid className='xapitextarea-group'>
       {this.state.isPrompting ? this._renderInputForm() : (this.state.isConfirming ? this._renderConfirmResponse() : this._renderFinalResponse())}
     </Grid>;
   }
@@ -64,8 +64,8 @@ export class XAPITextArea extends React.PureComponent {
     return <div>
       <Row>
         <Col>
-          <p className='reflection-prompt'>{prompt}</p>
-          <TextArea className='reflection-text-area'
+          <p className='xapitextarea-prompt'>{prompt}</p>
+          <TextArea className='xapitextarea-text-area'
                     defaultValue={this.state.responseText}
                     onChange={this._handleInputChange}/>
         </Col>
@@ -91,8 +91,8 @@ export class XAPITextArea extends React.PureComponent {
       </Row>
       <Row className='margin-top margin-bottom'>
         <Col>
-          <p className='reflection-prompt'>{prompt}</p>
-          <blockquote className='reflection-saved-text'>{this.state.responseText}</blockquote>
+          <p className='xapitextarea-prompt'>{prompt}</p>
+          <blockquote className='xapitextarea-saved-text'>{this.state.responseText}</blockquote>
         </Col>
       </Row>
       <Row>
@@ -109,8 +109,8 @@ export class XAPITextArea extends React.PureComponent {
     return <div>
       <Row>
         <Col>
-          <p className='reflection-prompt'>{this.props.prompt}</p>
-          <blockquote className='reflection-saved-text'>{this.state.responseText}</blockquote>
+          <p className='xapitextarea-prompt'>{this.props.prompt}</p>
+          <blockquote className='xapitextarea-saved-text'>{this.state.responseText}</blockquote>
         </Col>
       </Row>
     </div>;

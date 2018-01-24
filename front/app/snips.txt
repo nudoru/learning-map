@@ -1,0 +1,70 @@
+REFLECTION ENTRY
+
+{
+  "active": true,
+  "dateAdded": "",
+  "dateUpdated": "",
+  "id": 0,
+  "title": "",
+  "contentLink": "",
+  "lmsID": "",
+  "summary": " ",
+  "duration": "20 minutes",
+  "contentType": 3,
+  "isRequired": true,
+  "requireConfirm": true,
+  "reflection":true,
+  "reflectionPrompt":"How does your department build on Red Hat's open source legacy?"
+},
+
+LMS WBT
+
+
+{
+  "active": true,
+  "dateAdded": "",
+  "dateUpdated": "",
+  "id": 4,
+  "title": "",
+  "contentLink": "",
+  "lmsID": 99999,
+  "summary": "",
+  "duration": "15 minutes",
+  "contentType": 0,
+  "isRequired": true
+},
+
+LRS
+
+{
+  "active": true,
+  "dateAdded": "",
+  "dateUpdated": "",
+  "id": 16,
+  "title": "",
+  "contentLink": "",
+  "lmsID": null,
+  "summary": "",
+  "duration": "15 minutes",
+  "contentType": 7,
+  "isRequired": null,
+  "requireConfirm": true
+},
+
+ALLEGO COMPLETION
+
+{
+  "active": true,
+  "dateAdded": "",
+  "dateUpdated": "",
+  "id": 13,
+  "title": "",
+  "lmsID": null,
+  "allegoVerb":"completed",
+  "allegoID":[""],
+  "summary": "",
+  "duration": "15 minutes",
+  "contentType": 13,
+  "isRequired": true,
+  "requireConfirm": true
+},
