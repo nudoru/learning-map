@@ -7,7 +7,9 @@ import {
   getNumActivitiesForPeriod
 } from '../store/selectors';
 import {idMatchObjId} from '../utils/AppUtils';
-import {ContentRow, PeriodCard, PeriodTopicCard} from './PeriodCard';
+import {PeriodCard} from './PeriodCard';
+import {TopicCard} from "./TopicCard";
+import {ContentRow} from "./ContentRow";
 
 class LearningMap extends React.PureComponent {
 
@@ -109,14 +111,14 @@ class LearningMap extends React.PureComponent {
                         config={this.props.config}
                         currentStructure={this.props.currentStructure}
                         {...period}>
-      {period.topics.map(topic => this._renderPeriodTopic(topic))}
+      {period.topics.map(topic => this._renderTopicCard(topic))}
     </PeriodCard>);
   }
 
-  _renderPeriodTopic(topic) {
-    return (<PeriodTopicCard {...topic}>
+  _renderTopicCard(topic) {
+    return (<TopicCard {...topic}>
       {topic.content.map((contentID, index) => this._renderContentRow(contentID))}
-    </PeriodTopicCard>);
+    </TopicCard>);
   }
 
   _renderContentRow(contentID) {
