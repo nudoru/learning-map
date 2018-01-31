@@ -2,7 +2,7 @@ import Task from 'data.task';
 
 export const fetchConfigData = (url) => {
   return new Task((reject, resolve) => {
-    fetch(url)
+    fetch(url+'.json')
       .then(res => res.json().then(json => {
         resolve(json);
       }))

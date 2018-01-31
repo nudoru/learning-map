@@ -6,6 +6,7 @@ import AppStore from './store/AppStore';
 import {setConfig} from './store/actions/Actions';
 import {fetchConfigData} from './services/fetchConfig';
 import LMSKerberosIDRequest from './components/LMSKerberosIDRequest';
+import {getParameterByName} from './utils/Toolbox';
 
 const LoadingMessage = _ =>
   <PleaseWaitModal><h1>Please wait ...</h1>
@@ -19,7 +20,7 @@ const ErrorMessage = _ =>
   }}>
   </ModalMessage>;
 
-let configFile = 'config.json';
+let configFile = 'config';
 
 class ApplicationContainer extends React.PureComponent {
 
@@ -32,15 +33,15 @@ class ApplicationContainer extends React.PureComponent {
   };
 
   componentDidMount() {
-    const mapConfig = this.getParameterByName('map');
+    const mapConfig = getParameterByName('map');
     if (mapConfig) {
       configFile = mapConfig;
     }
 
-    // Email from URL is for DEBUG ONLY
-    const email = this.getParameterByName('e');
+    // Email from URL should be for for DEBUG ONLY and removed before a prod build
+    const email = getParameterByName('e');
     if (email) {
-      // Needs to be set in the Redux store, not a global var
+      // TODO Need to put this in the Redux store rather than a global var
       window.userEmail = email;
     }
 
@@ -48,23 +49,6 @@ class ApplicationContainer extends React.PureComponent {
 
     this.storeListener = AppStore.subscribe(this._onStateUpdated.bind(this));
     this._fetchConfig();
-  }
-
-  //https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-  getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name        = name.replace(/[\[\]]/g, "\\$&");
-    let regex   = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) {
-      return null;
-    }
-    if (!results[2]) {
-      return '';
-    }
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 
   // Start the app or load the configuration file
