@@ -6,6 +6,10 @@ import {
 } from '../utils/learningservices/lrs/LRS';
 import {useLRS} from "../store/selectors";
 
+/**
+ * Provides a context to child components to allow for easier access to the LRS
+ */
+
 export class XAPIProvider extends React.PureComponent {
   static propTypes = {
     connection: PropTypes.object,
@@ -37,6 +41,7 @@ export class XAPIProvider extends React.PureComponent {
 
   state = {error: false};
 
+  // Convenience to apply certain values to every statement sent
   _setAppStatementDefaults = _ => {
     const {connection, user} = this.props;
 
@@ -114,6 +119,7 @@ export class XAPIProvider extends React.PureComponent {
 
   render() {
     // TODO error view from this.state.error
+    // Need to fix the ability to bubble up connection errors to App
     return <div>{this.props.children}</div>
   }
 }

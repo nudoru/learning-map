@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
 
+/**
+ * Sends a complete statement when the toggle is clicked
+ */
+
 const completedLabel  = 'Completed';
 const incompleteLabel = 'Mark complete';
 
@@ -28,8 +32,8 @@ export class XAPIToggle extends React.PureComponent {
 
   _handleClick = _ => {
     if (this.state.toggled) {
-      // Shouldn't reach this point
-      console.warn(`Ignoring additional toggle clicks on ${id}`);
+      // This should never happen because the control is disabled if it's completed
+      // console.warn(`Ignoring additional toggle clicks on ${id}`);
       return;
     }
 

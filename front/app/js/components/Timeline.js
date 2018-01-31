@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-scroll';
-import {isPeriodComplete, getNumActivitiesForPeriod, getNumCompletedActivitiesForPeriod} from '../store/selectors';
-import {StatusIconTiny} from '../rh-components/rh-StatusIcon';
-import IconCircleText from '../rh-components/rh-IconCircleText';
+import {
+  getNumActivitiesForPeriod,
+  getNumCompletedActivitiesForPeriod,
+  isPeriodComplete
+} from '../store/selectors';
 import {ScrollWatch} from "./ScrollWatch";
 import {StatusRibbonTop} from "./StatusRibbon";
-import {Row, Col} from "../rh-components/rh-Grid";
-import {Tag, TagHGroup} from "../rh-components/rh-Tag";
 
 class Timeline extends React.PureComponent {
 
@@ -20,6 +20,8 @@ class Timeline extends React.PureComponent {
   timelineEl       = null;
 
   componentDidMount() {
+    // Get a reference to the DOM element and it's starting Y position in the
+    // document flow
     this.timelineEl       = document.querySelector('.rh-timeline-container');
     this.initialYPosition = this.timelineEl.getBoundingClientRect().top;
   }
@@ -59,11 +61,14 @@ const TimeLineItem = ({period, key, activities,completed}) => {
       clsName  = ['rh-timeline-item'],
       statusMarker = isPeriodComplete(period) ?
         <StatusRibbonTop type={3}/> : null;
+
+      // Disabled because we're using the ribbon for status indicators
       // complete = isPeriodComplete(period) ?
       //   <div className="complete"><StatusIconTiny type="success"/>
       //   </div> : null;
 
   // Disabled pending updated styles MBP 12/6/17
+  // The app has been rethemed and no new styles have been created for this functionality
   // if (period.startdate && period.enddate) {
   //   timePeriod = getDateRelationship(period.startdate, period.enddate);
   //   if (timePeriod === -1) {

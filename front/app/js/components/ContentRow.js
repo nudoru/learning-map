@@ -8,6 +8,8 @@ import {XAPITextArea} from "./xAPITextArea";
 import {Col, Row} from "../rh-components/rh-Grid";
 
 // TODO generalize for new interaction obj
+// Unclear if we'll need to accomodate other interaction types beyond a text entry,
+// but use a general "interaction" term just in case
 const hasXapiInteraction = contentObj => contentObj.reflection;
 
 const onXapiInteractionComplete = ({id, response}) => console.log('xAPI interaction completed', id, response);
@@ -29,16 +31,10 @@ export const ContentRow = props => {
   </Row>;
 };
 
-
-
-
 const RibbonCell = ({status}) => <Col className="learning-map-col details-ribbon">
   <StatusRibbonLeft className='details-ribbon-left' type={status}/>
   <StatusRibbonTop className='details-ribbon-top' type={status}/>
 </Col>;
-
-
-
 
 const NameCell = ({modType, modIcon, onLinkClick, contentObj}) => {
   let nameElement;
@@ -47,6 +43,7 @@ const NameCell = ({modType, modIcon, onLinkClick, contentObj}) => {
 
   const tagModType  = modType ?
     <Tag><i className={'fa fa-' + modIcon}/>{modType}</Tag> : null;
+
   const tagDuration = contentObj.duration ?
     <Tag><i className='fa fa-clock-o'/>{contentObj.duration}</Tag> : null;
 
@@ -79,9 +76,6 @@ const NameCell = ({modType, modIcon, onLinkClick, contentObj}) => {
     </Row>
   </Col>;
 };
-
-
-
 
 const StatusCell = ({onCompletedClick, contentObj, status}) => {
   let statusMarker, toggleId;
@@ -124,12 +118,11 @@ const StatusCell = ({onCompletedClick, contentObj, status}) => {
   </Col>;
 };
 
-
-
-
+// This is either the description of the content object or an xAPI interaction
 const DescriptionCell = ({contentObj}) => {
   let xapiInteraction = null;
 
+  // TODO use general term here
   if (contentObj.reflection) {
     let refId;
     if (!contentObj.contentLink) {

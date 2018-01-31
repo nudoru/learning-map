@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * Wraps a <a> to send a clicked statement when it's ... clicked
+ */
+
 export class XAPILink extends React.PureComponent {
   static propTypes = {
     id     : PropTypes.string,

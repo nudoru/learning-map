@@ -1,12 +1,13 @@
 import React from 'react';
 import {isPeriodComplete} from '../store/selectors';
-import {Tag} from '../rh-components/rh-Tag';
 import {StatusRibbonTop} from "./StatusRibbon";
 import {Col, Row} from "../rh-components/rh-Grid";
 
-//------------------------------------------------------------------------------
-// Card showing the week information, overall completion icon, and courses
-//------------------------------------------------------------------------------
+/**
+ * Card showing the week information, overall completion icon, and courses
+ *
+ * Hierarchy: Period card -> Topic Card(s) -> Content Row(s)
+ */
 
 export const PeriodCard = periodObj => {
   let {
@@ -19,23 +20,22 @@ export const PeriodCard = periodObj => {
         endDateDisplay,
         children,
         timePeriod
-      }               = periodObj,
-      periodCls       = ['period'],
-      tagRow          = null;
+      }         = periodObj,
+      periodCls = ['period'];
 
+  // tagRow          = null;
 
-      // Disabled
-      //const activitiesLabel = activities === 1 ? 'Activity' : 'Activities';
-      //const activitiesEl    = activities ? (<Tag><em>{activities}</em> {activitiesLabel}</Tag>) : null;
+  const statusMarker = isPeriodComplete(periodObj) ?
+    <StatusRibbonTop type={3}/> : <StatusRibbonTop type={0}/>;
+  const summaryEl    = summary ? <div className="text-summary margin-top"
+                                      dangerouslySetInnerHTML={{__html: summary}}></div> : null;
 
-      const startEl         = startDateDisplay ? (
-        <Tag>Begins <em>{startDateDisplay}</em></Tag>) : null;
-      const endEl           = endDateDisplay ? (
-        <Tag>Ends <em>{endDateDisplay}</em></Tag>) : null;
-      const statusMarker = isPeriodComplete(periodObj) ?
-        <StatusRibbonTop type={3}/> : <StatusRibbonTop type={0}/>;
-      const summaryEl = summary ? <div className="text-summary margin-top"
-                                       dangerouslySetInnerHTML={{__html: summary}}></div> : null;
+  // Disabled since there is no requirement to display
+  // const startEl         = startDateDisplay ? (<Tag>Begins <em>{startDateDisplay}</em></Tag>) : null;
+  // const endEl           = endDateDisplay ? (<Tag>Ends <em>{endDateDisplay}</em></Tag>) : null;
+  // if (config.setup.interface.showDateOnPeriod) {
+  //   tagRow = <TagHGroup>{startEl}{endEl}</TagHGroup>;
+  // }
 
   // Disabled pending new styles MBP 12/6/17
   // if (timePeriod === -1) {
@@ -46,12 +46,7 @@ export const PeriodCard = periodObj => {
   //   periodCls.push('period-future');
   // }
 
-  // Disabled
-  // if (config.setup.interface.showDateOnPeriod) {
-  //   tagRow = <TagHGroup>{startEl}{endEl}</TagHGroup>;
-  // }
-
-  if(isPeriodComplete(periodObj)) {
+  if (isPeriodComplete(periodObj)) {
     periodCls.push('period-complete');
   } else {
     periodCls.push('period-incomplete');
@@ -62,7 +57,7 @@ export const PeriodCard = periodObj => {
       <div className="page-container">
         <section className={periodCls.join(' ')} id={'period' + period}>
           <div className='period-status'>
-          {statusMarker}
+            {statusMarker}
           </div>
           <header className='period-header'>
             <Row className='period-title'

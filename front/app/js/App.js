@@ -30,7 +30,7 @@ import PleaseWaitModal from './rh-components/rh-PleaseWaitModal';
 import ModalMessage from './rh-components/rh-ModalMessage';
 import Timeline from './components/Timeline';
 import Introduction from './components/Introduction';
-import {XAPIProvider} from "./components/LRSProvider";
+import {XAPIProvider} from "./components/xAPIProvider";
 
 const LoadingMessage = () => <PleaseWaitModal><h1>Loading your profile ...</h1>
 </PleaseWaitModal>;
@@ -89,7 +89,7 @@ class App extends React.PureComponent {
       AppStore.dispatch(setFullUserProfile(profile.lms));
       AppStore.dispatch(setLRSStatements(profile.lrs));
 
-      // Just warn if fail
+      // Just warn if it fails
       fetchAllegoLRSStatements().fork(console.warn, s => {
         AppStore.dispatch(setAllegoStatements(s));
         this._externalLearningActivityLoaded();
@@ -103,7 +103,7 @@ class App extends React.PureComponent {
     // internal state
     AppStore.dispatch(setHydratedContent(getHydratedContent()));
     // A start event is an enrollment in a given course. If there is one, then
-    // this date will need to be loaded from the ShadowDB since it's not available
+    // this date will need to be loaded from the shadow db since it's not available
     // in the LMS data
     if (useShadowDB() && startEventSelector().length) {
       this._fetchShadowDBDataEnrollmentData();
@@ -113,24 +113,23 @@ class App extends React.PureComponent {
     }
   }
 
+  // Get the enrollment date for a given course ID from the shadow db
   _fetchShadowDBDataEnrollmentData() {
     getSBUserEnrolledCourseDetails().fork(e => {
       console.error('ShadowDB Error: ', e);
       this.setState({errorMessage: e});
       AppStore.dispatch(setSDBStatus(false));
-      this._shadowDBEnrollmentsLoaded();
+      this._finalizeContent();
     }, res => {
       console.log('got the shadow data!', res);
       AppStore.dispatch(setShadowEnrollments(res));
-      this._shadowDBEnrollmentsLoaded();
+      this._finalizeContent();
     });
   }
 
-  _shadowDBEnrollmentsLoaded() {
-    this._finalizeContent();
-  }
-
   _finalizeContent() {
+    // Get current structure allows for there to be multiple versions in the config
+    // content structure. This picks the correct version
     AppStore.dispatch(setCurrentStructure(getCurrentStructure()));
     this.setState({ready: true});
   }

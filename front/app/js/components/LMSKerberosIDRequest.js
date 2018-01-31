@@ -3,11 +3,11 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ModalMessage from '../rh-components/rh-ModalMessage';
 import PleaseWaitModal from '../rh-components/rh-PleaseWaitModal';
 import AppStore from '../store/AppStore';
-import { configSelector } from '../store/selectors';
-import { setCurrentUser } from '../store/actions/Actions';
-import { requestUserProfile } from '../utils/learningservices/lms/GetUserProfile';
-import { validateInputStr } from '../utils/AppUtils';
-import { Status } from '../rh-components/rh-Status';
+import {configSelector} from '../store/selectors';
+import {setCurrentUser} from '../store/actions/Actions';
+import {requestUserProfile} from '../utils/learningservices/lms/GetUserProfile';
+import {validateInputStr} from '../utils/AppUtils';
+import {Status} from '../rh-components/rh-Status';
 import {
   FormHGroup,
   FormHGroupRow,
@@ -61,7 +61,7 @@ class LMSKerberosIDRequest extends React.Component {
       isFetching : true,
       isWSError  : false,
       isPrompting: false,
-      lastRequest: userinput //this.refs.emailInput.value
+      lastRequest: userinput
     });
 
     requestUserProfile(configSelector().webservice, userinput)
@@ -70,8 +70,8 @@ class LMSKerberosIDRequest extends React.Component {
         this.setState({isFetching: false, isWSError: true, isPrompting: true});
       }, res => {
         if (res.users.length) {
-          // This will set the user. Bootstrap will pick up this store change and show
-          // the app, removing this prompt
+          // This will set the user. ApplicationContainer will pick up this store
+          // change and show the app, removing this prompt
           AppStore.dispatch(setCurrentUser(userinput + '@redhat.com'));
         } else {
           this.setState({
@@ -147,8 +147,5 @@ class LMSKerberosIDRequest extends React.Component {
       </ReactCSSTransitionGroup>);
   }
 }
-
-LMSKerberosIDRequest.defaultProps = {};
-LMSKerberosIDRequest.propTypes    = {};
 
 export default LMSKerberosIDRequest;
