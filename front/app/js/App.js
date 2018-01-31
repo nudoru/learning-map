@@ -45,6 +45,7 @@ class App extends React.PureComponent {
     this._fetchProfiles();
   }
 
+  // Catch errors that occur during loading or usage of the application
   _onStateUpdated() {
     if (!(isConnectionSuccessful())) {
       this.setState({systemError: true});
@@ -52,6 +53,9 @@ class App extends React.PureComponent {
     }
   }
 
+  // Loads the user profile, courses from the LMS which are present in the config
+  // file's structure and any Allego statements
+  // After it's loaded, it's set in the store
   _fetchProfiles() {
     let state = AppStore.getState(),
         user  = state.config.defaultuser;
@@ -60,11 +64,13 @@ class App extends React.PureComponent {
       user = state.currentUser;
     }
 
+    // This is for DEBUG only
     if(window.userEmail) {
       console.log('setting user from url');
       user = window.userEmail;
     }
 
+    // Using chain rather than map to prevent double wrapping Task monads
     chainTasks([fetchUserProfile(user), fetchCoursesInMap()]).fork(e => {
       console.error('Could not get initial app data!', e);
       this.setState({errorMessage: e});
@@ -73,12 +79,17 @@ class App extends React.PureComponent {
       console.log('Got user profile', res[0]);
       console.log('Got courses in map', res[1]);
 
+      // The way the result is structured, res[0][0] is an object whose key
+      // is the user's email address. The value is an object with 'lms' and 'lrs'
+      // keys
+      // ['0':{'user@email.com':{lms:{},lrs:{}}}]
       let profile = res[0][0][Object.keys(res[0][0])];
 
       AppStore.dispatch(setCoursesInMap(res[1]));
       AppStore.dispatch(setFullUserProfile(profile.lms));
       AppStore.dispatch(setLRSStatements(profile.lrs));
 
+      // Just warn if fail
       fetchAllegoLRSStatements().fork(console.warn, s => {
         AppStore.dispatch(setAllegoStatements(s));
         this._externalLearningActivityLoaded();
@@ -88,11 +99,16 @@ class App extends React.PureComponent {
   }
 
   _externalLearningActivityLoaded() {
+    // "Hydrate" all the content, analyse LMS and LRS data to set completions to
+    // internal state
     AppStore.dispatch(setHydratedContent(getHydratedContent()));
+    // A start event is an enrollment in a given course. If there is one, then
+    // this date will need to be loaded from the ShadowDB since it's not available
+    // in the LMS data
     if (useShadowDB() && startEventSelector().length) {
       this._fetchShadowDBDataEnrollmentData();
     } else {
-      console.log('no start event, skipping');
+      // console.log('no start event, skipping');
       this._finalizeContent();
     }
   }
