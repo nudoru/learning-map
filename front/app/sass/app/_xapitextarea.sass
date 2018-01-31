@@ -1,11 +1,9 @@
 .xapitextarea-group
-  border-radius: $border-radius-small
-  h1
-    font-size: 2rem
-    line-height: $base-line-height-double
-    text-align: left
-    text-transform: none
-    border: none
+  background-color: $grey-0
+  border: 1px solid $grey-1
+  border-radius: 2px
+  padding: $base-line-height
+
 
 .xapitextarea-text-area
   border: 1px solid $period-color-light
@@ -13,9 +11,21 @@
   border-radius: $border-radius-small
   box-shadow: none
 
+.xapitextarea-buttonrow
+  border-top: 1px solid $grey-2
+  margin-top: $base-line-height-half
+  padding-top: $base-line-height-half
+
 .xapitextarea-prompt
   font-weight: 400
-  color: $period-color-dark
+  color: $branding-color-dark
+  text-shadow: $text-shadow-light
+
+.xapitextarea-confirmation
+  color: $color-body
+  text-align: left
+  text-transform: uppercase
+  border-bottom: 1px solid $grey-2
 
 .xapitextarea-saved-header
   @extend .xapitextarea-prompt
@@ -23,18 +33,16 @@
 .xapitextarea-saved-text
   margin: 0
   margin-top: $base-line-height
-  //padding: $base-line-height
-  border-radius: $border-radius
-  //background-color: rgba(0,0,0,.01)
-  //border: 1px solid $period-color-light
+  padding: $base-line-height
+  padding-bottom: 0
   text-shadow: $text-shadow-light
   font-style: italic
   font-size: 1.6rem
-  color: $period-color-dark
+  color: $color-body
   quotes: "\201C""\201D""\2018""\2019"
   // https://css-tricks.com/snippets/css/simple-and-nice-blockquote-styling/
   &:before
-    color: $period-color-light
+    color: $branding-color-light
     content: open-quote
     font-size: 4em
     line-height: 0.1em
@@ -42,7 +50,7 @@
     margin-right: 0.25em
     vertical-align: -0.4em
   &:after
-    color: $period-color-light
+    color: $branding-color-light
     content: close-quote
     font-size: 4em
     line-height: .1em

@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import 'isomorphic-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Bootstrap from './app/Bootstrap'
+import Bootstrap from './js/Bootstrap'
 
 // Globally available styles
 import css from './sass/index.sass';

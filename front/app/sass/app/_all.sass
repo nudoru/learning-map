@@ -8,7 +8,6 @@ $period-color-dark: $red-dark-2
 
 @import "base"
 @import "header"
-@import "mobile"
 @import "statusribbon"
 @import "learningmap"
 @import "timeline"
@@ -19,6 +18,8 @@ $period-color-dark: $red-dark-2
 
 .page-container
   overflow: visible !important
+  +max-width($mqbp-huge)
+    width: 100%
   +max-width($mqbp-medium)
     padding: 5px
   +max-width($mqbp-small)

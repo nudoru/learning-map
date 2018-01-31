@@ -88,6 +88,14 @@
     background-color: #fafafa
     font-style: italic
     text-shadow: 1px 1px 0 rgb(255,255,255)
+  .rh-button
+    height: 3rem
+    line-height: 3rem
+    padding: 0 $base-line-height-double
+    font-size: 1.2rem
+    font-weight: 600
+    //text-transform: none
+
   +max-width($mqbp-medium)
     margin-bottom: $base-line-height
 
@@ -170,7 +178,6 @@
     text-transform: uppercase
     font-weight: 600
     margin: 0
-    margin-top: $base-line-height-double
     padding: 0
   .text-summary
     margin-bottom: $base-line-height-double
@@ -237,6 +244,7 @@
   .learning-map-col
     vertical-align: top
     padding: $base-line-height
+    border: 1px solid $red
   .details-ribbon
     position: relative
     //left: -17px
@@ -250,7 +258,9 @@
       display: none
   .details-course-name
     @extend .text-summary
-    flex: 2
+    //flex: 2
+    flex: none
+    width: 35rem
     font-weight: 400
     margin-bottom: 0 !important
     span
@@ -292,7 +302,9 @@
     .details-course-required
       padding-top: $base-line-height-half+.1rem
     .details-course-name
-      flex: 3
+      //flex: 3
+      //width: auto
+      width: 20rem
       margin-left: $base-line-height-half
 
   +max-width($mqbp-small)
@@ -304,6 +316,8 @@
     .details-ribbon
       height: 0
     .details-course-name
+      flex: 3
+      width: auto
       border-bottom: 1px solid $grey-2
       padding-left: $base-line-height*4
       margin: 0
@@ -312,8 +326,3 @@
     .details-completion
       border-left: none
       border-bottom: 1px solid $grey-2
-
-
-
-
-

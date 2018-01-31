@@ -70,8 +70,8 @@ export class XAPITextArea extends React.PureComponent {
                     onChange={this._handleInputChange}/>
         </Col>
       </Row>
-      <Row>
-        <Col className='text-right padding-top'>
+      <Row className='xapitextarea-buttonrow'>
+        <Col className='text-center'>
           <Button hollow onClick={this._handleSaveClick}
                   disabled={!this.state.hasEnteredText}>Save</Button>
         </Col>
@@ -85,8 +85,8 @@ export class XAPITextArea extends React.PureComponent {
     return <div>
       <Row>
         <Col>
-          <h1>You cannot change your response once it's saved. Are you
-            sure?</h1>
+          <p className='xapitextarea-confirmation'>You cannot change your response once it's saved. Are you
+            sure?</p>
         </Col>
       </Row>
       <Row className='margin-top margin-bottom'>
@@ -95,11 +95,11 @@ export class XAPITextArea extends React.PureComponent {
           <blockquote className='xapitextarea-saved-text'>{this.state.responseText}</blockquote>
         </Col>
       </Row>
-      <Row>
-        <Col className='text-right padding-top'>
-          <SecondaryButton onClick={this._handleCancelClick}
-                           className='margin-right'>Go back</SecondaryButton>
-          <Button onClick={this._handleSubmitClick}>I'm sure</Button>
+      <Row className='xapitextarea-buttonrow'>
+        <Col className='text-center'>
+          <Button onClick={this._handleCancelClick}
+                           className='rh-button-text margin-right'>Edit</Button>
+          <Button onClick={this._handleSubmitClick}>Save</Button>
         </Col>
       </Row>
     </div>;

@@ -7,6 +7,11 @@ import {XAPIToggle} from "./xAPIToggle";
 import {XAPITextArea} from "./xAPITextArea";
 import {Col, Row} from "../rh-components/rh-Grid";
 
+// TODO generalize for new interaction obj
+const hasXapiInteraction = contentObj => contentObj.reflection;
+
+const onXapiInteractionComplete = ({id, response}) => console.log('xAPI interaction completed', id, response);
+
 export const ContentRow = props => {
   let rowCls = ['learning-map-row'];
 
@@ -20,14 +25,20 @@ export const ContentRow = props => {
     <RibbonCell {...props} />
     <NameCell {...props} />
     <DescriptionCell {...props}/>
-    <StatusCell {...props} />
+    {hasXapiInteraction(props.contentObj) ? null :  <StatusCell {...props} />}
   </Row>;
 };
+
+
+
 
 const RibbonCell = ({status}) => <Col className="learning-map-col details-ribbon">
   <StatusRibbonLeft className='details-ribbon-left' type={status}/>
   <StatusRibbonTop className='details-ribbon-top' type={status}/>
 </Col>;
+
+
+
 
 const NameCell = ({modType, modIcon, onLinkClick, contentObj}) => {
   let nameElement;
@@ -68,6 +79,9 @@ const NameCell = ({modType, modIcon, onLinkClick, contentObj}) => {
     </Row>
   </Col>;
 };
+
+
+
 
 const StatusCell = ({onCompletedClick, contentObj, status}) => {
   let statusMarker, toggleId;
@@ -110,6 +124,9 @@ const StatusCell = ({onCompletedClick, contentObj, status}) => {
   </Col>;
 };
 
+
+
+
 const DescriptionCell = ({contentObj}) => {
   let xapiInteraction = null;
 
@@ -129,11 +146,8 @@ const DescriptionCell = ({contentObj}) => {
                     id={refId} onSave={onXapiInteractionComplete}/>;
   }
 
-  //
   return <Col className="learning-map-col details-course-description">
     <p dangerouslySetInnerHTML={{__html: contentObj.summary}}></p>
     {xapiInteraction}
   </Col>;
 };
-
-const onXapiInteractionComplete = ({id, response}) => console.log('xAPI interaction completed', id, response);
