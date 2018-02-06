@@ -8,4 +8,5 @@ import ApplicationContainer from './js/ApplicationContainer'
 import css from './sass/index.sass';
 
 // ApplicationContainer loads config file and gets the user
+// ApplicationContainer -> App -> LearningMap
 ReactDOM.render(<ApplicationContainer />, document.querySelector('#app'));

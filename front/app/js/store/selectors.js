@@ -3,9 +3,8 @@ NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE
 NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE
 NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE
 
-This all needs to be refactored, but I since this app is working well with the current
-code and should be sunset at the end of 2018, I've decided to leave it as is.
-
+This needs to be refactored, but since the app is working and bugs have been
+addressed in this code, I've decided to leave it as is.
 MBP 1/17/18
  */
 
@@ -21,7 +20,6 @@ import {
 import {hasLength, idMatchObjId, noOp, stripHTML} from '../utils/AppUtils';
 import AppStore from './AppStore';
 
-let STATEMENTS_FOR_CONTEXT_CACHE;
 
 export const configSelector                   = () => AppStore.getState().config;
 export const hydratedContentSelector          = () => AppStore.getState().hydratedContent;
@@ -33,6 +31,11 @@ export const coursesInMapSelector             = () => AppStore.getState().course
 export const shadowDBEnrollmentsSelector      = () => AppStore.getState().shadowEnrollments;
 export const allegoStatementsSelector         = () => AppStore.getState().allegoStatements;
 export const userStatementsSelector           = () => AppStore.getState().lrsStatements;
+
+// Filter the LRS statements for the user for the context specified in the config file
+// Caching the results so we don't have to do it again
+
+let STATEMENTS_FOR_CONTEXT_CACHE;
 export const userStatementsSelectorForContext = () => {
   if (STATEMENTS_FOR_CONTEXT_CACHE) {
     return STATEMENTS_FOR_CONTEXT_CACHE;
@@ -41,6 +44,7 @@ export const userStatementsSelectorForContext = () => {
   return STATEMENTS_FOR_CONTEXT_CACHE;
 };
 
+// Given a context id and an array of statements, filter for only the statements that match
 const filterStatementsForContext = curry((contextId, statements) =>
   statements.reduce((acc, stmnt) => {
     if ((stmnt.context && stmnt.context.platform) && stmnt.context.platform === contextId) {
@@ -49,7 +53,10 @@ const filterStatementsForContext = curry((contextId, statements) =>
     return acc;
   }, []));
 
+// Determine if the LRS is used, is there a connection in the config?
 export const useLRS      = () => configSelector().webservice.lrs != null; // eslint-disable-line eqeqeq
+
+// Determine if the shadow db is used, is there a connection in the config?
 export const useShadowDB = () => configSelector().webservice.shadowdb != null; // eslint-disable-line eqeqeq
 
 // True if there are no errors
@@ -65,11 +72,15 @@ export const contentTitleToLink = (title, id) => 'https://www.redhat.com/en#' + 
 // Several items have the same endpoint/link. Add the id as a hash to unique them
 export const contentLinkWithId = (link, id) => link + '#' + id;
 
+// For date based periods, apply that date to the items and get the current version
+// Use the version for which there are LRS statements
 export const getCurrentStructure = () =>
   applyStartDateToStructure(startEventSelector(),
     getStructureVersion(configSelector().structure, getLastLRSContentRevision(userStatementsSelectorForContext()) || configSelector().currentVersion));
 
+// Given a course ID, get that enrollment start date from the shadow db
 const getUserEnrollmentForId = id => shadowDBEnrollmentsSelector().userEnrollments.filter(e => id === e.enrolid)[0];
+
 
 const getEnrollmentDetailsForCourseId = id => shadowDBEnrollmentsSelector().enrollmentDetails.filter(e => id === e[0].courseid)[0];
 

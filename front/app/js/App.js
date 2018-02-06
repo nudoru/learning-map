@@ -32,6 +32,18 @@ import Timeline from './components/Timeline';
 import Introduction from './components/Introduction';
 import {XAPIProvider} from "./components/xAPIProvider";
 
+/**
+ * App
+ *  Header
+ *    Introduction
+ *    Timeline
+ *    XAPIProvider
+ *      LearningMap
+ *        PeriodCard
+ *          TopicCard(s)
+ *            ContentRow(s)
+ */
+
 const LoadingMessage = () => <PleaseWaitModal><h1>Loading your profile ...</h1>
 </PleaseWaitModal>;
 

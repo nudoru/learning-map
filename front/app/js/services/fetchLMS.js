@@ -3,6 +3,7 @@ import { is, prop } from 'ramda';
 import { configSelector } from '../store/selectors';
 import { requestCatalog } from '../utils/learningservices/lms/GetCourseCatalog';
 
+// Filter out lms course IDs from the config data
 const coursesInMap = data => data.map(prop('lmsID')).filter(is(Number));
 
 export const fetchCoursesInMap = () =>

@@ -5,6 +5,11 @@ import {
   createAggregateQuery
 }   from '../utils/learningservices/lrs/LRS';
 
+/*
+Allego is a video based platform for sales. All interactions on that platform are
+also recorded to a store on the LRS
+ */
+
 export const fetchAllegoLRSStatements = () => {
   let config  = configSelector(),
       profile = userProfileSelector();
