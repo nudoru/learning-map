@@ -110,6 +110,7 @@ export const getDateRelationship = (startM, endM) => {
 };
 
 // Get the version from the most recent LRS statement if there is one
+// LRS statements record the content version in the statement
 const getLastLRSContentRevision = statements => Either.fromNullable(statements[0])
   .map(stmt => stmt.context.revision)
   .fold(noOp, r => {
@@ -117,7 +118,10 @@ const getLastLRSContentRevision = statements => Either.fromNullable(statements[0
     return r;
   });
 
-// Get the period structure for the given version
+// Get the period structure for the given version.
+// A requested but never used (and lightly tested) feature was to allow for
+// differing versions of the content structure to allow for updates and changes to
+// the training program
 const getStructureVersion = (data, version) =>
   Either.fromNullable(data.filter(str => str.version === version)[0]).fold(() => [], s => s);
 
@@ -128,7 +132,6 @@ export const applyStartDateToStructure = (startEventData, structure) => {
   if (startEventData.length) {
     let startEventDataParms = startEventData.split(',');
 
-    //enroll,637
     if (startEventDataParms[0] === 'enroll') {
       let enrollmentDetails = getEnrollmentDetailsForCourseId(parseInt(startEventDataParms[1]));
       if (enrollmentDetails) {
