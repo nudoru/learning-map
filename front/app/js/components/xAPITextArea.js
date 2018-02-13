@@ -40,6 +40,7 @@ export class XAPITextArea extends React.PureComponent {
     });
     // TODO send to the LRS
     if (this.props.onSave) {
+      // this.context.sendLinkStatement('clicked', children, id);
       this.props.onSave({id: this.props.id, response: this.state.responseText})
     }
   };

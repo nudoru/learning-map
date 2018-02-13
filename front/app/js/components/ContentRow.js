@@ -123,6 +123,8 @@ const DescriptionCell = ({contentObj}) => {
   let xapiInteraction = null;
 
   // TODO use general term here
+  // contentObj.interaction
+  // contentObj.interaction.type == 'text-entry'
   if (contentObj.reflection) {
     let refId;
     if (!contentObj.contentLink) {

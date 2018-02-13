@@ -41,6 +41,9 @@ export class XAPIProvider extends React.PureComponent {
 
   state = {error: false};
 
+
+  // TODO - Need to add programId to config and pass it along w/ every statement here
+  // Can this just be the contextGroup or contextParent?
   // Convenience to apply certain values to every statement sent
   _setAppStatementDefaults = _ => {
     const {connection, user} = this.props;
@@ -91,6 +94,20 @@ export class XAPIProvider extends React.PureComponent {
       objectID   : link
     });
   };
+
+  // TODO create _sendInteractionStatement = (type, verb, name, userInput) => {}
+  /*
+  Type would be 'text-entry' from content object interaction
+  Use the verb 'responded' http://adlnet.gov/expapi/verbs/responded
+  Object type would be 'interaction' http://adlnet.gov/expapi/activities/interaction
+  Object name would be the prompt
+    This may be a problem for a generic prompt, may need to add a new prop in the config to give this more context such as the learning activity is asking about
+  Add a response prop to result to capture what they entered (userInput)
+    result : {
+        completion: true,
+        response: userInput
+      },
+  */
 
   _sendXAPIStatement = fragment => {
     if (!useLRS()) {
