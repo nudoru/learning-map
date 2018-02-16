@@ -26,11 +26,11 @@ export class XAPITextArea extends React.PureComponent {
     };
 
     state = {
-        isPrompting: true,
+        isPrompting: true && !this.props.disabled,
         isConfirming: false,
-        hasResponded: false,
-        hasEnteredText: false,
-        responseText: ''
+        hasResponded: false || this.props.disabled,
+        hasEnteredText: false || this.props.disabled,
+        responseText: this.props.previousResponse?this.props.previousResponse:''
     };
 
     _handleSaveClick = e => {

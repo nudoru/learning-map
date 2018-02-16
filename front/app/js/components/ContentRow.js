@@ -137,8 +137,8 @@ const DescriptionCell = ({contentObj}) => {
 
         //previousResponse={}
         xapiInteraction =
-            <XAPITextArea prompt={contentObj.interaction.prompt} disabled={false}
-                          id={refId} onSave={onXapiInteractionComplete}/>;
+            <XAPITextArea prompt={contentObj.interaction.prompt} disabled={contentObj.hasOwnProperty("interactionResponse")}
+                          id={refId} onSave={onXapiInteractionComplete} previousResponse = {contentObj.interactionResponse} />;
     }
 
     return <Col className="learning-map-col details-course-description">

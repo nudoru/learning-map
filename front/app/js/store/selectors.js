@@ -227,11 +227,13 @@ export const getEnrollmentRecordLMSCourse = (userEnrolledCourses, courseLMSId) =
     .filter(idMatchObjId(courseLMSId));
 
 const getAllStatementsForID       = id => userStatementsSelectorForContext().filter(s => s.object.id === id);
+
+// TODO replace this logic with one function
 const getCompletionStatementForID = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'completed')[0];
 const getClickedStatementForID    = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'clicked')[0];
-
+const getInteractionStatementForID    = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'responded')[0];
 // Get the "completed" statement if exists then "clicked" or null if not
-export const getStatusStatementForContentID = id => getCompletionStatementForID(id) || getClickedStatementForID(id);
+export const getStatusStatementForContentID = id => getCompletionStatementForID(id) || getClickedStatementForID(id)||getInteractionStatementForID(id);
 
 export const isTopicComplete = obj =>
   obj.content.reduce((res, contentId) =>
@@ -304,6 +306,7 @@ export const getHydratedContent = () => {
       o.requireConfirm = false;
     }
 
+
     if (o.contentLink) {
       //console.log('getting content links for',o);
       statement = getStatusStatementForContentID(contentLinkWithId(o.contentLink, o.id));
@@ -315,14 +318,20 @@ export const getHydratedContent = () => {
       o.lrsStatus     = statement.verb.display['en-US'];
       o.lrsStatusDate = moment(statement.timestamp);
 
+
+
       // Complete if clicked and NOT require confirmation OR completed AND required confirmed
-      o.isComplete = (o.lrsStatus === 'clicked' && !o.requireConfirm) || (o.lrsStatus === 'completed' && o.requireConfirm);
+      o.isComplete = o.lrsStatus === 'responded'||(o.lrsStatus === 'clicked' && !o.requireConfirm) || (o.lrsStatus === 'completed' && o.requireConfirm);
+      if(o.lrsStatus === 'responded'){
+        o.interactionResponse = statement.result.response;
+      }
     }
 
     if (o.hasOwnProperty('allegoID')) {
       allegoStatement = getAllegoStatement(o.allegoID, o.allegoVerb);
       console.log('Allego statement(s)', allegoStatement);
       if (allegoStatement.length) {
+        // TODO replace en_US with locale variable everywhere
         o.allegoStatus     = allegoStatement[0].verb.display['en-US'];
         o.allegoStatusDate = moment(allegoStatement[0].timestamp);
       }
@@ -356,7 +365,6 @@ export const getHydratedContent = () => {
     // o.isComplete = o.lmsStatus === 2 || (o.lrsStatus === 'clicked' && !o.requireConfirm || o.lrsStatus === 'completed' && o.requireConfirm) || o.allegoStatus.length > 0;
 
     // console.log('is it complete?', o.isComplete);
-
     acc.push(o);
     return acc;
   }, []);
