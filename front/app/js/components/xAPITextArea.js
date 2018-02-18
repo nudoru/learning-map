@@ -4,6 +4,11 @@ import {curry} from 'ramda';
 import {Col, Grid, Row} from "../rh-components/rh-Grid";
 import {Button, SecondaryButton} from "../rh-components/rh-Button";
 import {TextArea} from "../rh-components/rh-Form";
+import AppStore from "../store/AppStore";
+import {submitCompletion} from "../store/actions/Actions";
+
+
+
 
 export class XAPITextArea extends React.PureComponent {
     static propTypes = {
@@ -11,7 +16,8 @@ export class XAPITextArea extends React.PureComponent {
         onSave: PropTypes.func,
         prompt: PropTypes.string,
         disabled: PropTypes.bool,
-        previousResponse: PropTypes.string
+        previousResponse: PropTypes.string,
+        contentId: PropTypes.number
     };
 
     static defaultProps = {};
@@ -49,6 +55,7 @@ export class XAPITextArea extends React.PureComponent {
         });
 
         this.context.sendInteractionStatement('fill-in', 'responded', this.props.id, this.props.prompt, this.state.responseText);
+        AppStore.dispatch(submitCompletion(this.props.contentId));
         if (this.props.onSave) {
             this.props.onSave({id: this.props.id, response: this.state.responseText})
         }

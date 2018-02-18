@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {contentLinkWithId, contentTitleToLink} from '../store/selectors';
 import {Tag, TagHGroup} from '../rh-components/rh-Tag';
 import {StatusRibbonLeft, StatusRibbonTop} from "./StatusRibbon";
@@ -14,22 +16,49 @@ const hasXapiInteraction = contentObj => contentObj.hasOwnProperty("interaction"
 
 const onXapiInteractionComplete = ({id, response}) => console.log('xAPI interaction completed', id, response);
 
-export const ContentRow = props => {
-    let rowCls = ['learning-map-row'];
+class ContentComponent extends React.PureComponent {
+    static propTypes = {
+        contentObj: PropTypes.object,
+        status: PropTypes.number,
+        modType: PropTypes.string,
+        modIcon: PropTypes.string,
+        modNote: PropTypes.string,
+        onLinkClick: PropTypes.func,
+        onCompletedClick: PropTypes.func
+    };
+    static defaultProps = {};
+    render() {
+        let rowCls = ['learning-map-row'];
+        //TODO move 3 to constants everywhere
+        if (this.props.status === 3) {
+            rowCls.push('learning-map-row-complete')
+        } else {
+            rowCls.push('learning-map-row-incomplete')
+        }
 
-    if (props.status === 3) {
-        rowCls.push('learning-map-row-complete')
-    } else {
-        rowCls.push('learning-map-row-incomplete')
+        return <Row className={rowCls.join(' ')}>
+            <RibbonCell {...this.props} />
+            <NameCell {...this.props} />
+            <DescriptionCell {...this.props}/>
+            {hasXapiInteraction(this.props.contentObj) ? null : <StatusCell {...this.props} />}
+        </Row>;
     }
-
-    return <Row className={rowCls.join(' ')}>
-        <RibbonCell {...props} />
-        <NameCell {...props} />
-        <DescriptionCell {...props}/>
-        {hasXapiInteraction(props.contentObj) ? null : <StatusCell {...props} />}
-    </Row>;
+}
+/* Sets the status of the row to complete, if the corresponding object in the store was set to be complete.
+    Only row, which properties are changed, will be re-rendered*/
+const mapStateToProps=(state, ownProps) => {
+    let content = state.hydratedContent.find((element)=>element.id ===ownProps.contentObj.id );
+    return{
+        contentObj: content,
+        status: content.isComplete? 3: ownProps.status
+    };
 };
+
+const ContentRow = connect(mapStateToProps)(ContentComponent);
+
+export default ContentRow;
+
+
 
 const RibbonCell = ({status}) => <Col className="learning-map-col details-ribbon">
     <StatusRibbonLeft className='details-ribbon-left' type={status}/>
@@ -84,6 +113,7 @@ const StatusCell = ({onCompletedClick, contentObj, status}) => {
         statusMarker = <div className='status-group'><span className='status-label'>Completed</span></div>;
     } else {
         if (contentObj.requireConfirm) {
+            //TODO move the actions common to statusCell and DescriptionCell higher
             if (!contentObj.contentLink) {
                 // Use the "slugified" title for the link
                 toggleId = contentTitleToLink(contentObj.title, contentObj.id);
@@ -98,6 +128,7 @@ const StatusCell = ({onCompletedClick, contentObj, status}) => {
                     disabled={contentObj.isComplete}
                     complete={contentObj.isComplete}
                     onClick={onCompletedClick}
+                    contentId={contentObj.id}
                 />
             </div>);
         } else if (contentObj.lmsID) {
@@ -137,8 +168,12 @@ const DescriptionCell = ({contentObj}) => {
 
         //previousResponse={}
         xapiInteraction =
-            <XAPITextArea prompt={contentObj.interaction.prompt} disabled={contentObj.hasOwnProperty("interactionResponse")}
-                          id={refId} onSave={onXapiInteractionComplete} previousResponse = {contentObj.interactionResponse} />;
+            <XAPITextArea prompt={contentObj.interaction.prompt}
+                          disabled={contentObj.hasOwnProperty("interactionResponse")}
+                          id={refId} onSave={onXapiInteractionComplete}
+                          previousResponse={contentObj.interactionResponse}
+                          contentId={contentObj.id}
+            />;
     }
 
     return <Col className="learning-map-col details-course-description">

@@ -59,3 +59,8 @@ export const setSDBStatus = (payload) => ({
   type: Actions.SET_SDB_STATUS,
   payload
 });
+
+export const submitCompletion = (payload) => ({
+    type: Actions.SUBMIT_ITEM_COMPLETION,
+    payload
+});

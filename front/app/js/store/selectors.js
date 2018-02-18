@@ -19,6 +19,7 @@ import {
 } from '../utils/Toolbox';
 import {hasLength, idMatchObjId, noOp, stripHTML} from '../utils/AppUtils';
 import AppStore from './AppStore';
+import {hydratedContent} from "./reducers/hydratedContent";
 
 
 export const configSelector                   = () => AppStore.getState().config;
@@ -274,6 +275,12 @@ export const filterStatementAllegoID = curry((idArr, el) => {
   let statementid = el.object.definition.name['en-US'];
   return idArr.indexOf(statementid) >= 0;
 });
+
+export const assignItemToComplete = (hydratedContent, id)=>{
+    let index = hydratedContent.findIndex((element)=>element.id === id );
+    let completedItem = Object.assign({},hydratedContent[index],{isComplete:true});
+    return [...hydratedContent.slice(0,index),completedItem,...hydratedContent.slice(index+1)];
+};
 
 export const getHydratedContent = () => {
   let coursesInMap    = coursesInMapSelector(),

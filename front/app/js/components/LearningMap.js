@@ -9,7 +9,7 @@ import {
 import {idMatchObjId} from '../utils/AppUtils';
 import {PeriodCard} from './PeriodCard';
 import {TopicCard} from "./TopicCard";
-import {ContentRow} from "./ContentRow";
+import ContentRow from "./ContentRow";
 
 class LearningMap extends React.PureComponent {
 

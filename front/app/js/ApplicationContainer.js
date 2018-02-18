@@ -1,4 +1,5 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import ModalMessage from './rh-components/rh-ModalMessage';
 import PleaseWaitModal from './rh-components/rh-PleaseWaitModal';
 import App from './App';
@@ -78,7 +79,7 @@ class ApplicationContainer extends React.PureComponent {
     } else if (!this.state.hasUser) {
       return <LMSKerberosIDRequest/>;
     } else {
-      return <App/>;
+        return <Provider store={AppStore}><App/></Provider>;
     }
   }
 }

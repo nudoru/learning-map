@@ -10,3 +10,4 @@ export const SET_COURSES_IN_MAP     = 'SET_COURSES_IN_MAP';
 export const SET_LMS_STATUS         = 'SET_LMS_STATUS';
 export const SET_LRS_STATUS         = 'SET_LRS_STATUS';
 export const SET_SDB_STATUS         = 'SET_SDB_STATUS';
+export const SUBMIT_ITEM_COMPLETION = 'SUBMIT_ITEM_COMPLETION';
