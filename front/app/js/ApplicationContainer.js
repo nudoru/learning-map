@@ -47,7 +47,7 @@ class ApplicationContainer extends React.PureComponent {
             this.storeListener = AppStore.subscribe(this._onStateUpdated.bind(this));
             this._fetchConfig();
         } else{
-            this._setErrorState("Map parameter is required! Please, specify learning map in the url.")
+            this._setErrorState("Can't find the configuration. Do you have the right link?");
         }
     }
 
