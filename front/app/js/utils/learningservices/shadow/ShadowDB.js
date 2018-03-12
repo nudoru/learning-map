@@ -119,6 +119,9 @@ const getUserEnrollmentsByUserId = (config, id) =>
 const getEnrollmentById = (config, id) =>
   createSDBQuery(config, 'mdl_enrol', {id: 'eq.' + id});
 
+const getUserEnrollmentToProgram = (config, userId, programId) =>
+    createSDBQuery(config, 'program_status_report', {userid: 'eq.' + userId, programid: 'eq.' + programId});
+
 
 // Fetches the enrollment IDs for a user and then fetches more details about each
 // such as the course ID it's tied to
@@ -145,18 +148,19 @@ const getUserScormActivityById = (config, uid, sid) =>
   });
 
 module.exports = {
-  getCustomCourseFields,
-  getCustomFieldsForCourseRaw,
-  getCustomFieldsForCourse,
-  getEvidenceFromDateCompleted,
-  getEvidenceForUserId,
-  getLogEventsFromDate,
-  getLogEventsByAction,
-  getLogEventsByActionAndCourseId,
-  getLogEventsByCourseId,
-  getLogEventsByUserId,
-  getEnrollmentById,
-  getUserEnrollmentsByUserId,
-  getUserScormActivityById,
-  requestUserEnrolledCourseDetails
+    getCustomCourseFields,
+    getCustomFieldsForCourseRaw,
+    getCustomFieldsForCourse,
+    getEvidenceFromDateCompleted,
+    getEvidenceForUserId,
+    getLogEventsFromDate,
+    getLogEventsByAction,
+    getLogEventsByActionAndCourseId,
+    getLogEventsByCourseId,
+    getLogEventsByUserId,
+    getEnrollmentById,
+    getUserEnrollmentsByUserId,
+    getUserScormActivityById,
+    getUserEnrollmentToProgram,
+    requestUserEnrolledCourseDetails
 };

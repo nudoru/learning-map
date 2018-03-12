@@ -32,6 +32,7 @@ export const coursesInMapSelector = () => AppStore.getState().coursesInMap;
 export const shadowDBEnrollmentsSelector = () => AppStore.getState().shadowEnrollments;
 export const allegoStatementsSelector = () => AppStore.getState().allegoStatements;
 export const userStatementsSelector = () => AppStore.getState().lrsStatements;
+export const programEnrollmentSelector = () => AppStore.getState().programEnrollment;
 
 // Filter the LRS statements for the user for the context specified in the config file
 // Caching the results so we don't have to do it again

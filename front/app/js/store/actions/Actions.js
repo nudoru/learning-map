@@ -64,3 +64,9 @@ export const submitCompletion = (payload) => ({
     type: Actions.SUBMIT_ITEM_COMPLETION,
     payload
 });
+
+export const setProgramEnrollment = (payload) => ({
+    type: Actions.SET_PROGRAM_ENROLLMENT,
+    payload
+});
+

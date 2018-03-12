@@ -12,18 +12,20 @@ import { currentStructure } from './currentStructure';
 import { connectionLMSStatus } from './connectionLMSStatus';
 import { connectionLRSStatus } from './connectionLRSStatus';
 import { connectionSDBStatus } from './connectionSDBStatus';
+import {programEnrollment} from './programEnrollment.js'
 
 export const reducers = combineReducers({
-  config,
-  lrsStatements,
-  allegoStatements,
-  shadowEnrollments,
-  currentUser,
-  userProfile,
-  coursesInMap,
-  hydratedContent,
-  currentStructure,
-  connectionLMSStatus,
-  connectionLRSStatus,
-  connectionSDBStatus
+    config,
+    lrsStatements,
+    allegoStatements,
+    shadowEnrollments,
+    currentUser,
+    programEnrollment,
+    userProfile,
+    coursesInMap,
+    hydratedContent,
+    currentStructure,
+    connectionLMSStatus,
+    connectionLRSStatus,
+    connectionSDBStatus
 });

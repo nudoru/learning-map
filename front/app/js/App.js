@@ -1,15 +1,16 @@
 import React from 'react';
 import AppStore from './store/AppStore';
 import {
-  setAllegoStatements,
-  setCoursesInMap,
-  setCurrentStructure,
-  setFullUserProfile,
-  setHydratedContent,
-  setLMSStatus,
-  setLRSStatements,
-  setSDBStatus,
-  setShadowEnrollments
+    setAllegoStatements,
+    setCoursesInMap,
+    setCurrentStructure,
+    setFullUserProfile,
+    setHydratedContent,
+    setLMSStatus,
+    setLRSStatements,
+    setSDBStatus,
+    setShadowEnrollments,
+    setProgramEnrollment
 } from './store/actions/Actions';
 import {
   getCurrentStructure,
@@ -22,7 +23,7 @@ import {
 import {chainTasks} from './utils/AppUtils';
 import {fetchUserProfile} from './services/fetchUserProfile';
 import {fetchCoursesInMap, fetchLMSData} from './services/fetchLMS';
-import {getSBUserEnrolledCourseDetails} from './services/fetchShadowDb';
+import {getSBUserEnrolledCourseDetails, isUserEnrolledToProgram } from './services/fetchShadowDb';
 import {fetchAllegoLRSStatements} from './services/fetchAllegoLRS';
 import Header from './components/Header';
 import LearningMap from './components/LearningMap';
@@ -30,6 +31,7 @@ import PleaseWaitModal from './rh-components/rh-PleaseWaitModal';
 import ModalMessage from './rh-components/rh-ModalMessage';
 import Timeline from './components/Timeline';
 import Introduction from './components/Introduction';
+import ProgramEnrollment from './components/ProgramEnrollment'
 import {XAPIProvider} from "./components/xAPIProvider";
 
 /**
@@ -71,7 +73,6 @@ class App extends React.PureComponent {
   _fetchProfiles() {
     let state = AppStore.getState(),
         user  = state.config.defaultuser;
-
     if (state.currentUser.length) {
       user = state.currentUser;
     }
@@ -81,6 +82,7 @@ class App extends React.PureComponent {
       console.log('setting user from url');
       user = window.userEmail;
     }
+
 
     // Using chain rather than map to prevent double wrapping Task monads
     chainTasks([fetchUserProfile(user), fetchCoursesInMap()]).fork(e => {
@@ -96,11 +98,17 @@ class App extends React.PureComponent {
       // keys
       // ['0':{'user@email.com':{lms:{},lrs:{}}}]
       let profile = res[0][0][Object.keys(res[0][0])];
-
       AppStore.dispatch(setCoursesInMap(res[1]));
       AppStore.dispatch(setFullUserProfile(profile.lms));
       AppStore.dispatch(setLRSStatements(profile.lrs));
-
+      if (state.config.setup.programEnroll) {
+        isUserEnrolledToProgram().fork(e => {
+          console.error('ShadowDB Error: ', e);
+          this.setState({errorMessage: e});
+          }, res => {
+          AppStore.dispatch(setProgramEnrollment(res));
+          });
+      }
       // Just warn if it fails
       fetchAllegoLRSStatements().fork(console.warn, s => {
         AppStore.dispatch(setAllegoStatements(s));
@@ -120,7 +128,6 @@ class App extends React.PureComponent {
     if (useShadowDB() && startEventSelector().length) {
       this._fetchShadowDBDataEnrollmentData();
     } else {
-      // console.log('no start event, skipping');
       this._finalizeContent();
     }
   }
@@ -146,39 +153,46 @@ class App extends React.PureComponent {
     this.setState({ready: true});
   }
 
-  render() {
-    const state = AppStore.getState();
+    render() {
+        const state = AppStore.getState();
+        let enrollment = state.config.setup.programEnroll;
+        if (this.state.ready) {
 
-    if (this.state.ready) {
-      return <main>
-        <Header title={state.config.setup.title}
-                secondaryNav={state.config.setup.secondaryNav}
-                username={state.userProfile.fullname}/>
-        <article className="header-overlap">
-          <Introduction text={state.currentStructure.introduction}
-                        instructions={state.currentStructure.instructions}
-                        newOrUpdated={getNewOrUpdatedContentTitles()}/>
-          <Timeline currentStructure={state.currentStructure}/>
-          <XAPIProvider connection={state.config.webservice.lrs}
-                        user={state.userProfile}
-                        login
-                        appTitle={state.config.setup.title}
-                        appVersion={state.currentStructure.version}
-          >
-            <LearningMap config={state.config} userProfile={state.userProfile}
-                         coursesInMap={state.coursesInMap}
-                         hydratedContent={state.hydratedContent}
-                         currentStructure={state.currentStructure}/>
-          </XAPIProvider>
-        </article>
-        {this.state.systemError ? this._renderErrorMessage() : null}
-      </main>;
-    } else {
-      return <div>
-        <LoadingMessage/>
-        {this.state.systemError ? this._renderErrorMessage() : null}
-      </div>;
-    }
+            return <main>
+                <Header title={state.config.setup.title}
+                        secondaryNav={state.config.setup.secondaryNav}
+                        username={state.userProfile.fullname}/>
+                <article className="header-overlap">
+                    <Introduction text={state.currentStructure.introduction}
+                                  instructions={state.currentStructure.instructions}
+                                  newOrUpdated={getNewOrUpdatedContentTitles()}/>
+                    {enrollment ? <ProgramEnrollment enrolledMessage={enrollment.enrolledMessage}
+                                                     goEnrollMessage={enrollment.goEnrollMessage}
+                                                     goEnrollLink={enrollment.enrollmentLink}
+                                                     isEnrolled={state.programEnrollment}/> : null}
+                    <Timeline currentStructure={state.currentStructure}/>
+                    <XAPIProvider connection={state.config.webservice.lrs}
+                                  user={state.userProfile}
+                                  login
+                                  appTitle={state.config.setup.title}
+                                  appVersion={state.currentStructure.version}
+                    >
+                        <LearningMap config={state.config} userProfile={state.userProfile}
+                                     coursesInMap={state.coursesInMap}
+                                     hydratedContent={state.hydratedContent}
+                                     currentStructure={state.currentStructure}
+
+                        />
+                    </XAPIProvider>
+                </article>
+                {this.state.systemError ? this._renderErrorMessage() : null}
+            </main>;
+        } else {
+            return <div>
+                <LoadingMessage/>
+                {this.state.systemError ? this._renderErrorMessage() : null}
+            </div>;
+        }
   }
 
   _closeErrorMessage() {

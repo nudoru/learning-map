@@ -11,23 +11,24 @@
  */
 
 export default {
-  config             : {
-    // There will be additional props here from the config json file
-    defaultuser     : '',
-    currentStructure: {}
-  },
-  lrsStatements      : [],
-  shadowEnrollments  : {
-    userEnrollments  : [],
-    enrollmentDetails: []
-  },
-  currentUser        : '',
-  allegoStatements   : [],
-  userProfile        : {},
-  coursesInMap       : [],
-  currentStructure   : {},
-  hydratedContent    : [],
-  connectionLMSStatus: true,
-  connectionLRSStatus: true,
-  connectionSDBStatus: true
+    config: {
+        // There will be additional props here from the config json file
+        defaultuser: '',
+        currentStructure: {}
+    },
+    lrsStatements: [],
+    shadowEnrollments: {
+        userEnrollments: [],
+        enrollmentDetails: []
+    },
+    currentUser: '',
+    programEnrollment: null,
+    allegoStatements: [],
+    userProfile: {},
+    coursesInMap: [],
+    currentStructure: {},
+    hydratedContent: [],
+    connectionLMSStatus: true,
+    connectionLRSStatus: true,
+    connectionSDBStatus: true
 };
