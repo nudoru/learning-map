@@ -29,20 +29,21 @@ const prohibitedCategories = ['(hidden) Course Templates', 'n/a'];
 const requestCatalog = (wsOptions, courseIds) => {
   return new Task((reject, resolve) => {
     let categoryReq, catalogReq, courseOptions;
-
     if (courseIds) {
       courseOptions = courseIds.reduce((acc, id, idx) => {
         acc[('options[ids][' + idx + ']')] = id;
         return acc;
-      }, {});
+        }, {});
     }
-
-    categoryReq = requestCategories(wsOptions);
-    catalogReq  = createLMSQuery(wsOptions, 'core_course_get_courses', courseOptions);
-    chainTasks([categoryReq, catalogReq]).fork(reject,
-      res => {
+    if (Array.isArray(courseIds)&& !courseIds.length) {
+      resolve(new Array());
+    } else {
+      categoryReq = requestCategories(wsOptions);
+      catalogReq = createLMSQuery(wsOptions, 'core_course_get_courses', courseOptions);
+      chainTasks([categoryReq, catalogReq]).fork(reject, res => {
         resolve(_compactCatalog(wsOptions, res, (courseIds.length)));
       });
+    }
   });
 };
 
