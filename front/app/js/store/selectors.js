@@ -367,7 +367,9 @@ export const getHydratedContent = () => {
                 o.lmsID = o.lmsID[0];
             }
             o.lmsDetails = coursesInMap.filter(c => c.id === o.lmsID)[0];
-            o.contentLink = o.lmsDetails ? o.lmsDetails.deeplink : '';
+            if(!o.hasOwnProperty("linkActivity") || o.linkActivity === true){
+                o.contentLink = o.lmsDetails ? o.lmsDetails.deeplink : '';
+            }
             o.summary = o.summary || stripHTML(o.lmsDetails.summary);
         }
 
