@@ -109,7 +109,7 @@ class LMSKerberosIDRequest extends React.Component {
 
       content = (<div>
         <form className="rh-form">
-          <h1>Please enter your email address to continue.</h1><p>You must be
+          <h1>Please enter your kerberos ID to continue.</h1><p>You must be
           connected to the corporate network or VPN to access.</p>
             <FormHGroupRow>
               <FormHGroup>
