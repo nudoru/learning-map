@@ -183,7 +183,9 @@ export const getContentObjById = id =>
     Either.fromNullable(hydratedContentSelector().filter(idMatchObjId(id))[0])
         .fold(
             () => {
-                console.error('Content with ID ' + id + ' not found!');
+                // It wouldn't be found due to a config error that should be caught in review
+                // OR the item is not active
+                //console.error('Content with ID ' + id + ' not found!');
                 return {};
             },
             res => res);
@@ -295,6 +297,11 @@ export const getHydratedContent = () => {
             statement,
             allegoStatement,
             lmsEnrollments = getEnrollmentRecordLMSCourses(userEnrolledCoursesSelector(), o.lmsID);
+
+        // If the content item is not active, skip it
+        if(!o.active) {
+            return acc;
+        }
 
         o.isNew = isDateWithinNewRange(today, newIfWithinDays, o.dateAdded);
         o.isUpdated = isDateWithinNewRange(today, newIfWithinDays, o.dateUpdated);

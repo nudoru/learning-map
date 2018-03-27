@@ -32,7 +32,9 @@ class LearningMap extends React.PureComponent {
   _getStateContentObjById(id) {
     let res = this.state.contents.filter(idMatchObjId(id))[0];
     if (!res) {
-      console.error('Content with ID ' + id + ' not found!');
+      // It wouldn't be found due to a config error that should be caught in review
+      // OR the item is not active
+      //console.error('Content with ID ' + id + ' not found!');
       return {};
     }
     return res;
@@ -125,6 +127,11 @@ class LearningMap extends React.PureComponent {
     const {config}   = this.props,
           contentObj = this._getStateContentObjById(contentID),
           isComplete = contentObj.isComplete;
+
+          // console.log(contentObj.active)
+    if(!contentObj.hasOwnProperty('active')) {
+      return null;
+    }
 
     let modNote = '',
         status  = 1;
