@@ -47,20 +47,15 @@ module.exports.requestFullUserProfile = (wsOptions, username, reqOptions = {}) =
 // Get the user profile, calendar and course profile
 const _requestBaseUserProfile = (wsOptions, username, reqOptions) =>
   new Task((reject, resolve) => {
-    let queryField = 'email',
+    // Ok here ...
+    
+    let queryField = 'username',
         userProfile,
-        userEmailName = username.split('@')[0],
         userID;
 
-    //console.log('requestBaseUserProfile', username, userEmailName)
-
-    // Due to ticket HR0799124
-    // Changed this behavior to use the user's id rather than email. 
-    // Easiest to change the functionality in this location vs multiple edits to
-    // other files
-    // MBP 4/9/18
-    queryField = 'username';
-    username = userEmailName;
+    if (username.indexOf('@') > 0) {
+      queryField = 'email';
+    }
 
     // Get the user profile in order to get the user ID to get the rest of the info
     requestUserProfile(wsOptions, username, queryField).fork(reject, res => {

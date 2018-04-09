@@ -13,7 +13,7 @@ let {createLMSQuery} = require('../shared');
  * @returns {Task}
  */
 
-module.exports.requestUserProfile = (wsOptions, value, field = 'username') =>
+module.exports.requestUserProfile = (wsOptions, value, field = 'username') => 
   createLMSQuery(wsOptions, 'core_user_get_users', {
     'criteria[0][key]'  : field,
     'criteria[0][value]': value
