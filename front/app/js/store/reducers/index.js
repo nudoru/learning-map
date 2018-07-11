@@ -12,7 +12,8 @@ import { currentStructure } from './currentStructure';
 import { connectionLMSStatus } from './connectionLMSStatus';
 import { connectionLRSStatus } from './connectionLRSStatus';
 import { connectionSDBStatus } from './connectionSDBStatus';
-import {programEnrollment} from './programEnrollment.js'
+import { programEnrollment } from './programEnrollment.js';
+import { requiredItemsCompleted } from './requiredItemsCompleted.js';
 
 export const reducers = combineReducers({
     config,
@@ -27,5 +28,6 @@ export const reducers = combineReducers({
     currentStructure,
     connectionLMSStatus,
     connectionLRSStatus,
-    connectionSDBStatus
+    connectionSDBStatus,
+    requiredItemsCompleted
 });

@@ -4,7 +4,11 @@ import {
     sendFragment,
     setStatementDefaults
 } from '../utils/learningservices/lrs/LRS';
-import {useLRS} from "../store/selectors";
+import {getLastPathComponent} from '../utils/Toolbox'
+import {areRequiredActivitiesCompleted, useLRS} from "../store/selectors";
+import {markCourseCompletion, submitCompletion} from "../store/actions/Actions";
+import AppStore from "../store/AppStore";
+
 
 /**
  * Provides a context to child components to allow for easier access to the LRS
@@ -27,7 +31,9 @@ export class XAPIProvider extends React.PureComponent {
         sendLinkStatement: PropTypes.func,
         sendLoggedInStatement: PropTypes.func,
         sendFragment: PropTypes.func,
-        sendInteractionStatement: PropTypes.func
+        sendInteractionStatement: PropTypes.func,
+        handleItemCompletion: PropTypes.func
+
     };
 
     getChildContext() {
@@ -37,7 +43,8 @@ export class XAPIProvider extends React.PureComponent {
             sendLinkStatement: this._sendLinkStatement,
             sendLoggedInStatement: this._sendLoggedInStatement,
             sendFragment: this._sendXAPIStatement,
-            sendInteractionStatement: this._sendInteractionStatement
+            sendInteractionStatement: this._sendInteractionStatement,
+            handleItemCompletion: this._handleItemCompletion
         };
     }
 
@@ -92,6 +99,29 @@ export class XAPIProvider extends React.PureComponent {
             interactionType: type,
             actorResponse: userInput
 
+        });
+    };
+
+    // sets content item as completed, once all the required items are completed, sets course as completed and sends a course completion statement to lrs
+    _handleItemCompletion = itemID => {
+        AppStore.dispatch(submitCompletion(itemID));
+        const state = AppStore.getState();
+        if (!state.requiredItemsCompleted) {
+            if (areRequiredActivitiesCompleted(state.hydratedContent)) {
+                this._sendCourseCompletionStatement();
+                AppStore.dispatch(markCourseCompletion(true));
+            }
+        }
+    };
+
+
+    _sendCourseCompletionStatement = () => {
+        this._sendXAPIStatement({
+            verbDisplay: 'earned',
+            objectName: 'Certificate of ' + this.props.appTitle + ' course completion',
+            objectTypeIRI: 'https://www.opigno.org/en/tincan_registry/activity_type/certificate',
+            objectID: 'https://www.redhat.com/certificate/' + getLastPathComponent(this.props.connection.contextID),
+            verbID: 'http://id.tincanapi.com/verb/earned'
         });
     };
 

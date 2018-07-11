@@ -30,5 +30,6 @@ export default {
     hydratedContent: [],
     connectionLMSStatus: true,
     connectionLRSStatus: true,
-    connectionSDBStatus: true
+    connectionSDBStatus: true,
+    requiredItemsCompleted: false
 };

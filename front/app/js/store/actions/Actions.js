@@ -70,3 +70,8 @@ export const setProgramEnrollment = (payload) => ({
     payload
 });
 
+export const markCourseCompletion = (payload) => ({
+    type: Actions.MARK_COURSE_COMPLETION,
+    payload
+});
+

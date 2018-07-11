@@ -67,6 +67,7 @@ class ApplicationContainer extends React.PureComponent {
             },
             res => {
                 AppStore.dispatch(setConfig(res));
+                document.title = res.setup.title;
                 this.setState({
                     loading: false,
                     hasUser: (res.defaultuser.length || window.userEmail)

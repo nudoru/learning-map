@@ -232,12 +232,16 @@ export const getEnrollmentRecordLMSCourses = (userEnrolledCourses, courseLMSIds)
 
 const getAllStatementsForID = id => userStatementsSelectorForContext().filter(s => s.object.id === id);
 
-// TODO replace this logic with one function
-const getCompletionStatementForID = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'completed')[0];
-const getClickedStatementForID = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'clicked')[0];
-const getInteractionStatementForID = id => getAllStatementsForID(id).filter(st => st.verb.display['en-US'] === 'responded')[0];
+const getActionStatementForID = curry((verb, id) => getAllStatementsForID(id).filter(filterStatementVerb(verb))[0]);
+
+const getCompletionStatementForID = getActionStatementForID('completed');
+const getClickedStatementForID = getActionStatementForID('clicked');
+const getInteractionStatementForID = getActionStatementForID('responded');
+
+export const isProgramCompleted = () => userStatementsSelectorForContext().some(filterStatementVerb('earned'));
+
 // Get the "completed" statement if exists then "clicked" or null if not
-export const getStatusStatementForContentID = id => getCompletionStatementForID(id) || getClickedStatementForID(id) || getInteractionStatementForID(id);
+export const getStatusStatementForContentID = id => getInteractionStatementForID(id) || getCompletionStatementForID(id) || getClickedStatementForID(id) ;
 
 export const isTopicComplete = obj =>
     obj.content.reduce((res, contentId) =>
@@ -248,13 +252,13 @@ export const isPeriodComplete = obj =>
         isTopicComplete(topic) && res, true);
 
 // content should be a hydrated content collection
-export const areRequiredActivitiesCompleted = content =>
-    content.reduce((acc, c) => {
+export const areRequiredActivitiesCompleted = content => content.reduce((acc, c) => {
         if (c.isRequired) {
             acc = acc && c.isComplete;
         }
         return acc;
     }, true);
+
 
 export const getAllegoStatement = (idArr, verb) =>
     allegoStatementsSelector()
@@ -284,6 +288,7 @@ export const assignItemToComplete = (hydratedContent, id) => {
     let completedItem = Object.assign({}, hydratedContent[index], {isComplete: true});
     return [...hydratedContent.slice(0, index), completedItem, ...hydratedContent.slice(index + 1)];
 };
+
 
 export const getHydratedContent = () => {
     let coursesInMap = coursesInMapSelector(),
@@ -334,7 +339,7 @@ export const getHydratedContent = () => {
 
 
             // Complete if clicked and NOT require confirmation OR completed AND required confirmed
-            o.isComplete = o.lrsStatus === 'responded' || (o.lrsStatus === 'clicked' && !o.requireConfirm) || (o.lrsStatus === 'completed' && o.requireConfirm);
+            o.isComplete = o.lrsStatus === 'responded' || (o.lrsStatus === 'clicked' && !o.requireConfirm && !o.hasOwnProperty("interaction")) || (o.lrsStatus === 'completed' && o.requireConfirm);
             if (o.lrsStatus === 'responded') {
                 o.interactionResponse = statement.result.response;
             }

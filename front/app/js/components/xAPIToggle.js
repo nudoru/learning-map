@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
-import AppStore from "../store/AppStore";
-import {submitCompletion} from "../store/actions/Actions";
-
-
-
 
 /**
  * Sends a complete statement when the toggle is clicked
@@ -32,7 +27,8 @@ export class XAPIToggle extends React.PureComponent {
         user: PropTypes.object,
         sendLinkStatement: PropTypes.func,
         sendLoggedInStatement: PropTypes.func,
-        sendFragment: PropTypes.func
+        sendFragment: PropTypes.func,
+        handleItemCompletion: PropTypes.func
     };
 
     state = {toggled: false};
@@ -45,10 +41,9 @@ export class XAPIToggle extends React.PureComponent {
         }
 
         const {title, id, onClick} = this.props;
-
         this.setState({toggled: true});
         this.context.sendLinkStatement('completed', title, id);
-        AppStore.dispatch(submitCompletion(this.props.contentId));
+        this.context.handleItemCompletion(this.props.contentId);
         if (onClick) {
             onClick({title, id});
         }

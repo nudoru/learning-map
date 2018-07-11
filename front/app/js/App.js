@@ -10,7 +10,8 @@ import {
     setLRSStatements,
     setSDBStatus,
     setShadowEnrollments,
-    setProgramEnrollment
+    setProgramEnrollment,
+    markCourseCompletion
 } from './store/actions/Actions';
 import {
   getCurrentStructure,
@@ -18,7 +19,8 @@ import {
   getNewOrUpdatedContentTitles,
   isConnectionSuccessful,
   startEventSelector,
-  useShadowDB
+  useShadowDB,
+  isProgramCompleted
 } from './store/selectors';
 import {chainTasks} from './utils/AppUtils';
 import {fetchUserProfile} from './services/fetchUserProfile';
@@ -118,19 +120,25 @@ class App extends React.PureComponent {
     });
   }
 
-  _externalLearningActivityLoaded() {
-    // "Hydrate" all the content, analyse LMS and LRS data to set completions to
-    // internal state
-    AppStore.dispatch(setHydratedContent(getHydratedContent()));
-    // A start event is an enrollment in a given course. If there is one, then
-    // this date will need to be loaded from the shadow db since it's not available
-    // in the LMS data
-    if (useShadowDB() && startEventSelector().length) {
-      this._fetchShadowDBDataEnrollmentData();
-    } else {
-      this._finalizeContent();
+    _externalLearningActivityLoaded() {
+        // if all required items are completed, user gets program accreditation
+        if (isProgramCompleted()) {
+            AppStore.dispatch(markCourseCompletion(true));
+        }
+        // "Hydrate" all the content, analyse LMS and LRS data to set completions to
+        // internal state
+        AppStore.dispatch(setHydratedContent(getHydratedContent()));
+
+
+        // A start event is an enrollment in a given course. If there is one, then
+        // this date will need to be loaded from the shadow db since it's not available
+        // in the LMS data
+        if (useShadowDB() && startEventSelector().length) {
+            this._fetchShadowDBDataEnrollmentData();
+        } else {
+            this._finalizeContent();
+        }
     }
-  }
 
   // Get the enrollment date for a given course ID from the shadow db
   _fetchShadowDBDataEnrollmentData() {
@@ -181,7 +189,7 @@ class App extends React.PureComponent {
                                      coursesInMap={state.coursesInMap}
                                      hydratedContent={state.hydratedContent}
                                      currentStructure={state.currentStructure}
-
+                                     allComplete={state.requiredItemsCompleted}
                         />
                     </XAPIProvider>
                 </article>
@@ -193,7 +201,7 @@ class App extends React.PureComponent {
                 {this.state.systemError ? this._renderErrorMessage() : null}
             </div>;
         }
-  }
+    }
 
   _closeErrorMessage() {
     this.setState({systemError: false});

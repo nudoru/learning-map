@@ -16,7 +16,7 @@ const hasXapiInteraction = contentObj => contentObj.hasOwnProperty("interaction"
 
 const onXapiInteractionComplete = ({id, response}) => console.log('xAPI interaction completed', id, response);
 
-class ContentComponent extends React.PureComponent {
+class ContentRow extends React.PureComponent {
     static propTypes = {
         contentObj: PropTypes.object,
         status: PropTypes.number,
@@ -44,19 +44,18 @@ class ContentComponent extends React.PureComponent {
         </Row>;
     }
 }
+
 /* Sets the status of the row to complete, if the corresponding object in the store was set to be complete.
     Only row, which properties are changed, will be re-rendered*/
-const mapStateToProps=(state, ownProps) => {
-    let content = state.hydratedContent.find((element)=>element.id ===ownProps.contentObj.id );
-    return{
+const mapStateToProps = (state, ownProps) => {
+    let content = state.hydratedContent.find((element) => element.id === ownProps.contentObj.id);
+    return {
         contentObj: content,
-        status: content.isComplete? 3: ownProps.status
+        status: content.isComplete ? 3 : ownProps.status
     };
 };
 
-const ContentRow = connect(mapStateToProps)(ContentComponent);
-
-export default ContentRow;
+export default connect(mapStateToProps)(ContentRow);
 
 
 
@@ -84,8 +83,10 @@ const NameCell = ({modType, modIcon, onLinkClick, contentObj}) => {
         // The same link could be used for more than one content item
         nameElement = <XAPILink
             href={contentObj.contentLink}
+            onClick={onLinkClick}
             id={contentLinkWithId(contentObj.contentLink, contentObj.id)}
-            onClick={onLinkClick}>
+            contentID={contentObj.id}
+            setCompletion={!contentObj.requireConfirm && !contentObj.hasOwnProperty("interaction")}>
             {contentObj.title}
         </XAPILink>
     } else {
@@ -153,7 +154,6 @@ const StatusCell = ({onCompletedClick, contentObj, status}) => {
 // This is either the description of the content object or an xAPI interaction
 const DescriptionCell = ({contentObj}) => {
     let xapiInteraction = null;
-
 
     if (contentObj.hasOwnProperty("interaction")) {
         let refId;

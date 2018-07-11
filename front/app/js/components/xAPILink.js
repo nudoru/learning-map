@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+
 /**
  * Wraps a <a> to send a clicked statement when it's ... clicked
  */
 
 export class XAPILink extends React.PureComponent {
   static propTypes = {
-    id     : PropTypes.string,
     href   : PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    id: PropTypes.string,
+    contentID: PropTypes.number,
+    setCompletion: PropTypes.bool
   };
 
   static defaultProps = {};
@@ -19,16 +22,20 @@ export class XAPILink extends React.PureComponent {
     user                 : PropTypes.object,
     sendLinkStatement    : PropTypes.func,
     sendLoggedInStatement: PropTypes.func,
-    sendFragment         : PropTypes.func
+    sendFragment         : PropTypes.func,
+    handleItemCompletion : PropTypes.func
   };
 
-  _handleClick = _ => {
-    const {children, id, onClick} = this.props;
-    this.context.sendLinkStatement('clicked', children, id);
-    if (onClick) {
-      onClick({title:children, id});
-    }
-  };
+    _handleClick = _ => {
+        const {children, href, onClick, contentID, setCompletion, id} = this.props;
+        this.context.sendLinkStatement('clicked', children, id);
+        if (setCompletion) {
+            this.context.handleItemCompletion(contentID);
+        }
+        if (onClick) {
+            onClick({title: children, id});
+        }
+    };
 
   render() {
     const {href, children} = this.props;

@@ -107,6 +107,10 @@ module.exports.removeWhiteSpace = (str) => {
   return str.replace(/(\r\n|\n|\r|\t|\s)/gm, '').replace(/>\s+</g, '><');
 };
 
+// returns all symbols after last '/' in a string
+module.exports.getLastPathComponent = (iri) => {
+    return iri.substr(iri.lastIndexOf('/')+1);
+};
 /*******************************************************************************
  * Array
  *******************************************************************************/

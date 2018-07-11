@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ModalMessage from '../rh-components/rh-ModalMessage';
 import {
-  areRequiredActivitiesCompleted,
   getDateRelationship,
   getNumActivitiesForPeriod
 } from '../store/selectors';
@@ -10,6 +9,7 @@ import {idMatchObjId} from '../utils/AppUtils';
 import {PeriodCard} from './PeriodCard';
 import {TopicCard} from "./TopicCard";
 import ContentRow from "./ContentRow";
+import {connect} from "react-redux";
 
 class LearningMap extends React.PureComponent {
 
@@ -18,14 +18,14 @@ class LearningMap extends React.PureComponent {
     coursesInMap    : PropTypes.array,
     hydratedContent : PropTypes.array,
     config          : PropTypes.object,
-    currentStructure: PropTypes.object
+    currentStructure: PropTypes.object,
+    allComplete: PropTypes.bool
   };
 
   // Content is copied to the state. When a link is clicked/completed this
   // copy is modified w/ an isPending status to change the icon.
   state = {
     contents              : this.props.hydratedContent, // TODO use app state
-    allComplete           : areRequiredActivitiesCompleted(this.props.hydratedContent),
     completionNotification: false
   };
 
@@ -63,13 +63,12 @@ class LearningMap extends React.PureComponent {
     newState[idx].isComplete = isCompleted;
 
     this.setState({
-      contents   : newState,
-      allComplete: areRequiredActivitiesCompleted(newState)
+      contents   : newState
     });
   }
 
   render() {
-    const {allComplete} = this.state;
+    const allComplete = this.props.allComplete;
     const {data}        = this.props.currentStructure;
 
     return <section>
@@ -175,4 +174,11 @@ class LearningMap extends React.PureComponent {
   _onCompletedClickCb = ({title, id}) => console.log('Toggle clicked',title, id);
 }
 
-export default LearningMap;
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+            allComplete           : state.requiredItemsCompleted
+    };
+};
+
+export default connect(mapStateToProps)(LearningMap);
