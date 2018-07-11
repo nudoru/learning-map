@@ -71,13 +71,21 @@ const createStatement = (partialStatement) => {
             objectType,
             objectName,
             interactionType,
-            actorResponse
+            actorResponse,
+            verbID,
+            objectTypeIRI
         } = partialStatement;
 
     // This check may be used for troubleshooting
     // if (!_validateVerb(verbDisplay)) {
     //   console.log('Verb is not in the dictionary: ' + verbDisplay);
     // }
+    let objectDefinitionType = null
+    if(objectTypeIRI) {
+        objectDefinitionType = objectTypeIRI
+    } else if(objectType){
+        objectDefinitionType = activityURLPrefix + objectType
+    }
 
     statement = defaults({
         actor: {
@@ -85,13 +93,13 @@ const createStatement = (partialStatement) => {
             mbox: 'mailto:' + subjectID
         },
         verb: {
-            id: verbURLPrefix + verbDisplay.toLowerCase(),
+            id: verbID || verbURLPrefix + verbDisplay.toLowerCase(),
             display: {'en-US': verbDisplay.toLowerCase()}
         },
         object: {
             id: objectID,
             definition: {
-                type: objectType ? activityURLPrefix + objectType : null,
+                type: objectDefinitionType,
                 name: {'en-US': objectName}
             }
         }
