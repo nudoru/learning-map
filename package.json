@@ -14,7 +14,7 @@
     "validate-webpack:prod": "webpack-validator webpack.config.js --env.prod",
     "clean-www": "rm -rf ./front/www/",
     "predev": "npm run clean-www",
-    "dev": "webpack-dev-server --inline --hot --env.dev --history-api-fallback --open --port 3000 --content-base front/www/",
+    "dev": "webpack-dev-server --hot --env.dev --history-api-fallback --host=0.0.0.0 --port 3000 --content-base front/www/",
     "prebuild": "npm run clean-www",
     "prebuild:prod": "npm run clean-www",
     "build": "webpack --env.dev",
