@@ -211,7 +211,15 @@ export const getNewOrUpdatedContentTitles = () => getContentIDsInStructure().red
 export const getNumActivitiesForPeriod = period =>
     period.topics
         .filter(t => hasLength(t.content))
-        .reduce((acc, topic) => acc += topic.content.length, 0);
+        .reduce((acc, topic) => acc += getNumActiveActivitiesForTopic(topic), 0);
+
+export const getNumActiveActivitiesForTopic = topic =>
+  topic.content.reduce((acc, contentid) => {
+    if (getContentObjById(contentid).active) {
+      acc++;
+    }
+    return acc;
+  }, 0);
 
 export const getNumCompletedActivitiesForTopic = topic =>
     topic.content.reduce((acc, contentid) => {
