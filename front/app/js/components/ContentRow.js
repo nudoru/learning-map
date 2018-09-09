@@ -86,7 +86,7 @@ const NameCell = ({modType, modIcon, onLinkClick, contentObj}) => {
             onClick={onLinkClick}
             id={contentLinkWithId(contentObj.contentLink, contentObj.id)}
             contentID={contentObj.id}
-            setCompletion={!contentObj.requireConfirm && !contentObj.hasOwnProperty("interaction")}>
+            setCompletion={false}>
             {contentObj.title}
         </XAPILink>
     } else {
