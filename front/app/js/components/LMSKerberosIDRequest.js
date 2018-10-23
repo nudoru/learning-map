@@ -37,7 +37,7 @@ class LMSKerberosIDRequest extends React.Component {
   }
 
   onEmailInputChange (e) {
-    let userinput = this.refs.emailInput.value;
+    let userinput = this.refs.emailInput.value.toLowerCase();
     this.setState({
       isInputError : validateInputStr(userinput),
       usernameInput: userinput
