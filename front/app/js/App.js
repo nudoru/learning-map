@@ -35,6 +35,7 @@ import Timeline from './components/Timeline';
 import Introduction from './components/Introduction';
 import ProgramEnrollment from './components/ProgramEnrollment'
 import {XAPIProvider} from "./components/xAPIProvider";
+import {SystemAlert} from "./components/SystemAlert";
 
 /**
  * App
@@ -167,6 +168,7 @@ class App extends React.PureComponent {
         if (this.state.ready) {
 
             return <main>
+              <SystemAlert>{state.config.setup.interface.systemAlert}</SystemAlert>
                 <Header title={state.config.setup.title}
                         secondaryNav={state.config.setup.secondaryNav}
                         username={state.userProfile.fullname}/>
