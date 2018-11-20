@@ -46,7 +46,7 @@ class LMSKerberosIDRequest extends React.Component {
 
   onContinueClick (e) {
     e.preventDefault();
-    let userinput = this.refs.emailInput.value;
+    let userinput = this.refs.emailInput.value.toLowerCase();
 
     if (this.state.isInputError || userinput.length === 0) {
       console.warn('Invalid id');
